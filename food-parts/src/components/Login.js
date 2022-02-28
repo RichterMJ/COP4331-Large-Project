@@ -18,6 +18,7 @@ function Login() {
               name="login"
               placeholder="email"
             />
+            <br></br>
             <input
               className="form-control"
               type="text"
@@ -39,6 +40,7 @@ function Login() {
             <a className="underlineHover" href="#">
               Forgot Password?
             </a>
+            <br></br>
             <a className="underlineHover" href="signup">
               Create an account
             </a>
