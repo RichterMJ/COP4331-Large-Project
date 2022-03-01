@@ -8,7 +8,13 @@
 #LoginHeader{
   background-color: white;
   width:100vw;
+  display:flex;
 }
 .headerText{
   color:black;
+  align-self: center;
+
+}
+#mainLogo{
+  height:175px;
 }
