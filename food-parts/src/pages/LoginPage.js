@@ -1,12 +1,11 @@
 import React from "react";
 import Login from "../components/Login";
-import PageTitle from "../components/PageTitle";
+import LoginPageHeader from "../components/LoginPageHeader";
 
 function LoginPage() {
   return (
-    <div className="container">
-      <PageTitle />
-      <Login />
+    <div className="content">
+      <LoginPageHeader/>
     </div>
   );
 }
