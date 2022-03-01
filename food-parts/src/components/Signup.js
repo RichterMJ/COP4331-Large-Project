@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 
 function Signup() {
 
-  let name;
+  let fName;
+  let lName;
+  let weight;
   let email;
   let password;
   let repeat;
@@ -17,7 +19,8 @@ function Signup() {
       return;
     }
 
-    const obj = {name:name.value, email:email.value, password: password, repeat: repeat};
+    const obj = {fName: fName.value, lName: lName.value, weight: weight.value, 
+                 email:email.value, password: password, repeat: repeat};
     const js = JSON.stringify(obj);
 
     try
@@ -49,14 +52,39 @@ function Signup() {
     <div className="container">
       <h2 className="text-center"> Sign Up </h2>
       <form>
-        <div>
-          <label className="form-label" for="signupName">
-            Name
+        <div style={{display:"inline-block"}}>
+          <label style={{disply:"block"}} className="form-label" for="signupFName">
+            First Name
           </label>
           <input
             type="text"
-            id="signupName"
+            id="signupFName"
             className="form-control form-control-lg"
+            style={{width:400}}
+          />
+        </div>
+
+        <div style={{display:"inline-block"}}>
+          <label style={{disply:"block", marginLeft:50}} className="form-label" for="signupLName">
+              Last Name
+          </label>
+          <input
+              type="text"
+              id="signupLName"
+              className="form-control form-control-lg"
+              style={{width:400, marginLeft:50}}
+          />
+        </div>
+
+        <div style={{display:"inline-block"}}>
+          <label style={{disply:"block", marginLeft:50}} className="form-label" for="signupWeight">
+              Weight
+          </label>
+          <input
+              type="text"
+              id="signupWeight"
+              className="form-control form-control-lg"
+              style={{width:80, marginLeft:50}}
           />
         </div>
 
