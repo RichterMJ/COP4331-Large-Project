@@ -5,45 +5,47 @@ function Login() {
     event.preventDefault();
     alert("doIt()");
   };
+  function makeTextInput (id, name,placeholder){
+
+    return(<input
+              className="form-control"
+              type="text"
+              id={id}
+              name={name}
+              placeholder={placeholder}
+            />
+          )
+  }
+  function makeActionButton(type,className,event,text,id=""){
+    return(<button
+           type = {type}
+           className={className}
+           onClick = {event}
+           id = {id}>
+             {text}
+
+           </button>)
+  }
+  function makeLinkDiv ( className, href, content){
+    return (<a className={className} href={href}>
+              {content}
+            </a>)
+  }
   return (
     <div className="container">
       <div className="card">
         <div className="card-body">
-          <h2 className="text-center">Log In</h2>
-          <form onSubmit={doLogin}>
-            <input
-              className="form-control"
-              type="text"
-              id="username"
-              name="login"
-              placeholder="email"
-            />
+          <h2 className="text-center">Log in</h2>
+          {makeTextInput("username","login","email")}
             <br></br>
-            <input
-              className="form-control"
-              type="text"
-              id="password"
-              name="login"
-              placeholder="password"
-            />
+          {makeTextInput("password","login","password")}
             <div>
-              <button
-                type="button"
-                className="btn btn-block"
-                onSubmit={doLogin}
-              >
-                Log In
-              </button>
+              {makeActionButton("button","btn btn-block",()=>doLogin(),"Login","loginButton")}
             </div>
-          </form>
           <div id="formFooter">
-            <a className="underlineHover" href="#">
-              Forgot Password?
-            </a>
+            {makeLinkDiv("underLineHover","s","Forgot Password?")}
             <br></br>
-            <a className="underlineHover" href="signup">
-              Create an account
-            </a>
+            {makeLinkDiv("underLineHover","signup","Create an Account")}
           </div>
         </div>
       </div>

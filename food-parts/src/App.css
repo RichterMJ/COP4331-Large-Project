@@ -18,3 +18,12 @@
 #mainLogo{
   height:175px;
 }
+#loginButton{
+  color:rgb(199,247,187);
+  background-color:rgb(60,179,113);
+  width:200px;
+  margin-top:20px;
+  margin-bottom:20px;
+
+
+}

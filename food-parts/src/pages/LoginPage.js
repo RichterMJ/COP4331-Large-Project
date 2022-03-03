@@ -6,6 +6,7 @@ function LoginPage() {
   return (
     <div className="content">
       <LoginPageHeader/>
+      <Login/>
     </div>
   );
 }

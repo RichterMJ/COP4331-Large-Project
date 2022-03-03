@@ -5,7 +5,7 @@ function LoginPageHeader() {
     <div id ="LoginHeader" >
       <Logo/>
     <h1 className="left-text headerText" id="title">
-      git fit
+      GitFit
     </h1>
     </div>
   );
