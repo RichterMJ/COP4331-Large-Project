@@ -12,6 +12,7 @@ function Signup() {
   const [message, setMessage] = useState('');
 
   const doSignup = async (event) => {
+    console.log('test');
     event.preventDefault();
 
     if(repeat != password){
@@ -48,96 +49,75 @@ function Signup() {
     }    
   };
 
+  function makeText(title, txt, marginLeft=0){
+      return (<label style={{display:"block", marginLeft:marginLeft}} className="form-label" htmlFor={title}>
+                  {txt}
+              </label>)
+  }
+
+  function makeInput(type, id, {...style} = "", className="form-control form-control-lg", ){
+      return (<input type={type} id={id} className={className} style={style}/>)
+  }
+
+  function makeButton(className, onClick, txt){
+    return (<button type="button" className={className} onClick={onClick}>
+                {txt}
+            </button>)
+  }
+
+  function makeLink(href, className, txt){
+    return (<a href={href} class={className}>
+                <u>{txt}</u>
+            </a>)
+  }
+
   return (
     <div className="container">
-      <h2 className="text-center"> Sign Up </h2>
-      <form>
-        <div style={{display:"inline-block"}}>
-          <label style={{disply:"block"}} className="form-label" for="signupFName">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="signupFName"
-            className="form-control form-control-lg"
-            style={{width:400}}
-          />
+      <div className="card">
+        <h2 className="text-center"> Sign Up </h2>
+        
+        <div style={{display:"flex",flexDirection:"row"}}>
+          
+          <div style={{display:"inline-block", marginLeft:50}}>
+            {makeText("signupFName", "First Name")}
+            {makeInput("text", "signupFName", {width:400})}
+          </div>
+
+          <div style={{display:"inline-block", marginLeft:-10}}>
+            {makeText("signupLName", "Last Name", 50)}
+            {makeInput("text", "signupLName", {width:400,marginLeft:50})}
+          </div>
+
+          <div style={{display:"inline-block"}}>
+            {makeText("signupWeight", "Weight", 50)}
+            {makeInput("text", "signupWeight", {width:85, marginLeft:50})}
+          </div>
         </div>
 
-        <div style={{display:"inline-block"}}>
-          <label style={{disply:"block", marginLeft:50}} className="form-label" for="signupLName">
-              Last Name
-          </label>
-          <input
-              type="text"
-              id="signupLName"
-              className="form-control form-control-lg"
-              style={{width:400, marginLeft:50}}
-          />
+        <div style={{marginLeft:50, marginRight:50, marginTop:10}}>
+          {makeText("signupEmail", "Email")}
+          {makeInput("email", "signupEmail")}
         </div>
 
-        <div style={{display:"inline-block"}}>
-          <label style={{disply:"block", marginLeft:50}} className="form-label" for="signupWeight">
-              Weight
-          </label>
-          <input
-              type="text"
-              id="signupWeight"
-              className="form-control form-control-lg"
-              style={{width:80, marginLeft:50}}
-          />
+        <div style={{marginLeft:50, marginRight:50, marginTop:10}}>
+          {makeText("signupPassword", "Password")}
+          {makeInput("password", "signupPassword")}
         </div>
 
-        <div>
-          <label className="form-label" for="signupEmail">
-            Email
-          </label>
-          <input
-            type="email"
-            id="signupEmail"
-            className="form-control form-control-lg"
-          />
+        <div style={{marginLeft:50, marginRight:50, marginTop:10}}>
+          {makeText("confirmPassword", "Repeat your password")}
+          {makeInput("password", "confirmedPassword")}
         </div>
 
-        <div>
-        < label className="form-label" for="signupPassword">
-            Password
-          </label>
-          <input
-            type="password"
-            id="signupPassword"
-            className="form-control form-control-lg"
-          />
+        <div style={{marginLeft:50, marginRight:50, marginTop:50}}>
+          {makeButton("btn btn-success btn-block btn-lg gradient-custom-4 text-body", () => doSignup(), "Register")}
         </div>
 
-        <div>
-          <label className="form-label" for="confirmPassword">
-            Repeat your password
-          </label>
-          <input
-            type="password"
-            id="confirmedPassword"
-            className="form-control form-control-lg"
-          />
-        </div>
-
-        <div>
-          <button
-            type="button"
-            className="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
-            onSubmit={doSignup}
-          >
-            Register
-          </button>
-        </div>
-        <br></br>
         <p className="text-center text-muted mt-5 mb-0">
-          Have already an account?{" "}
-          <a href="/" class="fw-bold text-body">
-            <u>Login here</u>
-          </a>
+          Have an account already?{" "}
+          {makeLink("/", "fw-bold text-body", "Login here")}
         </p>
-      </form>
+      </div>
     </div>
   );
 }
