@@ -1,0 +1,43 @@
+{
+    "name": "gitfit",
+    "version": "1.0.0",
+    "description": "App to track nutrient intake and set goals.",
+    "repository": "https://github.com/RichterMJ/COP4331-Large-Project",
+    "license": "MIT",
+    "contributors": [
+        "Hieu Dang",
+        "Kevin Cahalan",
+        "Kyle McKibben",
+        "Noah Seligson",
+        "Michael Richter",
+        "Santiago Gutierrez",
+        "Stephan Hartig"
+    ],
+    "main": "./src/index.js",
+    "scripts": {
+        "start": "tsc && node dist/index.js",
+        "lint": "echo \"No linter yet\"",
+        "test": "echo \"No testing framework yet\""
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.13",
+        "@types/mongodb": "^4.0.7",
+        "@types/node": "^17.0.21",
+        "@typescript-eslint/eslint-plugin": "^5.13.0",
+        "@typescript-eslint/parser": "^5.13.0",
+        "eslint": "^7.32.0",
+        "eslint-config-standard": "^16.0.3",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^5.2.0",
+        "eslint-plugin-react": "^7.29.2",
+        "typescript": "^4.6.2"
+    },
+    "dependencies": {
+        "@types/cors": "^2.8.12",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.0",
+        "express": "^4.17.3",
+        "mongodb": "^4.4.0"
+    }
+}
