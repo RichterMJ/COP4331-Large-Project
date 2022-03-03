@@ -1,6 +1,6 @@
 
 <h1 align="center">
-    <img src="https://cdn.discordapp.com/attachments/944980484591591474/948288670266437662/thirdLogo.png" alt="GitFit-logo"/>
+    <img src="https://cdn.discordapp.com/attachments/944980484591591474/948288670266437662/thirdLogo.png" alt="GitFit-logo" width="250px"/>
     <br/>
     GitFit
 </h1>
