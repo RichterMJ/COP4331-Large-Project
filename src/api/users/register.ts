@@ -21,7 +21,28 @@ export type RegisterResponse = {
 /* Returns a function of type `RequestHandler` to be used in a route. */
 export function register(app: Express, client: MongoClient): RequestHandler {
     return async (req: Request, res: Response) => {
-        // TODO: Register logic.
+        let response: RegisterResponse = { error: RegisterError.Ok }
+
+        try {
+            const { username, password, firstname, lastname } = req.body as RegisterRequest
+            const db = client.db()
+
+            db.collection('Users')
+              .insertOne({ username, password, firstname, lastname })
+
+        } catch (e) {
+            if ((e as WriteError).code === 11000) {
+                response = {
+                    error: RegisterError.ExistingUser
+                }
+              } else {
+                response = {
+                    error: RegisterError.ServerError
+                }
+              }
+        }
+
+        res.status(200).json(response)
     }
 }
 
