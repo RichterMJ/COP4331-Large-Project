@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 
 function Signup() {
-  let fName;
-  let lName;
-  let weight;
-  let email;
-  let password;
-  let repeat;
-
   const [message, setMessage] = useState("");
 
   const doSignup = async (event) => {
-    console.log("test");
-    event.preventDefault();
+    //event.preventDefault();
 
-    if (repeat != password) {
+    let fName = document.getElementById('fName');
+    let lName = document.getElementById('lName');
+    let weight = document.getElementById('weight');
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
+    let repeat = document.getElementById('repeat');
+
+    if (repeat.value != password.value) {
       setMessage("Passwords do not match");
       return;
     }
@@ -24,29 +23,33 @@ function Signup() {
       lName: lName.value,
       weight: weight.value,
       email: email.value,
-      password: password,
-      repeat: repeat,
+      password: password.value,
+      repeat: repeat.value,
     };
+
     const js = JSON.stringify(obj);
 
+    console.log(js);
     try {
       const response = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
       });
-      var res = JSON.parse(await response.text());
+      
+      let res = JSON.parse(await response.text());
+
       if (res.id <= 0) {
         setMessage("Duplicate username");
       } else {
-        var user = {
+        const user = {
           firstName: res.firstName,
           lastName: res.lastName,
           id: res.id,
         };
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
-        window.location.href = "/cards";
+        window.location.href = "/";
       }
     } catch (e) {
       console.log(e.toString());
@@ -93,42 +96,44 @@ function Signup() {
 
   return (
     <div className="container">
+      
       <div className="card">
+      
         <h2 className="text-center"> Sign Up </h2>
 
-        <div className="ourRow">
+        <div className="firstRow">
           <div className="fNameBox">
             {makeLabel("signupFName", "First Name")}
-            {makeInput("text", "signupFName", { width: 400 })}
+            {makeInput("text", "fName", { width: 400 })}
           </div>
 
           <div className="lNameBox">
             {makeLabel("signupLName", "Last Name", 50)}
-            {makeInput("text", "signupLName", { width: 400, marginLeft: 50 })}
+            {makeInput("text", "lName", { width: 400, marginLeft: 50 })}
           </div>
 
           <div>
             {makeLabel("signupWeight", "Weight", 50)}
-            {makeInput("text", "signupWeight", { width: 85, marginLeft: 50 })}
+            {makeInput("text", "weight", { width: 85, marginLeft: 50 })}
           </div>
         </div>
 
-        <div class="longBox">
+        <div className="longBox">
           {makeLabel("signupEmail", "Email")}
-          {makeInput("email", "signupEmail")}
+          {makeInput("email", "email")}
         </div>
 
-        <div class="longBox">
+        <div className="longBox">
           {makeLabel("signupPassword", "Password")}
-          {makeInput("password", "signupPassword")}
+          {makeInput("password", "password")}
         </div>
 
-        <div class="longBox">
+        <div className="longBox">
           {makeLabel("confirmPassword", "Repeat your password")}
-          {makeInput("password", "confirmedPassword")}
+          {makeInput("password", "repeat")}
         </div>
 
-        <div class="signupButton">
+        <div className="signupButton">
           {makeButton(
             "btn btn-success btn-block btn-lg gradient-custom-4 text-body",
             () => doSignup(),

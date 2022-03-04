@@ -27,7 +27,13 @@
   margin-bottom: 20px;
 }
 
-.ourRow {
+.container{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.firstRow {
   display: flex;
 }
 
