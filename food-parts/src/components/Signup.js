@@ -57,11 +57,10 @@ function Signup() {
     }
   };
 
-  function makeLabel(title, txt, marginLeft = 0) {
+  function makeLabel(title, txt, className = "") {
     return (
       <label
-        style={{ display: "block", marginLeft: marginLeft }}
-        className="form-label"
+        className={className + " signupLabel form-label"}
         htmlFor={title}
       >
         {txt}
@@ -72,10 +71,9 @@ function Signup() {
   function makeInput(
     type,
     id,
-    { ...style } = "",
-    className = "form-control form-control-lg"
+    className = "",
   ) {
-    return <input type={type} id={id} className={className} style={style} />;
+    return <input type={type} id={id} className={className + " form-control form-control-lg"}/>;
   }
 
   function makeButton(className, onClick, txt) {
@@ -94,6 +92,10 @@ function Signup() {
     );
   }
 
+  function makeSpan(className, txt){
+    return (<span className={className}>{txt}</span>);
+  }
+
   return (
     <div className="container">
       
@@ -104,17 +106,22 @@ function Signup() {
         <div className="firstRow">
           <div className="fNameBox">
             {makeLabel("signupFName", "First Name")}
-            {makeInput("text", "fName", { width: 400 })}
+            {makeInput("text", "fName", "fNameInput")}
           </div>
 
           <div className="lNameBox">
-            {makeLabel("signupLName", "Last Name", 50)}
-            {makeInput("text", "lName", { width: 400, marginLeft: 50 })}
+            {makeLabel("signupLName", "Last Name", "lNameLabel")}
+            {makeInput("text", "lName", "lNameInput")}
           </div>
 
-          <div>
-            {makeLabel("signupWeight", "Weight", 50)}
-            {makeInput("text", "weight", { width: 85, marginLeft: 50 })}
+          <div className="weightBox">
+            {makeLabel("signupWeight", "Weight", "weightLabel")}
+            <div className="input-group">
+              {makeInput("text", "weight", "weightInput")}
+              <div className="input-group-append">
+                {makeSpan("input-group-text", "lbs")}
+              </div>
+            </div>
           </div>
         </div>
 
