@@ -12,9 +12,11 @@
 
 # Table of Contents
 
-- [Setup](#Setup)
-- [Authors](#Authors)
-- [License](#License)
+- [About](#about)
+- [Setup](#setup)
+- [Authors](#authors)
+- [Building](#building)
+- [License](#license)
 
 
 # About
@@ -32,6 +34,15 @@ PORT=8080
 MONGODB_URI=mongodb+srv://example.mongodb.net/Example
 # and so on...
 ```
+
+
+# Building
+
+In development mode:
+- Run `yarn start` from the root directory to compile + run the API server.
+- Run `yarn start` from the *frontend* directory to run the react sever.
+
+Production mode is not complete as of yet.
 
 
 # Team

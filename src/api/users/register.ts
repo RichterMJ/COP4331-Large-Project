@@ -1,9 +1,10 @@
 import { RequestHandler, Request, Response, Express } from 'express'
-import { MongoClient } from 'mongodb'
+import { MongoClient, WriteError } from 'mongodb'
+import { json } from 'stream/consumers'
 
 export enum RegisterError {
-    Ok = '',
-    ExistingUser = 1,
+    Ok = 0,
+    ExistingUser,
     ServerError
 }
 
