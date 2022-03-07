@@ -24,7 +24,6 @@ function Login() {
            onClick = {event}
            id = {id}>
              {text}
-
            </button>)
   }
 

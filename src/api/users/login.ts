@@ -8,7 +8,7 @@ export enum LoginError {
 }
 
 export type LoginRequest = {
-    username: string
+    email: string
     password: string
 }
 
@@ -26,11 +26,11 @@ export function login(app: Express, client: MongoClient): RequestHandler {
         let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginError.ServerError }
 
         try {
-            const { username, password } = req.body as LoginRequest
+            const { email, password } = req.body as LoginRequest
             const db = client.db()
             const queryResults = await db
                 .collection('Users')
-                .find({ username, password })
+                .find({ email, password })
                 .toArray()
 
             if (queryResults.length > 0) {

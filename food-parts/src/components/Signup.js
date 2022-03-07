@@ -19,25 +19,26 @@ function Signup() {
     }
 
     const obj = {
-      fName: fName.value,
-      lName: lName.value,
+      firstName: fName.value,
+      lastName: lName.value,
       weight: weight.value,
       email: email.value,
       password: password.value,
-      repeat: repeat.value,
     };
 
     const js = JSON.stringify(obj);
 
-    console.log(js);
+    //console.log(js);
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const response = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
       });
       
       let res = JSON.parse(await response.text());
+
+      console.log(res);
 
       if (res.id <= 0) {
         setMessage("Duplicate username");
