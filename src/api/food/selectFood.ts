@@ -8,21 +8,19 @@ import { USDA_API_KEY } from '../../index';
 var token = require('./createJWT.js');
 var storage = require('../tokenStorage.js');
 
-export enum SearchFoodError {
+export enum SelectFoodError {
     Ok = 0,
     ServerError
 }
 
-export type SearchFoodRequest = {
-    query: string
-    pageSize: number,
-    start: number
+export type SelectFoodRequest = {
+    fdcId: number
 }
 
-export type SearchFoodResponse {
+export type SelectFoodResponse {
     currentPage : number;
     foods: Food[] | null
-    error: SearchFoodError
+    error: SelectFoodError
     jwtToken: any
 }
 
@@ -92,12 +90,14 @@ function convertUsdaFood(food: any): Food {
 
 
 /* Returns a function of type `RequestHandler` to be used in a route. */
-export function searchFood(app: Express, client: MongoClient): RequestHandler {
+
+//get food and add portion section to it later?
+export function selectFood(app: Express, client: MongoClient): RequestHandler {
     return async (req: Request, res: Response) => {
-        let response: SearchFoodResponse = { currentPage: 0, foods: null, error: SearchFoodError.Ok, jwtToken: null }
+        let response: SelectFoodResponse = { currentPage: 0, foods: null, error: SelectFoodError.Ok, jwtToken: null }
 
         try {
-            const { query, pageSize, start } = req.body as SearchFoodRequest
+            const { query, pageSize, start } = req.body as SelectFoodRequest
             const db = client.db()
 
             /* call api to get responses */
@@ -126,14 +126,14 @@ export function searchFood(app: Express, client: MongoClient): RequestHandler {
             */
 
             let result = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
-            let searchResults = result.data;
+            let SelectResults = result.data;
 
             //convert results
 
             response = {
                 currentPage : start,
-                foods : searchResults.foods.map(convertUsdaFood),
-                error : SearchFoodError.Ok,
+                foods : SelectResults.foods.map(convertUsdaFood),
+                error : SelectFoodError.Ok,
                 jwtToken : null
             }
 
@@ -142,7 +142,7 @@ export function searchFood(app: Express, client: MongoClient): RequestHandler {
             response = {
                 currentPage : 0,
                 foods: null,
-                error: SearchFoodError.ServerError,
+                error: SelectFoodError.ServerError,
                 jwtToken: null
             }
         }
