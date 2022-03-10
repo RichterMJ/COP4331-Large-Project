@@ -5,7 +5,7 @@ declare global {
             NODE_ENV: 'development' | 'production'
             PORT?: string
             MONGODB_URI: string
-            USDA_URI: string
+            USDA_API_KEY: string
         }
     }
 }

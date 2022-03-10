@@ -1,8 +1,9 @@
 import { RequestHandler, Request, Response, Express } from 'express'
 import { MongoClient } from 'mongodb'
 import { fetch } from 'node-fetch';
-import axios from 'axios'
+import axios from 'axios';
 import internal from 'stream';
+import { USDA_API_KEY } from '../../index';
 
 var token = require('./createJWT.js');
 var storage = require('../tokenStorage.js');
@@ -98,7 +99,7 @@ export function register(app: Express, client: MongoClient): RequestHandler {
             /* call api to get responses */
             
             var body = {
-                "query": str1.concat(query),
+                "query": `*${query}*`,
                 "dataType": [
                 "SR Legacy"
                 ],
@@ -106,18 +107,21 @@ export function register(app: Express, client: MongoClient): RequestHandler {
                 "pageNumber":start
             }
 
+            /*
+
             var config = 
             {
                 method: 'post',
-                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key=KynCmtSnUl7GKzpkzj7nVdNSAX9WCB2wJkPNE744',	
+                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key='.concat(USDA_API_KEY),	
                 headers: 
                 {
                     'Content-Type': 'application/json'
                 },
                 data: body
             };
+            */
 
-            let result = await axios.post('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=KynCmtSnUl7GKzpkzj7nVdNSAX9WCB2wJkPNE744', body);
+            let result = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
             let searchResults = result.data;
 
             response = {
