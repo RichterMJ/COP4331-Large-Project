@@ -17,7 +17,8 @@
     "scripts": {
         "start": "tsc && node dist/index.js",
         "lint": "echo \"No linter yet\"",
-        "test": "echo \"No testing framework yet\""
+        "test": "echo \"No testing framework yet\"",
+        "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd ./food-parts install && yarn --cwd ./food-parts run build"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",

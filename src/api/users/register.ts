@@ -1,17 +1,19 @@
 import { RequestHandler, Request, Response, Express } from 'express'
-import { MongoClient } from 'mongodb'
+import { MongoClient, WriteError } from 'mongodb'
+import { json } from 'stream/consumers'
 
 export enum RegisterError {
-    Ok = '',
-    ExistingUser = 1,
+    Ok = 0,
+    ExistingUser,
     ServerError
 }
 
 export type RegisterRequest = {
-    username: string
+    firstName: string
+    lastName: string
+    weight: string
+    email: string
     password: string
-    firstname: string
-    lastname: string
 }
 
 export type RegisterResponse = {
@@ -19,16 +21,18 @@ export type RegisterResponse = {
 }
 
 /* Returns a function of type `RequestHandler` to be used in a route. */
+
+//TODO: Check for duplicate email
 export function register(app: Express, client: MongoClient): RequestHandler {
     return async (req: Request, res: Response) => {
         let response: RegisterResponse = { error: RegisterError.Ok }
 
         try {
-            const { username, password, firstname, lastname } = req.body as RegisterRequest
+            const { firstName, lastName, weight, email, password } = req.body as RegisterRequest
             const db = client.db()
 
             db.collection('Users')
-              .insertOne({ username, password, firstname, lastname })
+              .insertOne({ firstName, lastName, weight, email, password })
 
         } catch (e) {
             if ((e as WriteError).code === 11000) {

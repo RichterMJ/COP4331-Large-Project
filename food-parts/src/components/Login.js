@@ -5,8 +5,8 @@ function Login() {
     event.preventDefault();
     alert("doIt()");
   };
-  function makeTextInput (id, name,placeholder){
 
+  function makeTextInput (id, name,placeholder){
     return(<input
               className="form-control"
               type="text"
@@ -16,6 +16,7 @@ function Login() {
             />
           )
   }
+
   function makeActionButton(type,className,event,text,id=""){
     return(<button
            type = {type}
@@ -23,14 +24,15 @@ function Login() {
            onClick = {event}
            id = {id}>
              {text}
-
            </button>)
   }
+
   function makeLinkDiv ( className, href, content){
     return (<a className={className} href={href}>
               {content}
             </a>)
   }
+
   return (
     <div className="container">
       <div className="card">

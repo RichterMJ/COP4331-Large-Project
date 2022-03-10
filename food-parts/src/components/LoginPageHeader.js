@@ -2,11 +2,13 @@ import React from "react";
 
 function LoginPageHeader() {
   return (
-    <div id ="LoginHeader" >
-      <Logo/>
-    <h1 className="left-text headerText" id="title">
-      GitFit
-    </h1>
+    <div className="container">
+      <div id ="LoginHeader" >
+        <Logo/>
+      <h1 className="left-text headerText" id="title">
+        GitFit
+      </h1>
+      </div>
     </div>
   );
 }
