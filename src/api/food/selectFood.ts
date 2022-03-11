@@ -1,12 +1,11 @@
 import { RequestHandler, Request, Response, Express } from 'express'
 import { MongoClient } from 'mongodb'
-import { fetch } from 'node-fetch';
 import axios from 'axios';
 import internal from 'stream';
 import { USDA_API_KEY } from '../../index';
 
-var token = require('./createJWT.js');
-var storage = require('../tokenStorage.js');
+let token = require('./createJWT.js');
+let storage = require('../tokenStorage.js');
 
 export enum SelectFoodError {
     Ok = 0,
@@ -14,14 +13,16 @@ export enum SelectFoodError {
 }
 
 export type SelectFoodRequest = {
-    fdcId: number
+    fdcId: number,
+    portionId: number,
+    quantity: number,
+    jwtToken: any
 }
 
-export type SelectFoodResponse {
-    currentPage : number;
-    foods: Food[] | null
-    error: SelectFoodError
+export type SelectFoodResponse = {
+    food: Food | null
     jwtToken: any
+    error: SelectFoodError
 }
 
 export type Nutrient = {
@@ -29,135 +30,116 @@ export type Nutrient = {
     nutrientName: string
     nutrientNumber : number
     unitName: string
-    value: number 
+    value: number
     foodNutrientId: number
 }
-/*
-export type Measure = {
-    measureName: string
+
+export type Portion = {
+    id: number,
+    PortionName: string,
     gramWeight: number
 }
-*/
+
+export type Consumed = {
+    portionId: number,
+    quantity: number
+}
 
 export type Food = {
     fdcId : number
     description: string
-    usdaId: string
     foodNutrients: Nutrient[]
-    foodMeasures: Measure[]
+    foodPortions: Portion[] | null
+    foodConsumed: Consumed | null
 }
 
 
 function convertUsdaNutrient(nutrient: any): Nutrient {
-    // @ts-ignore
-    const converted = {
-        nutrientId: nutrient.nutrientId,
-        nutrientName: nutrient.nutrientName,
-        nutrientNumber: nutrient.nutrientNumber,
-        unitName: nutrient.unitName,
-        value: nutrient.value,
-        foodNutrientId: nutrient.foodNutrientId
-    }
+  // @ts-ignore
+  const converted = {
+    nutrientId: nutrient.nutrientId,
+    nutrientName: nutrient.nutrientName,
+    nutrientNumber: nutrient.nutrientNumber,
+    unitName: nutrient.unitName,
+    value: nutrient.value,
+    foodNutrientId: nutrient.foodNutrientId
+  }
 
-    return converted
+  return converted
 }
 
-/*
-function convertUsdaMeasure(measure: any): Measure {
-    // @ts-ignore
-    const converted = {
-        measureName = measure.disseminationText,
-        gramWeight: measure.gramWeight,
-    }
+function convertUsdaPortion(Portion: any): Portion {
+  // @ts-ignore
+  const converted = {
+    id: Portion.id,
+    PortionName: Portion.disseminationText,
+    gramWeight: Portion.gramWeight
+  }
 
-    return converted
+  return converted
 }
-*/
 
 function convertUsdaFood(food: any): Food {
-    // @ts-ignore
-    const converted = {
-        usdaId: food.fdcId,
-        usdaName: food.description,
-        nutrients: food.foodNutrients.map(convertUsdaNutrient),
-        //measures: food.foodMeasures.map(convertUsdaMeasure),
-        dataSource: food.dataSource
-    }
+  // @ts-ignore
+  const converted = {
+    fdcId: food.fdcId,
+    description: food.description,
+    foodNutrients: food.foodNutrients.map(convertUsdaNutrient),
+    foodPortions: food.foodPortions.map(convertUsdaPortion),
+    foodConsumed: null
+  }
 
-    return converted
+  return converted
 }
 
-
-
 /* Returns a function of type `RequestHandler` to be used in a route. */
+export function SelectFood(app: Express, client: MongoClient): RequestHandler {
+  return async (req: Request, res: Response) => {
+    let response: SelectFoodResponse = { food: null, jwtToken: null, error: SelectFoodError.Ok }
 
-//get food and add portion section to it later?
-export function selectFood(app: Express, client: MongoClient): RequestHandler {
-    return async (req: Request, res: Response) => {
-        let response: SelectFoodResponse = { currentPage: 0, foods: null, error: SelectFoodError.Ok, jwtToken: null }
+    try {
+      const { fdcId, portionId, quantity, jwtToken } = req.body as SelectFoodRequest
+      const db = client.db()
 
-        try {
-            const { query, pageSize, start } = req.body as SelectFoodRequest
-            const db = client.db()
+      /* call api to get responses */
 
-            /* call api to get responses */
-            
-            var body = {
-                "query": `*${query}*`,
-                "dataType": [
-                "SR Legacy"
-                ],
-                "pageSize": pageSize,
-                "pageNumber":start
-            }
+      let result = await axios.get(`https://api.nal.usda.gov/fdc/v1/food/${fdcId}?api_key=${USDA_API_KEY}`);
+      let SelectResults = result.data;
 
-            /*
+      // convert results
 
-            var config = 
-            {
-                method: 'post',
-                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?api_key='.concat(USDA_API_KEY),	
-                headers: 
-                {
-                    'Content-Type': 'application/json'
-                },
-                data: body
-            };
-            */
-
-            let result = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
-            let SelectResults = result.data;
-
-            //convert results
-
-            response = {
-                currentPage : start,
-                foods : SelectResults.foods.map(convertUsdaFood),
-                error : SelectFoodError.Ok,
-                jwtToken : null
-            }
-
-
-        } catch (e) {
-            response = {
-                currentPage : 0,
-                foods: null,
-                error: SelectFoodError.ServerError,
-                jwtToken: null
-            }
-        }
-
-      var refreshedToken = null;
-      try
-      {
-        refreshedToken = token.refresh(jwtToken);
-        response.jwtToken = refreshedToken;
-      }
-      catch(e)
-      {
-        console.log(e.message);
+      let item = convertUsdaFood(SelectResults);
+      let consumedAmount = {
+        portionId: portionId,
+        quantity: quantity
       }
 
-        res.status(200).json(response)
+      item.foodConsumed = consumedAmount;
+      // get food consumed object
+      response = {
+        food: item,
+        jwtToken: null,
+        error: SelectFoodError.Ok
+      }
+    } catch (e) {
+      response = {
+        food: null,
+        jwtToken: null,
+        error: SelectFoodError.ServerError
+      }
     }
+
+    var refreshedToken = null;
+    try
+    {
+      refreshedToken = token.refresh(jwtToken)
+      response.jwtToken = refreshedToken
+    }
+    catch(e)
+    {
+      console.log(e.message);
+    }
+
+    res.status(200).json(response)
+  }
 }
