@@ -70,10 +70,10 @@ export function isAnyDate(obj: any): obj is AnyDate {
 // type Unit
 ////////////////////////////////////////
 
-export type UnitObject = {
-    type: string
-    name: string
-    grams: number
+export type PortionObject = {
+    id: number
+    PortionName: string
+    gramWeight: number
 }
 
 //// Can be just ID or an actual object. Use the functions to differentiate.
@@ -83,40 +83,45 @@ export type UnitObject = {
 //    return isObjectIdString(unit)
 //}
 
-export type Unit = UnitObject
+export type Portion = PortionObject
 
-export function isUnitObject(unit: any): unit is UnitObject {
-    return unit != null && typeof unit === 'object'
-        && 'type' in unit && typeof unit.type === 'string'
-        && 'name' in unit && typeof unit.name === 'string'
-        && 'grams' in unit && typeof unit.grams === 'number'
+export function isPortionObject(Portion: any): Portion is PortionObject {
+  return Portion != null && typeof Portion === 'object'
+        && 'id' in Portion && typeof Portion.id === 'number'
+        && 'PortionName' in Portion && typeof Portion.PortionName === 'string'
+        && 'gramWeight' in Portion && typeof Portion.gramWeight === 'number'
 }
 
-export function isUnit(unit: any): unit is Unit {
-    return isUnitObject(unit)
+export function isPortion(Portion: any): Portion is Portion {
+    return isPortionObject(Portion)
 }
 
 
 ////////////////////////////////////////
-// type FoodRecord
+// type Food
 ////////////////////////////////////////
 
-export type FoodRecord = {
-    foodRecordId?: ObjectIdString
-    creationTimestamp: AnyDate
-    eatenTimestamp: AnyDate
-    eatenAmount: number
-    eatenUnit: Unit
-    foodId: number
+export type Food = {
+    fdcId : number
+    description: string
+    foodNutrients: Nutrient[]
+    foodPortions: Portion[] | null
+    foodConsumed: ConsumedAmount | null
+    creationTimestamp: AnyDate | null
+    eatenTimestamp: AnyDate | null
+    // Maybe add a section for nutrients according to the portions or make it a function
 }
 
 /* Programmatically ensure `obj` is of type `FoodRecordPostRequest`. */
-export function isFoodRecord(obj: any): obj is FoodRecord {
+export function isFood(obj: any): obj is Food {
     return obj != null && typeof obj === 'object'
-        && (!('foodRecordId' in obj) || typeof obj.foodRecordId === 'string')
+        && (!('fdcId' in obj) || typeof obj.fdcId === 'number')
+        && 'description' in obj && typeof obj.description === 'string'
+        && 'foodNutrients' in obj && isNutrientArray(obj.foodNutrients) //make this and isNutrient method
+        && 'foodPortions' in obj && isPortionArray(obj.foodPortions) // ^ 
+        && 'foodConsumed' in obj && isConsumedAmount(obj.foodConsumed) // ^
         && 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp)
         && 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp)
-        && 'eatenAmount' in obj && typeof obj.eatenAmount === 'number'
-        && 'eatenUnit' in obj && isUnit(obj.eatenUnit)
-        && 'foodId' in obj && typeof obj.foodId === 'number'
 }
+
+//make functions for nutrients, portions, consumed amount and food record(and refactor attributes)
