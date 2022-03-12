@@ -132,12 +132,12 @@ export function SelectFood(app: Express, client: MongoClient): RequestHandler {
     var refreshedToken = null;
     try
     {
-      refreshedToken = token.refresh(jwtToken)
+      refreshedToken = token.refresh(response.jwtToken)
       response.jwtToken = refreshedToken
     }
     catch(e)
     {
-      console.log(e.message);
+     // console.log(e.message);
     }
 
     res.status(200).json(response)

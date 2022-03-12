@@ -4,27 +4,27 @@ import axios from 'axios';
 import internal from 'stream';
 import { USDA_API_KEY } from '../../index';
 
-var token = require('./createJWT.js');
-var storage = require('../tokenStorage.js');
+let token = require('./createJWT.js');
+let storage = require('../tokenStorage.js');
 
-export enum SearchFoodError {
+export enum SelectFoodError {
     Ok = 0,
     ServerError
 }
 
-export type SearchFoodRequest = {
-    query: string
-    pageSize: number,
-    start: number,
+export type SelectFoodRequest = {
+    fdcId: number,
+    portionId: number,
+    quantity: number,
     jwtToken: any
 }
 
-export type SearchFoodResponse = {
-    currentPage : number;
-    foods: Food[] | null
-    error: SearchFoodError
+export type SelectFoodResponse = {
+    food: Food | null
     jwtToken: any
+    error: SelectFoodError
 }
+
 export type Nutrient = {
     nutrientId: number
     nutrientName: string
@@ -85,62 +85,59 @@ function convertUsdaFood(food: any): Food {
     fdcId: food.fdcId,
     description: food.description,
     foodNutrients: food.foodNutrients.map(convertUsdaNutrient),
-    foodPortions: null,
+    foodPortions: food.foodPortions.map(convertUsdaPortion),
     foodConsumed: null
   }
 
   return converted
 }
 
-
 /* Returns a function of type `RequestHandler` to be used in a route. */
-export function searchFood(app: Express, client: MongoClient): RequestHandler {
+export function SelectFood(app: Express, client: MongoClient): RequestHandler {
   return async (req: Request, res: Response) => {
-    let response: SearchFoodResponse = { currentPage: 0, foods: null, error: SearchFoodError.Ok, jwtToken: null }
+    let response: SelectFoodResponse = { food: null, jwtToken: null, error: SelectFoodError.Ok }
 
     try {
-      const { query, pageSize, start, jwtToken } = req.body as SearchFoodRequest
+      const { fdcId, portionId, quantity, jwtToken } = req.body as SelectFoodRequest
       const db = client.db()
 
       /* call api to get responses */
-      let body = {
-        query: `*${query}*`,
-        dataType: [
-          'SR Legacy'
-        ],
-        pageSize: pageSize,
-        pageNumber:start
-      }
 
-      let result = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
-      let searchResults = result.data;
+      let result = await axios.get(`https://api.nal.usda.gov/fdc/v1/food/${fdcId}?api_key=${USDA_API_KEY}`);
+      let SelectResults = result.data;
 
       // convert results
 
+      let item = convertUsdaFood(SelectResults);
+      let consumedAmount = {
+        portionId: portionId,
+        quantity: quantity
+      }
+
+      item.foodConsumed = consumedAmount;
+      // get food consumed object
       response = {
-        currentPage : start,
-        foods : searchResults.foods.map(convertUsdaFood),
-        error : SearchFoodError.Ok,
-        jwtToken : null
+        food: item,
+        jwtToken: null,
+        error: SelectFoodError.Ok
       }
     } catch (e) {
       response = {
-        currentPage : 0,
-        foods: null,
-        error: SearchFoodError.ServerError,
-        jwtToken: null
+        food: null,
+        jwtToken: null,
+        error: SelectFoodError.ServerError
       }
     }
 
     var refreshedToken = null;
     try
     {
-      refreshedToken = token.refresh(response.jwtToken);
-      response.jwtToken = refreshedToken;
+      refreshedToken = token.refresh(jwtToken)
+      response.jwtToken = refreshedToken
     }
     catch(e)
     {
-      //console.log(e.message);
+      console.log(e.message);
     }
 
     res.status(200).json(response)

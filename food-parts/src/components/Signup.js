@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function Signup() {
-  const [message, setMessage] = useState("");
+  const [errorMessage, setMessage] = useState("");
 
   const doSignup = async (event) => {
     //event.preventDefault();
@@ -30,7 +30,7 @@ function Signup() {
 
     //console.log(js);
     try {
-      const response = await fetch("http://localhost:5000/api/users/register", {
+      const response = await fetch("http://localhost:8080/api/users/register", {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
@@ -50,7 +50,7 @@ function Signup() {
         };
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
-        window.location.href = "/";
+        //window.location.href = "/";
       }
     } catch (e) {
       console.log(e.toString());

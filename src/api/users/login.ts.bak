@@ -49,6 +49,7 @@ export function login(app: Express, client: MongoClient): RequestHandler {
                 }
             }).catch(); */
 
+        */
         let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginErr.ServerError, accessToken: null }
 
         try {

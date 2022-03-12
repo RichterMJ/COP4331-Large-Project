@@ -31,8 +31,9 @@ export function register(app: Express, client: MongoClient): RequestHandler {
             const { firstName, lastName, weight, email, password } = req.body as RegisterRequest
             const db = client.db()
 
-            db.collection('Users')
+            await db.collection('Users')
               .insertOne({ firstName, lastName, weight, email, password })
+
 
         } catch (e) {
             if ((e as WriteError).code === 11000) {
@@ -43,10 +44,11 @@ export function register(app: Express, client: MongoClient): RequestHandler {
                 response = {
                     error: RegisterError.ServerError
                 }
+
+                console.log(e)
               }
         }
 
         res.status(200).json(response)
     }
 }
-

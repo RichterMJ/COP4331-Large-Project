@@ -96,6 +96,14 @@ export function isPortion(Portion: any): Portion is Portion {
     return isPortionObject(Portion)
 }
 
+export type Nutrient = {
+    nutrientId: number
+    nutrientName: string
+    nutrientNumber : number
+    unitName: string
+    value: number 
+    foodNutrientId: number
+}
 
 ////////////////////////////////////////
 // type Food
