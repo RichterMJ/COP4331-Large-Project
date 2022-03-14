@@ -5,6 +5,7 @@ import { searchFoodById } from './api/food/searchFoodById'
 import { foodRecordsDelete, foodRecordsGet, foodRecordsPost, foodRecordsPut } from './api/users/data/foodRecords'
 import { login } from './api/users/login'
 import { register } from './api/users/register'
+import { recipesDelete, recipesGet, recipesPost, recipesPut } from './api/food/recipes'
 
 /* Set up the routing. Logic should go under './api/'. */
 export function setApp (app: Express, client: MongoClient) {
@@ -19,4 +20,9 @@ export function setApp (app: Express, client: MongoClient) {
     app.get('/api/users/data/foodRecords', foodRecordsGet(app, client))
     app.put('/api/users/data/foodRecords', foodRecordsPut(app, client))
     app.delete('/api/users/data/foodRecords', foodRecordsDelete(app, client))
+
+    app.post('/api/users/data/recipes', recipesPost(app, client))
+    app.get('/api/users/data/recipes', recipesGet(app, client))
+    app.put('/api/users/data/recipes', recipesPut(app, client))
+    app.delete('/api/users/data/recipes', recipesDelete(app, client))
 }

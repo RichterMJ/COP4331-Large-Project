@@ -1,5 +1,5 @@
 import { Express, Request, RequestHandler, Response } from 'express'
-import { Db, MongoClient, ObjectId } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
 import { extractRecipe, isObjectIdString, isRecipe, ObjectIdString, Recipe } from '../global-types'
 
 ////////////////////////////////////////
