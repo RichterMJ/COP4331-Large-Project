@@ -1,6 +1,24 @@
 
 // Types that may be used across multiple API endpoints.
 
+let logXmlDepth = 0
+const doWeLogXml = false
+
+export function logXmlInline(name: string, data: any) {
+    console.log(`${'  '.repeat(logXmlDepth)}<${name}> ${data} </${name}>`)
+}
+
+export function logXml(name: string, fn: any) {
+    if (!doWeLogXml) {
+        return
+    }
+
+    console.log(`${'  '.repeat(logXmlDepth)}<${name}>`)
+    logXmlDepth += 1
+    fn()
+    logXmlDepth -= 1
+    console.log(`${'  '.repeat(logXmlDepth)}</${name}>`)
+}
 
 ////////////////////////////////////////
 // type ObjectIdString
@@ -66,64 +84,79 @@ export function isAnyDate(obj: any): obj is AnyDate {
         || isIsoTimestamp(obj)
 }
 
+
 ////////////////////////////////////////
-// type Unit
+// type User
 ////////////////////////////////////////
 
-export type PortionObject = {
-    id: number
-    PortionName: string
-    gramWeight: number
+export type User = {
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+    hasVerifiedEmail: boolean
+    weight: number
 }
 
-//// Can be just ID or an actual object. Use the functions to differentiate.
-//export type Unit = ObjectIdString | UnitObject
-//
-//export function isUnitId(unit: any): unit is ObjectIdString {
-//    return isObjectIdString(unit)
-//}
-
-export type Portion = PortionObject
-
-export function isPortionObject(Portion: any): Portion is PortionObject {
-  return Portion != null && typeof Portion === 'object'
-        && 'id' in Portion && typeof Portion.id === 'number'
-        && 'PortionName' in Portion && typeof Portion.PortionName === 'string'
-        && 'gramWeight' in Portion && typeof Portion.gramWeight === 'number'
+export function isUser(obj: any): obj is User {
+    return obj != null && typeof obj === 'object'
+        && 'firstname' in obj && typeof obj.firstname === 'string'
+        && 'lastname' in obj && typeof obj.lastname === 'string'
+        && 'weight' in obj && typeof obj.weight === 'number'
+        && 'email' in obj && typeof obj.email === 'string'
+        && 'hasVerifiedEmail' in obj && typeof obj.hasVerifiedEmail === 'boolean'
+        && 'password' in obj && typeof obj.password === 'string'
 }
 
-export function isPortion(Portion: any): Portion is Portion {
-  return isPortionObject(Portion)
+
+////////////////////////////////////////
+// type Portion
+////////////////////////////////////////
+
+export type Portion = {
+    portionId: number
+    portionName: string
+    gramAmount: number
+}
+
+export function isPortion(obj: any): obj is Portion {
+    return obj != null && typeof obj === 'object'
+        && 'portionId' in obj && typeof obj.portionId === 'number'
+        && 'portionName' in obj && typeof obj.portionName === 'string'
+        && 'gramAmount' in obj && typeof obj.gramAmount === 'number'
 }
 
 export type Nutrient = {
     nutrientId: number
     nutrientName: string
-    nutrientNumber : number
     unitName: string
     value: number
-    foodNutrientId: number
 }
 
 export function isNutrient(obj: any): obj is Nutrient {
-  return obj != null && typeof obj === 'object'
+    logXml('Nutrient', () => {
+        logXmlInline('nutrientId', 'nutrientId' in obj && typeof obj.nutrientId === 'number')
+        logXmlInline('nutrientName', 'nutrientName' in obj && typeof obj.nutrientName === 'string')
+        logXmlInline('unitName', 'unitName' in obj && typeof obj.unitName === 'string')
+        logXmlInline('value', 'value' in obj && typeof obj.value === 'number')
+    })
+
+    return obj != null && typeof obj === 'object'
         && 'nutrientId' in obj && typeof obj.nutrientId === 'number'
         && 'nutrientName' in obj && typeof obj.nutrientName === 'string'
-        && 'nutrientNumber' in obj && typeof obj.nutrientNumber === 'number'
         && 'unitName' in obj && typeof obj.unitName === 'string'
         && 'value' in obj && typeof obj.value === 'number'
-        && 'foodNutrientId' in obj && typeof obj.foodNutrientId === 'number'
 }
 
-export type ConsumedAmount = {
-    portionId: number,
+export type AmountConsumed = {
+    portion: Portion
     quantity: number
 }
 
-export function isConsumedAmount(obj: any): obj is ConsumedAmount {
-  return obj != null && typeof obj === 'object'
-          && 'portionId' in obj && typeof obj.portionId === 'number'
-          && 'quantity' in obj && typeof obj.quantity === 'number'
+export function isAmountConsumed(obj: any): obj is AmountConsumed {
+    return obj != null && typeof obj === 'object'
+        && 'portion' in obj && isPortion(obj.portion)
+        && 'quantity' in obj && typeof obj.quantity === 'number'
 }
 
 ////////////////////////////////////////
@@ -131,22 +164,25 @@ export function isConsumedAmount(obj: any): obj is ConsumedAmount {
 ////////////////////////////////////////
 
 export type Food = {
-    fdcId : number
+    fdcId: number
     description: string
-    foodNutrients: Nutrient[]
-    foodPortions: Portion[] | null
+    nutrients: Nutrient[]
+    portions: Portion[]
 }
 
 /* Programmatically ensure `obj` is of type `FoodRecordPostRequest`. */
 export function isFood(obj: any): obj is Food {
-  return obj != null && typeof obj === 'object'
-        && (!('fdcId' in obj) || typeof obj.fdcId === 'number')
+    logXml('Food', () => {
+        logXmlInline('description', 'description' in obj && typeof obj.description === 'string')
+        logXmlInline('nutrients', 'nutrients' in obj && Array.isArray(obj.nutrients) && obj.nutrients.every(isNutrient))
+        logXmlInline('portions', 'portions' in obj && Array.isArray(obj.portions) && obj.portions.every(isPortion))
+    })
+
+    return obj != null && typeof obj === 'object'
+        && 'fdcId' in obj && typeof obj.fdcId === 'number'
         && 'description' in obj && typeof obj.description === 'string'
-        && 'foodNutrients' in obj && obj.foodNutrients.every(isNutrient)
-        && 'foodPortions' in obj && obj.foodPortions.every(isPortion)
-        && 'foodConsumed' in obj && isConsumedAmount(obj.foodConsumed)
-        && 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp)
-        && 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp)
+        && 'nutrients' in obj && Array.isArray(obj.nutrients) && obj.nutrients.every(isNutrient)
+        && 'portions' in obj && Array.isArray(obj.portions) && obj.portions.every(isPortion)
 }
 
 
@@ -156,22 +192,33 @@ export function isFood(obj: any): obj is Food {
 ////////////////////////////////////////
 
 export type FoodRecord = {
-    item: Food
-    foodConsumed: ConsumedAmount
+    foodRecordId?: ObjectIdString
+    userId: ObjectIdString
+    food: Food
+    amountConsumed: AmountConsumed
     creationTimestamp: AnyDate
     eatenTimestamp: AnyDate
     totalNutrients: Nutrient[]
-    userId: number
 }
 
 /* Programmatically ensure `obj` is of type `FoodRecordPostRequest`. */
 export function isFoodRecord(obj: any): obj is FoodRecord {
-  return obj != null && typeof obj === 'object'
-        && (!('item' in obj) || isFood(obj.item))
-        && 'foodConsumed' in obj && isConsumedAmount(obj.foodConsumed)
+    logXml('FoodRecord', () => {
+        logXmlInline('userId', 'userId' in obj && isObjectIdString(obj.userId))
+        logXmlInline('food', 'food' in obj && isFood(obj.food))
+        logXmlInline('amountConsumed', 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed))
+        logXmlInline('creationTimestamp', 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp))
+        logXmlInline('eatenTimestamp', 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp))
+        logXmlInline('totalNutrients', 'totalNutrients' in obj && Array.isArray(obj.totalNutrients) && obj.totalNutrients.every(isNutrient))
+    })
+    
+    return obj != null && typeof obj === 'object'
+        && (!('foodRecordId' in obj) || isObjectIdString(obj.foodRecordId))
+        && 'userId' in obj && isObjectIdString(obj.userId)
+        && 'food' in obj && isFood(obj.food)
+        && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
         && 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp)
         && 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp)
-        && 'totalNutrients' in obj && totalNutrients.every(isNutrient) //maybe chnage
-        && 'userId' in obj && typeof obj.userId === 'number'
+        && 'totalNutrients' in obj && Array.isArray(obj.totalNutrients) && obj.totalNutrients.every(isNutrient)
 }
 

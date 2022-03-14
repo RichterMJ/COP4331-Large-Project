@@ -5,10 +5,9 @@ import {
     IsoDate, isIsoDate,
     IsoTimestamp, isIsoTimestamp,
     FoodRecord, isFoodRecord,
-    Unit, isUnit,
+    Portion, isPortion, AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
 
-// TODO Create a schema for the database.
 
 ////////////////////////////////////////
 // POST
@@ -21,10 +20,10 @@ export enum FoodRecordPostError {
 }
 
 export type FoodRecordPostRequest = {
-    foodId: number
+    food: Food
+    userId: ObjectIdString
     eatenTimestamp: IsoTimestamp
-    eatenAmount: number
-    eatenUnit: Unit
+    amountConsumed: AmountConsumed
 }
 
 export type FoodRecordPostResponse = {
@@ -35,32 +34,33 @@ export type FoodRecordPostResponse = {
 export function foodRecordsPost(app: Express, client: MongoClient): RequestHandler {
 
     /* Programmatically ensure the request body is of type `FoodRecordPostRequest`. */
-    function isValidFoodRecordPostRequest(obj: any): obj is FoodRecordPostRequest {
+    function isFoodRecordPostRequest(obj: any): obj is FoodRecordPostRequest {
         return obj != null && typeof obj === 'object'
-            && 'foodId' in obj && typeof obj.foodId === 'number'
+            && 'food' in obj && isFood(obj.food)
+            && 'userId' in obj && isObjectIdString(obj.userId)
             && 'eatenTimestamp' in obj && isIsoTimestamp(obj.eatenTimestamp)
-            && 'eatenAmount' in obj && typeof obj.eatenAmount === 'number'
-            && 'eatenUnit' in obj && isUnit(obj.eatenUnit)
+            && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
     }
 
     return async (req: Request, res: Response) => {
         let response: FoodRecordPostResponse = { error: 0 }
 
         try {
-            if (!isValidFoodRecordPostRequest(req.body)) {
+            if (!isFoodRecordPostRequest(req.body)) {
                 response.error = FoodRecordPostError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { foodId, eatenTimestamp, eatenAmount, eatenUnit } = req.body
+            const { food, userId, eatenTimestamp, amountConsumed } = req.body
 
             const foodRecord: FoodRecord = {
+                userId,
                 creationTimestamp: new Date(),
                 eatenTimestamp: new Date(eatenTimestamp),
-                eatenAmount,
-                eatenUnit,
-                foodId,
+                food,
+                amountConsumed,
+                totalNutrients: [], // TODO calculate the total nutrients based on `food` + `amountConsumed`.
             }
 
             const db = client.db()
@@ -111,11 +111,12 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
         // @ts-ignore
         const converted = {
             foodRecordId: queryResult._id,
+            userId: queryResult.userId,
             creationTimestamp: queryResult.creationTimestamp,
             eatenTimestamp: queryResult.eatenTimestamp,
-            eatenAmount: queryResult.eatenAmount,
-            eatenUnit: queryResult.eatenUnit,
-            foodId: queryResult.foodId
+            amountConsumed: queryResult.amountConsumed,
+            food: queryResult.food,
+            totalNutrients: queryResult.totalNutrients,
         }
 
         return converted
@@ -141,7 +142,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 const foodRecordId = req.query.foodRecordId
 
                 const queryResults = await db.collection('FoodRecords').find({
-                    "_id": new ObjectId(foodRecordId)
+                    '_id': new ObjectId(foodRecordId)
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
@@ -197,7 +198,7 @@ export enum FoodRecordPutError {
     InvalidId,
 }
 
-export type FoodRecordPutRequest = { foodRecordId: ObjectIdString } & FoodRecord
+export type FoodRecordPutRequest = FoodRecord & { foodRecordId: ObjectIdString }
 
 export type FoodRecordPutResponse = {
     error: FoodRecordPutError
@@ -206,7 +207,7 @@ export type FoodRecordPutResponse = {
 export function foodRecordsPut(app: Express, client: MongoClient): RequestHandler {
 
     /* Programmatically ensure the request body is of type `FoodRecordPutRequest`. */
-    function isValidFoodRecordPutRequest(obj: any): obj is FoodRecordPutRequest {
+    function isFoodRecordPutRequest(obj: any): obj is FoodRecordPutRequest {
         return isFoodRecord(obj)
             && 'foodRecordId' in obj && isObjectIdString(obj.foodRecordId)
     }
@@ -216,14 +217,14 @@ export function foodRecordsPut(app: Express, client: MongoClient): RequestHandle
         let response: FoodRecordPutResponse = { error: 0 }
 
         try {
-            if (!isValidFoodRecordPutRequest(req.body)) {
+            if (!isFoodRecordPutRequest(req.body)) {
                 response.error = FoodRecordPutError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { foodRecordId, creationTimestamp, eatenTimestamp, eatenAmount, eatenUnit, foodId } = req.body
-            const update: FoodRecord = { creationTimestamp, eatenTimestamp, eatenAmount, eatenUnit, foodId }
+            const { foodRecordId, totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food } = req.body
+            const update: FoodRecord = { totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food }
 
             const db = client.db()
             const queryResult = await db.collection('FoodRecords').replaceOne(
@@ -266,7 +267,7 @@ export type FoodRecordDeleteResponse = {
 
 export function foodRecordsDelete(app: Express, client: MongoClient): RequestHandler {
 
-    function isValidFoodRecordDeleteRequest(obj: any): obj is FoodRecordDeleteRequest {
+    function isFoodRecordDeleteRequest(obj: any): obj is FoodRecordDeleteRequest {
         return obj != null && typeof obj === 'object'
             && 'foodRecordId' in obj && isObjectIdString(obj.foodRecordId)
     }
@@ -275,7 +276,7 @@ export function foodRecordsDelete(app: Express, client: MongoClient): RequestHan
         let response: FoodRecordDeleteResponse = { error: 0 }
 
         try {
-            if (!isValidFoodRecordDeleteRequest(req.body)) {
+            if (!isFoodRecordDeleteRequest(req.body)) {
                 response.error = FoodRecordDeleteError.InvalidRequest
                 res.status(200).json(response)
                 return

@@ -21,6 +21,7 @@
         "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd ./food-parts install && yarn --cwd ./food-parts run build"
     },
     "devDependencies": {
+        "@types/axios": "^0.14.0",
         "@types/express": "^4.17.13",
         "@types/mongodb": "^4.0.7",
         "@types/node": "^17.0.21",

@@ -1,11 +1,12 @@
 import { RequestHandler, Request, Response, Express, query } from 'express'
 import { MongoClient, WriteError } from 'mongodb'
-const token = require("./createJWT.js");
+import { isObjectIdString, ObjectIdString } from '../global-types'
 
 export enum LoginError {
     Ok = 0,
+    InvalidRequest,
+    ServerError,
     InvalidCredentials,
-    ServerError
 }
 
 export type LoginRequest = {
@@ -18,42 +19,30 @@ export type LoginResponse = {
     firstname: string
     lastname: string
     error: LoginError
-    accessToken: any;
 }
 
 /* Returns a function of type `RequestHandler` to be used in a route. */
 export function login(app: Express, client: MongoClient): RequestHandler {
+
+    function isLoginRequest(obj: any): obj is LoginRequest {
+        return obj != null && typeof obj === 'object'
+            && 'email' in obj && typeof obj.email === 'string'
+            && 'password' in obj && typeof obj.password === 'string'
+    }
+
     return async (req: Request, res: Response) => {
 
-        /*
-            /*axios(config).then(function (result) {
-                var resp = result.data;
-                if (resp.error) 
-                {
-                    response.error = resp.error;
-                }
-                else 
-                {	
-                    storage.storeToken(res);
-                    var jwt = require('jsonwebtoken');
-        
-                    var ud = jwt.decode(storage.retrieveToken(),{complete:true});
-                    
-                    var userId = ud.payload.userId;
-                    var firstName = ud.payload.firstName;
-                    var lastName = ud.payload.lastName;
-                      
-                    var user = {firstName:firstName,lastName:lastName,id:userId}
-                    localStorage.setItem('user_data', JSON.stringify(user));
-                    window.location.href = '/cards';
-                }
-            }).catch(); */
-
-        */
-        let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginErr.ServerError, accessToken: null }
+        let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginError.Ok }
 
         try {
-            const { email, password } = req.body as LoginRequest
+
+            if (!isLoginRequest(req.body)) {
+                response.error = LoginError.InvalidRequest
+                res.status(200).json(response)
+                return
+            }
+
+            const { email, password } = req.body
             const db = client.db()
             const queryResults = await db
                 .collection('Users')
@@ -61,25 +50,24 @@ export function login(app: Express, client: MongoClient): RequestHandler {
                 .toArray()
 
             if (queryResults.length > 0) {
-                response.userId = queryResults[0]._id.toString()
-                response.firstname = queryResults[0].firstname
-                response.lastname = queryResults[0].lastname
-                response.error = LoginError.Ok
-                
-                response.accessToken = token.createToken( response.firstname, response.lastname, response.userId );
+                response = {
+                    userId: queryResults[0]._id.toString(),
+                    firstname: queryResults[0].firstname,
+                    lastname: queryResults[0].lastname,
+                    error: LoginError.Ok
+                }
+                res.status(200).json(response)
+                return
             } else {
                 response.error = LoginError.InvalidCredentials
+                res.json(response)
+                return
             }
         } catch (e) {
-            response = {
-                userId: '',
-                firstname: '',
-                lastname: '',
-                error: LoginError.ServerError,
-                accessToken: null
-            }
+            console.log(e)
+            response.error = LoginError.ServerError,
+            res.status(200).json(response)
         }
 
-        res.status(200).json(response)
     }
 }
