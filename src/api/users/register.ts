@@ -11,7 +11,7 @@ export enum RegisterError {
 export type RegisterRequest = {
     firstName: string
     lastName: string
-    weight: string
+    weight: number
     email: string
     password: string
 }
@@ -24,29 +24,28 @@ export type RegisterResponse = {
 
 //TODO: Check for duplicate email
 export function register(app: Express, client: MongoClient): RequestHandler {
-    return async (req: Request, res: Response) => {
-        let response: RegisterResponse = { error: RegisterError.Ok }
+  return async (req: Request, res: Response) => {
+    let response: RegisterResponse = { error: RegisterError.Ok }
 
-        try {
-            const { firstName, lastName, weight, email, password } = req.body as RegisterRequest
-            const db = client.db()
+    try {
+      const { firstName, lastName, weight, email, password } = req.body as RegisterRequest
+      const db = client.db()
 
-            db.collection('Users')
-              .insertOne({ firstName, lastName, weight, email, password })
-
-        } catch (e) {
-            if ((e as WriteError).code === 11000) {
-                response = {
-                    error: RegisterError.ExistingUser
-                }
-              } else {
-                response = {
-                    error: RegisterError.ServerError
-                }
-              }
+      db.collection('Users')
+        .insertOne({ firstName, lastName, weight, email, password })
+    } catch (e) {
+      if ((e as WriteError).code === 11000) {
+        response = {
+          error: RegisterError.ExistingUser
         }
-
-        res.status(200).json(response)
+      } else {
+        response = {
+          error: RegisterError.ServerError
+        }
+      }
     }
+
+    res.status(200).json(response)
+  }
 }
 

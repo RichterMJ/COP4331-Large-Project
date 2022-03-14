@@ -14,8 +14,6 @@ export enum SelectFoodError {
 
 export type SelectFoodRequest = {
     fdcId: number,
-    portionId: number,
-    quantity: number,
     jwtToken: any
 }
 
@@ -40,17 +38,16 @@ export type Portion = {
     gramWeight: number
 }
 
-export type Consumed = {
+export type ConsumedAmount = {
     portionId: number,
     quantity: number
 }
 
 export type Food = {
-    fdcId : number
-    description: string
-    foodNutrients: Nutrient[]
-    foodPortions: Portion[] | null
-    foodConsumed: Consumed | null
+  fdcId : number
+  description: string
+  foodNutrients: Nutrient[] 
+  foodPortions: Portion[] | null
 }
 
 
@@ -86,8 +83,24 @@ function convertUsdaFood(food: any): Food {
     description: food.description,
     foodNutrients: food.foodNutrients.map(convertUsdaNutrient),
     foodPortions: food.foodPortions.map(convertUsdaPortion),
-    foodConsumed: null
   }
+
+  // only keep wanted nutrients
+  let requiredNutrients = [1106, 1109, 1114, 1124, 1162, 1165, 1166, 1167, 1174, 1175, 1176, 1177, 1178,
+    1180, 1183, 1184, 1185, 1187,1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 
+    1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1141, 1142, 1149, 1213, 
+    1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 
+    1227, 1232, 1233, 1234, 1003, 1004, 1005, 1009, 1010, 1011, 1012, 1013, 1050, 
+    1063, 1257, 1258, 1291, 1292, 1293, 2047, 2048] 
+
+  converted.foodNutrients.forEach((nutrient: Nutrient) => {
+    let id = nutrient.nutrientId;
+
+    let i = requiredNutrients.indexOf(id);
+    if (i < 0) {
+      converted.foodNutrients.splice(i, 1);
+    }
+  });
 
   return converted
 }
@@ -98,7 +111,7 @@ export function SelectFood(app: Express, client: MongoClient): RequestHandler {
     let response: SelectFoodResponse = { food: null, jwtToken: null, error: SelectFoodError.Ok }
 
     try {
-      const { fdcId, portionId, quantity, jwtToken } = req.body as SelectFoodRequest
+      const { fdcId, jwtToken } = req.body as SelectFoodRequest
       const db = client.db()
 
       /* call api to get responses */
@@ -109,12 +122,7 @@ export function SelectFood(app: Express, client: MongoClient): RequestHandler {
       // convert results
 
       let item = convertUsdaFood(SelectResults);
-      let consumedAmount = {
-        portionId: portionId,
-        quantity: quantity
-      }
 
-      item.foodConsumed = consumedAmount;
       // get food consumed object
       response = {
         food: item,
@@ -143,3 +151,11 @@ export function SelectFood(app: Express, client: MongoClient): RequestHandler {
     res.status(200).json(response)
   }
 }
+/*
+vitaminNumbers: []int{},
+		mineralNumbers: []int{},
+		aminoNumbers:   []int{},
+		macroNumbers:   []int{},
+*/
+
+

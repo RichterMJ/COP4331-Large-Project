@@ -81,6 +81,8 @@ function convertUsdaPortion(Portion: any): Portion {
 
 function convertUsdaFood(food: any): Food {
   // @ts-ignore
+  //remove all non-necessary nutrients
+
   const converted = {
     fdcId: food.fdcId,
     description: food.description,

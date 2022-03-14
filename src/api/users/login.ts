@@ -14,7 +14,7 @@ export type LoginRequest = {
 }
 
 export type LoginResponse = {
-    userId: string
+    userId: ObjectIdString
     firstname: string
     lastname: string
     error: LoginError
