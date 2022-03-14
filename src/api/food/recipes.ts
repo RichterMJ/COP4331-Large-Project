@@ -37,7 +37,7 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
                 return
             }
 
-            const recipe = extractRecipe(req.body)
+            const recipe: Recipe = extractRecipe(req.body)
 
             const db = client.db()
             const queryResult = await db.collection('Recipes').insertOne(recipe)

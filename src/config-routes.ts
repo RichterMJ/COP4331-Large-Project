@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import { MongoClient } from 'mongodb'
-import { recipesPost } from './api/food/recipes'
+import { recipesDelete, recipesGet, recipesPost, recipesPut } from './api/food/recipes'
 import { foodRecordsDelete, foodRecordsGet, foodRecordsPost, foodRecordsPut } from './api/users/data/foodRecords'
 import { login } from './api/users/login'
 import { register } from './api/users/register'
@@ -13,7 +13,9 @@ export function setApp (app: Express, client: MongoClient) {
     app.post('/api/users/register', register(app, client))
 
     app.post('/api/users/food/recipes', recipesPost(app, client))
-    //app.get('/api/food/recipes', )
+    app.get('/api/users/food/recipes', recipesGet(app, client))
+    app.put('/api/users/food/recipes', recipesPut(app, client))
+    app.delete('/api/users/food/recipes', recipesDelete(app, client))
 
     app.post('/api/users/data/foodRecords', foodRecordsPost(app, client))
     app.get('/api/users/data/foodRecords', foodRecordsGet(app, client))

@@ -172,7 +172,7 @@ export type Recipe = {
     recipeId?: ObjectIdString
     recipeName: string
     userId: ObjectIdString
-    foods: RecipeFood[]
+    ingredients: RecipeFood[]
 }
 
 export function isRecipe(obj: any): obj is Recipe {
@@ -181,7 +181,7 @@ export function isRecipe(obj: any): obj is Recipe {
         return obj != null && typeof obj === 'object'
             && 'foodId' in obj && typeof obj.foodId === 'string'
             && 'foodName' in obj && typeof obj.foodName === 'string'
-            && 'amount' in obj && typeof obj.foodId === 'number'
+            && 'amount' in obj && typeof obj.amount === 'number'
             && 'unit' in obj && isUnit(obj.unit)
     }
 
@@ -189,7 +189,7 @@ export function isRecipe(obj: any): obj is Recipe {
         && (!('recipeId' in obj) || isObjectIdString(obj.recipeId))
         && 'recipeName' in obj && typeof obj.recipeName === 'string'
         && 'userId' in obj && isObjectIdString(obj.userId)
-        && 'foods' in obj && Array.isArray(obj.foods) && obj.foods.every(isRecipeFood)
+        && 'ingredients' in obj && Array.isArray(obj.ingredients) && obj.ingredients.every(isRecipeFood)
 }
 
 /* Basically returns `obj` ignoring any extra fields in `obj`. Since I'm OCD like that. */
@@ -210,7 +210,7 @@ export function extractRecipe(obj: Recipe & { _id?: ObjectIdString }): Recipe {
         recipeId: obj.recipeId ?? obj._id,
         recipeName: obj.recipeName,
         userId: obj.userId,
-        foods: obj.foods.map(extractRecipeFoods),
+        ingredients: obj.ingredients.map(extractRecipeFoods),
     }
 
     return recipe
