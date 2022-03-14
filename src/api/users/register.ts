@@ -1,6 +1,5 @@
 import { RequestHandler, Request, Response, Express } from 'express'
 import { MongoClient, WriteError } from 'mongodb'
-import { json } from 'stream/consumers'
 import { ObjectIdString, User } from '../global-types'
 
 export enum RegisterError {

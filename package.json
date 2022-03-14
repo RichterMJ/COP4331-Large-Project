@@ -15,10 +15,12 @@
     ],
     "main": "./src/index.js",
     "scripts": {
-        "start": "tsc && node dist/index.js",
+        "start": "tsc && node ./dist/index.js",
+        "watch": "nodemon -e js,ts --watch src --exec \"yarn run start\"",
         "lint": "echo \"No linter yet\"",
         "test": "echo \"No testing framework yet\"",
-        "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd ./food-parts install && yarn --cwd ./food-parts run build"
+        "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd ./food-parts install && yarn --cwd ./food-parts run build",
+        "config-db": "node ./scripts/config-db.js"
     },
     "devDependencies": {
         "@types/axios": "^0.14.0",

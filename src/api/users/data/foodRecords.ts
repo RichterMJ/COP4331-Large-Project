@@ -5,7 +5,7 @@ import {
     IsoDate, isIsoDate,
     IsoTimestamp, isIsoTimestamp,
     FoodRecord, isFoodRecord,
-    Portion, isPortion, AmountConsumed, isAmountConsumed, Food, isFood,
+    AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
 
 
@@ -104,6 +104,10 @@ export type FoodRecordGetResponse = {
 }
 
 // Accepts request in body or URI as a query parameter.
+// Precedence is undefined when it comes to:
+// - Searches by URI vs body.
+// - Searches by ID vs date range.
+// Reason: The devs should always choose one or the other!
 export function foodRecordsGet(app: Express, client: MongoClient): RequestHandler {
 
     // Trusty that the database output is correctly formatted.
@@ -126,20 +130,24 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
         let response: FoodRecordGetResponse = { foodRecords: [], error: 0 }
 
+        const paramFoodRecordId = req.query.foodRecordId ?? req.body.startDate
+        const paramStartDate = req.query.startDate ?? req.body.startDate
+        const paramEndDate = req.query.startDate ?? req.body.startDate
+
         try {
             const db = client.db()
             
-            if ('foodRecordId' in req.query) {
+            if (paramFoodRecordId != null) {
 
                 // API search via ID.
                 
-                if (!isObjectIdString(req.query.foodRecordId)) {
+                if (!isObjectIdString(paramFoodRecordId)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     res.status(200).json(response)
                     return
                 }
                 
-                const foodRecordId = req.query.foodRecordId
+                const foodRecordId = paramFoodRecordId
 
                 const queryResults = await db.collection('FoodRecords').find({
                     '_id': new ObjectId(foodRecordId)
@@ -151,15 +159,15 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
                 // API search via date range.
 
-                if (!isIsoDate(req.query.startDate) || !isIsoDate(req.query.endDate)) {
+                if (!isIsoDate(paramStartDate) || !isIsoDate(paramEndDate)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     res.status(200).json(response)
                     return
                 }
 
                 // Hack to ensure that parsing via `new Date(..)` yields the correct date.
-                const startDate: string = req.query.startDate + 'T23:59:59Z'
-                const endDate: string = req.query.endDate + 'T23:59:59Z'
+                const startDate: string = paramStartDate + 'T23:59:59Z'
+                const endDate: string = paramEndDate + 'T23:59:59Z'
 
                 // Create `_startDate` as a date object, truncating time.
                 // Create `_endDate` as a date object one day ahead, truncating time.

@@ -16,6 +16,7 @@
 - [Setup](#setup)
 - [Authors](#authors)
 - [Building](#building)
+- [Team](#team)
 - [License](#license)
 
 
@@ -26,7 +27,19 @@ GitFit is a fitness app that works on desktop and mobile. Users can sign up with
 
 # Setup
 
-You'll need to set up your environment variables to match the specs as seen in the file *environment.d.ts*. This project uses dotenv so you can just set a *.env* file in the root of the project, e.g.:
+
+## Tools
+
+Yarn is the preferred package manager (npm should work as well, though).
+
+You'll need a USDA FoodData Central API key. It's free to sign up for an account.
+
+You'll also need to set up a MongoDB database with Atlas and get a connection URI. MongoDB Atlas is required because of the fuzzy-search functionality used (other databases might be compatible with fuzzy-search but it is untested and not directly supported).
+
+
+## Environment Variables
+
+The environment variables need to match the specs as seen in the file *environment.d.ts*. This project uses dotenv so you can just set a *.env* file in the root of the project, e.g.:
 
 ```sh
 NODE_ENV=development
@@ -36,13 +49,27 @@ MONGODB_URI=mongodb+srv://example.mongodb.net/Example
 ```
 
 
-# Building
+## First Time Running
+
+As with every yarn/npm project, simply run `yarn` from the command-line to download the required node packages.
+
+Then, before running the project for the first time, you must configure the database by running the following:
+
+```sh
+yarn run config-db
+```
+
+Afterwards you can (build + run)[#running] as normal.
+
+
+# Running
 
 In development mode:
 - Run `yarn start` from the root directory to compile + run the API server.
-- Run `yarn start` from the *frontend* directory to run the react sever.
+- Run `yarn start` from the *frontend* directory to run the React frontent server.
 
-Production mode is not complete as of yet.
+Production mode is not complete as of yet. But once it is the steps for production mode are:
+- Run `yarn start` from the root directory to compile + run the API server and the frontend.
 
 
 # Team
