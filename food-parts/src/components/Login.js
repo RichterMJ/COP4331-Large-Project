@@ -1,12 +1,49 @@
 import React from "react";
 
 function Login() {
+  const [errorMessage, setMessage] = useState("");
+
   const doLogin = async (event) => {
-    event.preventDefault();
-    alert("doIt()");
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
+
+    const loginData = {
+      email: email.value,
+      password: password.value
+    };
+
+    const loginJSON = JSON.stringify(loginData);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/users/login", {
+        method: "POST",
+        body: loginJSON,
+        headers: { "Content-Type": "application/json" },
+      });
+      
+      let res = JSON.parse(await response.text());
+
+      console.log(res);
+
+      if (res.error == 1) {
+        setMessage("Incorrect email/password");
+      } else {
+        const user = {
+          firstName: res.firstName,
+          lastName: res.lastName,
+          id: res.userId,
+        };
+        localStorage.setItem("user_data", JSON.stringify(user));
+        setMessage("");
+        //window.location.href = "/userpage";
+      }
+    } catch (e) {
+      console.log(e.toString());
+      return;
+    }
   };
 
-  function makeTextInput (id, name,placeholder){
+  function makeTextInput (id,name,placeholder){
     return(<input
               className="form-control"
               type="text"
@@ -38,7 +75,7 @@ function Login() {
       <div className="card">
         <div className="card-body">
           <h2 className="text-center">Log in</h2>
-          {makeTextInput("username","login","email")}
+          {makeTextInput("email","login","email")}
             <br></br>
           {makeTextInput("password","login","password")}
             <div>
