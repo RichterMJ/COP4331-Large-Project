@@ -13,8 +13,9 @@ function Signup() {
 	  if(fields[3] != fields[4])
 		  errors.push(4);
 	  
-	  if(isNaN(fields[5]) || fields[5].length == 0)
+	  if(isNaN(fields[5]) || fields[5].length == 0){
 		  errors.push(5);
+	  }
 	  
 	  return errors.length == 0;
   }
