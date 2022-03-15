@@ -49,6 +49,13 @@ function convertUsdaFood(food: any): Food {
     portions: food.foodPortions.map(convertUsdaPortion),
   }
 
+  const standardPortion = {
+    portionId: 0,
+    portionName: "100g",
+    gramAmount: 100
+  }
+  converted.portions.unshift(standardPortion);
+
   converted.nutrients = converted.nutrients
     .filter((nutrient: Nutrient) => keepOnlyNutrients.includes(nutrient.nutrientId))
 
