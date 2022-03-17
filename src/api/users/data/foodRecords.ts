@@ -93,7 +93,12 @@ export enum FoodRecordGetError {
     InvalidRange,
 }
 
-export type FoodRecordGetRequest = { foodRecordId: ObjectIdString } | {
+export type FoodRecordGetRequest =
+{
+    userId?: ObjectIdString
+    foodRecordId: ObjectIdString
+} | {
+    userId?: ObjectIdString
     startDate: IsoDate
     endDate: IsoDate
 }
@@ -132,7 +137,8 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
         const paramFoodRecordId = req.query.foodRecordId ?? req.body.startDate
         const paramStartDate = req.query.startDate ?? req.body.startDate
-        const paramEndDate = req.query.startDate ?? req.body.startDate
+        const paramEndDate = req.query.endDate ?? req.body.endDate
+        const paramUserId = req.params.userId ?? req.query.userId ?? req.body.userId
 
         try {
             const db = client.db()
@@ -141,7 +147,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
                 // API search via ID.
                 
-                if (!isObjectIdString(paramFoodRecordId)) {
+                if (!isObjectIdString(paramFoodRecordId) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     res.status(200).json(response)
                     return
@@ -150,16 +156,19 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 const foodRecordId = paramFoodRecordId
 
                 const queryResults = await db.collection('FoodRecords').find({
-                    '_id': new ObjectId(foodRecordId)
+                    '_id': new ObjectId(foodRecordId),
+                    userId: paramUserId
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
+                res.status(200).json(response)
+                return
 
             } else {
 
                 // API search via date range.
 
-                if (!isIsoDate(paramStartDate) || !isIsoDate(paramEndDate)) {
+                if (!isIsoDate(paramStartDate) || !isIsoDate(paramEndDate) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     res.status(200).json(response)
                     return
@@ -176,21 +185,24 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 _endDate.setDate(_endDate.getDate() + 1)
 
                 const queryResults = await db.collection('FoodRecords').find({
-                    eatenTimestamp: {
+                    userId: paramUserId,
+                    'eatenTimestamp': {
                         $gte: _startDate,
                         $lt: _endDate
                     }
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
+                res.status(200).json(response)
+                return
             }
 
         } catch (e) {
             response.error = FoodRecordGetError.ServerError
             console.log(e)
+            res.status(200).json(response)
+            return
         }
-
-        res.status(200).json(response)
     }
 }
 
