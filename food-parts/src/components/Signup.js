@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import Modal from "../components/Modal";
 
 function Signup() {
   const [errorMessage, setMessage] = useState("");
   let errors = [];
+
+  const [isOpen, setIsOpen] = useState(false);
+
   
   function isProperSignup(...fields){
 	  //Note that weight is the last index in fields
@@ -43,7 +47,7 @@ function Signup() {
   const doSignup = async (event) => {
     //event.preventDefault();
 
-	errors = [];
+	  errors = [];
 	
     let fName = document.getElementById('fName');
     let lName = document.getElementById('lName');
@@ -52,11 +56,11 @@ function Signup() {
     let password = document.getElementById('password');
     let repeat = document.getElementById('repeat');
 	
-	if(!isProperSignup(fName.value, lName.value, email.value, password.value, repeat.value, weight.value)){
-		console.log(errors.length);
-		addErrors(fName, lName, email, password, repeat, weight);
-		return;
-	}
+    if(!isProperSignup(fName.value, lName.value, email.value, password.value, repeat.value, weight.value)){
+      console.log(errors.length);
+      addErrors(fName, lName, email, password, repeat, weight);
+      return;
+    }
 	
     const obj = {
       firstName: fName.value,
@@ -67,8 +71,8 @@ function Signup() {
     };
 
     const js = JSON.stringify(obj);
+    setIsOpen(true);
 
-    //console.log(js);
     try {
       const response = await fetch("http://localhost:8080/api/users/register", {
         method: "POST",
@@ -90,9 +94,8 @@ function Signup() {
         };
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
-        //window.location.href = "/";
       }
-    } catch (e) {
+    }catch(e){
       console.log(e.toString());
       return;
     }
@@ -127,7 +130,7 @@ function Signup() {
 
   function makeLink(href, className, txt) {
     return (
-      <a href={href} class={className}>
+      <a href={href} className={className}>
         <u>{txt}</u>
       </a>
     );
@@ -135,6 +138,10 @@ function Signup() {
 
   function makeSpan(className, txt){
     return (<span className={className}>{txt}</span>);
+  }
+
+  function makeModal(){
+    return (null);
   }
 
   return (
@@ -194,6 +201,10 @@ function Signup() {
           {makeLink("/", "fw-bold text-body", "Login here")}
         </p>
       </div>
+
+      <main>
+      {isOpen && <Modal setIsOpen={setIsOpen} />}
+      </main>
     </div>
   );
 }
