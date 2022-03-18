@@ -18,6 +18,15 @@ function ForgotPassword() {
       </button>
     );
   }
+  function makeLinkDiv(className, href, content) {
+    return (
+      <div className={className}>
+        <a className="text-danger" href={href}>
+          {content}
+        </a>
+      </div>
+    );
+  }
   const doResetPassword = async (event) => {
     // implement reset password function
     // console.log("reset button clicked!");
@@ -50,11 +59,11 @@ function ForgotPassword() {
               "button",
               "btn btn-success btn-lg",
               () => doResetPassword(),
-              "Reset Password",
+              "Done",
               "resetPasswordButton"
             )}
           </div>
-          <div id="formFooter"></div>
+          <div id="formFooter">{makeLinkDiv("pt-2 pl-1", "/", "Cancel")}</div>
         </div>
       </div>
     </div>
