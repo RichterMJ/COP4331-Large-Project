@@ -74,3 +74,8 @@
   align-content: center;
   align-items: center;
   }
+#bottomSubPanel {
+  overflow-y: auto;
+
+
+}
