@@ -13,6 +13,7 @@ export const nodeEnv: string = process.env.NODE_ENV as string
 export const USDA_API_KEY: string = process.env.USDA_API_KEY as string
 const port: string = process.env.PORT || '8080'
 const dbUri: string = process.env.MONGODB_URI as string
+export const URL: string = 'localhost'
 
 // DB.
 const dbClient = new MongoClient(dbUri)

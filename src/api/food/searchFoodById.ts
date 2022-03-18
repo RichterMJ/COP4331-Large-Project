@@ -63,10 +63,6 @@ function convertUsdaFood(food: any): Food {
 }
 
 
-////////////////////////////////////////
-// POST
-////////////////////////////////////////
-
 export enum SearchFoodByIdError {
   Ok = 0,
   InvalidRequest,
