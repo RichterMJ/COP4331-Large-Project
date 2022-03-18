@@ -6,6 +6,8 @@ import { foodRecordsDelete, foodRecordsGet, foodRecordsPost, foodRecordsPut } fr
 import { login } from './api/users/login'
 import { register } from './api/users/register'
 import { recipesDelete, recipesGet, recipesPost, recipesPut } from './api/food/recipes'
+import { sendEmail } from './api/users/emailVerification/sendEmail'
+import { verifyEmail } from './api/users/emailVerification/verifyEmail'
 
 /* Set up the routing. Logic should go under './api/'. */
 export function setApp (app: Express, client: MongoClient) {
