@@ -16,7 +16,8 @@
     "main": "./src/index.js",
     "scripts": {
         "build": "tsc",
-        "start": "yarn run build && node ./dist/index.js",
+        "postinstall": "yarn run build",
+        "start": "node ./dist/index.js",
         "watch": "nodemon -e js,ts --watch src --exec \"yarn run start\"",
         "lint": "echo \"No linter yet\"",
         "test": "echo \"No testing framework yet\"",
