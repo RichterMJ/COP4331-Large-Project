@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// var ph = require('./path.js');
+import buildPath from "./path";
+
 function Signup() {
   const [errorMessage, setMessage] = useState("");
   let errors = [];
@@ -70,7 +73,7 @@ function Signup() {
 
     //console.log(js);
     try {
-      const response = await fetch("http://localhost:8080/api/users/register", {
+      const response = await fetch(buildPath("api/users/register"), {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
