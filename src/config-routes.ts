@@ -13,8 +13,8 @@ export function setApp (app: Express, client: MongoClient) {
     app.post('/api/users/login', login(app, client))
     app.post('/api/users/register', register(app, client))
 
-    app.post('/api/users/emailVerification/sendEmail', sendEmail(app, client))
-    app.post('/api/users/emailVerification/verifyEmail', verifyEmail(app, client))
+//    app.post('/api/users/emailVerification/sendEmail', sendEmail(app, client))
+//    app.post('/api/users/emailVerification/verifyEmail', verifyEmail(app, client))
 
     app.post('/api/food/searchByName', searchFoodByName(app, client))
     app.post('/api/food/searchById', searchFoodById(app, client))

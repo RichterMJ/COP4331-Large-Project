@@ -120,14 +120,14 @@ export function isUser(obj: any): obj is User {
 
 export type Portion = {
     portionId: number
-    portionName: string
+    portionName?: string
     gramAmount: number
 }
 
 export function isPortion(obj: any): obj is Portion {
     return obj != null && typeof obj === 'object'
         && 'portionId' in obj && typeof obj.portionId === 'number'
-        && 'portionName' in obj && typeof obj.portionName === 'string'
+        && (!('portionName' in obj) || typeof obj.portionName === 'string')
         && 'gramAmount' in obj && typeof obj.gramAmount === 'number'
 }
 
@@ -229,35 +229,32 @@ export function isFoodRecord(obj: any): obj is FoodRecord {
 
 
 ////////////////////////////////////////
-// type Recipe
+// type Recipe (extends Food)
 ////////////////////////////////////////
 
-type RecipeFood = {
+export type RecipeFood = {
     food: Food
     amountUsed: AmountConsumed
 }
 
-export type Recipe = {
+export function isRecipeFood(obj: any): boolean {
+    return obj != null && typeof obj === 'object'
+        && 'food' in obj && isFood(obj.food)
+        && 'amountUsed' in obj && isAmountConsumed(obj.amountUsed)
+}
+
+export type Recipe = Food & {
     recipeId?: ObjectIdString
-    recipeName: string
     userId: ObjectIdString
     ingredients: RecipeFood[]
-    totalNutrients: Nutrient[]
 }
 
 export function isRecipe(obj: any): obj is Recipe {
-
-    function isRecipeFood(obj: any): boolean {
-        return obj != null && typeof obj === 'object'
-            && 'food' in obj && isFood(obj.food)
-            && 'amountUsed' in obj && isAmountConsumed(obj.amountUsed)
-    }
-
     return obj != null && typeof obj === 'object'
         && (!('recipeId' in obj) || isObjectIdString(obj.recipeId))
-        && 'recipeName' in obj && typeof obj.recipeName === 'string'
         && 'userId' in obj && isObjectIdString(obj.userId)
         && 'ingredients' in obj && Array.isArray(obj.ingredients) && obj.ingredients.every(isRecipeFood)
+        && isFood(obj)
 }
 
 /* Basically returns `obj` ignoring any extra fields in `obj`. Tbh this is just me being OCD. Might delete idk. */
@@ -274,10 +271,13 @@ export function extractRecipe(obj: Recipe & { _id?: ObjectIdString }): Recipe {
 
     const recipe = {
         recipeId: obj.recipeId ?? obj._id?.toString() ?? obj._id, // Database results will always have `._id` instead of `recipeId`.
-        recipeName: obj.recipeName,
         userId: obj.userId,
         ingredients: obj.ingredients.map(extractRecipeFoods),
-        totalNutrients: obj.totalNutrients
+    
+        fdcId: obj.fdcId,
+        description: obj.description,
+        nutrients: obj.nutrients,
+        portions: obj.portions,
     }
 
     return recipe
