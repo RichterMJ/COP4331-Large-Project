@@ -50,7 +50,7 @@ function Signup() {
   const doSignup = async (event) => {
     //event.preventDefault();
 
-	  errors = [];
+	errors = [];
 	
     let fName = document.getElementById('fName');
     let lName = document.getElementById('lName');
@@ -65,7 +65,7 @@ function Signup() {
       return;
     }
 	
-    const obj = {
+    const signupInfo = {
       firstName: fName.value,
       lastName: lName.value,
       weight: Number(weight.value),
@@ -73,13 +73,13 @@ function Signup() {
       password: password.value,
     };
 
-    const js = JSON.stringify(obj);
+    const jsonPayload = JSON.stringify(signupInfo);
     setIsOpen(true);
 
     try {
       const response = await fetch(buildPath("api/users/register"), {
         method: "POST",
-        body: js,
+        body: jsonPayload,
         headers: { "Content-Type": "application/json" },
       });
       
