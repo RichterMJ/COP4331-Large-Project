@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { MongoClient } from 'mongodb'
+import { resolve } from 'path'
 
 // Load env vars from .env file.
 import 'dotenv/config'
@@ -34,6 +35,15 @@ app.use((_, res, next) => {
     )
     next()
 })
+
+if(process.env.NODE_ENV === 'production'){
+    // set static folder
+    app.use(express.static('frontend/build'))
+
+    app.get('*', (req, res) => {
+        res.sendFile(resolve(__dirname, 'frontend', 'build', 'index.html'))
+    })
+}
 
 setApp(app, dbClient)
 
