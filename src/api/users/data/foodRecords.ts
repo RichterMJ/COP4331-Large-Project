@@ -5,6 +5,8 @@ import {
     IsoDate, isIsoDate,
     IsoTimestamp, isIsoTimestamp,
     FoodRecord, isFoodRecord,
+    Nutrient, isNutrient,
+    Portion, isPortion,
     AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
 
@@ -22,6 +24,7 @@ export enum FoodRecordPostError {
 export type FoodRecordPostRequest = {
     food: Food
     userId: ObjectIdString
+    portionId: number
     eatenTimestamp: IsoTimestamp
     amountConsumed: AmountConsumed
 }
@@ -30,6 +33,39 @@ export type FoodRecordPostResponse = {
     foodRecordId?: ObjectIdString
     error: FoodRecordPostError
 }
+
+function getTotalNutrients(food: Food, consumed: AmountConsumed): Nutrient[] {
+    // @ts-ignore
+
+    const keepOnlyNutrients = [
+        1106, 1109, 1114, 1124, 1162, 1165, 1166, 1167, 1174, 1175, 1176, 1177, 1178,
+        1180, 1183, 1184, 1185, 1187, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094,
+        1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1141, 1142, 1149, 1213,
+        1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226,
+        1227, 1232, 1233, 1234, 1003, 1004, 1005, 1009, 1010, 1011, 1012, 1013, 1050,
+        1063, 1257, 1258, 1291, 1292, 1293, 2047, 2048
+    ]
+
+    let totalNutrients: Nutrient[] = [];
+    
+
+    const foodPortion = consumed.portion;
+    food.nutrients.forEach((curNutrient: Nutrient) => {
+        if(keepOnlyNutrients.indexOf(curNutrient.nutrientId) != -1){
+            const temp = {
+                nutrientId: curNutrient.nutrientId,
+                nutrientName: curNutrient.nutrientName,
+                unitName: curNutrient.unitName,
+                value: (consumed.quantity * curNutrient.value * foodPortion.gramAmount) / 100
+            }
+            totalNutrients.push(temp);
+        }
+    });
+
+    
+    return totalNutrients
+  }
+
 
 export function foodRecordsPost(app: Express, client: MongoClient): RequestHandler {
 
@@ -60,7 +96,7 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 eatenTimestamp: new Date(eatenTimestamp),
                 food,
                 amountConsumed,
-                totalNutrients: [], // TODO calculate the total nutrients based on `food` + `amountConsumed`.
+                totalNutrients: getTotalNutrients(food, amountConsumed), // TODO calculate the total nutrients based on `food` + `amountConsumed`.
             }
 
             const db = client.db()
