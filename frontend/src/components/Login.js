@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import buildPath from "./path";
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
@@ -15,7 +16,7 @@ function Login() {
     const loginJSON = JSON.stringify(loginData);
 
     try {
-      const response = await fetch("http://localhost:8080/api/users/login", {
+      const response = await fetch(buildPath("api/users/login"), {
         method: "POST",
         body: loginJSON,
         headers: { "Content-Type": "application/json" },
