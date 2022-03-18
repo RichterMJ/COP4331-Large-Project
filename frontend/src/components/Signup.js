@@ -10,61 +10,61 @@ function Signup() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  
-  function isProperSignup(...fields){
-	  //Note that weight is the last index in fields
-	  for(let i = 0; i < 4; i++)
-		  if(fields[i].length <= 0)
-			  errors.push(i);
-		  
-	  if(fields[3] != fields[4])
-		  errors.push(4);
-	  
-	  if(isNaN(fields[5]) || fields[5].length == 0)
-		  errors.push(5);
-	  
-	  return errors.length == 0;
+  function isProperSignup(...fields) {
+    //Note that weight is the last index in fields
+    for (let i = 0; i < 4; i++) if (fields[i].length <= 0) errors.push(i);
+
+    if (fields[3] != fields[4]) errors.push(4);
+
+    if (isNaN(fields[5]) || fields[5].length == 0) errors.push(5);
+
+    return errors.length == 0;
   }
-  
-  function addErrors(...fields){
-	  for(let i = 0; i < 4; i++)
-		  if(errors.includes(i)){
-			 //Add red warning to fields[i]
-		  }
-		 
-	  if(errors.includes(4)){
-		  //Add red warning to fields[4]
-	  }
-	  
-	  if(errors.includes(5)){
-		  //Add red warning to fields[5]
-	  }
-		  
+
+  function addErrors(...fields) {
+    for (let i = 0; i < 4; i++)
+      if (errors.includes(i)) {
+        //Add red warning to fields[i]
+      }
+
+    if (errors.includes(4)) {
+      //Add red warning to fields[4]
+    }
+
+    if (errors.includes(5)) {
+      //Add red warning to fields[5]
+    }
   }
-  
-  function addDuplicateEmailWarning(){
-	  
-	  
-  }
+
+  function addDuplicateEmailWarning() {}
 
   const doSignup = async (event) => {
     //event.preventDefault();
+    console.log("Hello");
+    errors = [];
 
-	  errors = [];
-	
-    let fName = document.getElementById('fName');
-    let lName = document.getElementById('lName');
-    let weight = document.getElementById('weight');
-    let email = document.getElementById('email');
-    let password = document.getElementById('password');
-    let repeat = document.getElementById('repeat');
-	
-    if(!isProperSignup(fName.value, lName.value, email.value, password.value, repeat.value, weight.value)){
+    let fName = document.getElementById("fName");
+    let lName = document.getElementById("lName");
+    let weight = document.getElementById("weight");
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
+    let repeat = document.getElementById("repeat");
+
+    if (
+      !isProperSignup(
+        fName.value,
+        lName.value,
+        email.value,
+        password.value,
+        repeat.value,
+        weight.value
+      )
+    ) {
       console.log(errors.length);
       addErrors(fName, lName, email, password, repeat, weight);
       return;
     }
-	
+
     const obj = {
       firstName: fName.value,
       lastName: lName.value,
@@ -82,7 +82,7 @@ function Signup() {
         body: js,
         headers: { "Content-Type": "application/json" },
       });
-      
+
       let res = JSON.parse(await response.text());
 
       console.log(res);
@@ -98,7 +98,7 @@ function Signup() {
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
       }
-    }catch(e){
+    } catch (e) {
       console.log(e.toString());
       return;
     }
@@ -106,21 +106,20 @@ function Signup() {
 
   function makeLabel(title, txt, className = "") {
     return (
-      <label
-        className={className + " signupLabel form-label"}
-        htmlFor={title}
-      >
+      <label className={className + " signupLabel form-label"} htmlFor={title}>
         {txt}
       </label>
     );
   }
 
-  function makeInput(
-    type,
-    id,
-    className = "",
-  ) {
-    return <input type={type} id={id} className={className + " form-control form-control-lg"}/>;
+  function makeInput(type, id, className = "") {
+    return (
+      <input
+        type={type}
+        id={id}
+        className={className + " form-control form-control-lg"}
+      />
+    );
   }
 
   function makeButton(className, onClick, txt) {
@@ -139,19 +138,17 @@ function Signup() {
     );
   }
 
-  function makeSpan(className, txt){
-    return (<span className={className}>{txt}</span>);
+  function makeSpan(className, txt) {
+    return <span className={className}>{txt}</span>;
   }
 
-  function makeModal(){
-    return (null);
+  function makeModal() {
+    return null;
   }
 
   return (
     <div className="container">
-      
       <div className="card">
-      
         <h2 className="text-center"> Sign Up </h2>
 
         <div className="firstRow">
@@ -206,7 +203,7 @@ function Signup() {
       </div>
 
       <main>
-      {isOpen && <Modal setIsOpen={setIsOpen} />}
+        {isOpen && <Modal setIsOpen={setIsOpen} purpose="Email Verification" />}
       </main>
     </div>
   );
