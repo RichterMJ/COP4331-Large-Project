@@ -1,16 +1,16 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import buildPath from "./path";
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
   const doLogin = async (event) => {
-    let email = document.getElementById('email');
-    let password = document.getElementById('password');
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
 
     const loginData = {
       email: email.value,
-      password: password.value
+      password: password.value,
     };
 
     const loginJSON = JSON.stringify(loginData);
@@ -21,7 +21,7 @@ function Login() {
         body: loginJSON,
         headers: { "Content-Type": "application/json" },
       });
-      
+
       let res = JSON.parse(await response.text());
 
       console.log(res);
@@ -44,31 +44,32 @@ function Login() {
     }
   };
 
-  function makeTextInput (id,name,placeholder){
-    return(<input
-              className="form-control"
-              type="text"
-              id={id}
-              name={name}
-              placeholder={placeholder}
-            />
-          )
+  function makeTextInput(id, name, placeholder) {
+    return (
+      <input
+        className="form-control"
+        type="text"
+        id={id}
+        name={name}
+        placeholder={placeholder}
+      />
+    );
   }
 
-  function makeActionButton(type,className,event,text,id=""){
-    return(<button
-           type = {type}
-           className={className}
-           onClick = {event}
-           id = {id}>
-             {text}
-           </button>)
+  function makeActionButton(type, className, event, text, id = "") {
+    return (
+      <button type={type} className={className} onClick={event} id={id}>
+        {text}
+      </button>
+    );
   }
 
-  function makeLinkDiv ( className, href, content){
-    return (<a className={className} href={href}>
-              {content}
-            </a>)
+  function makeLinkDiv(className, href, content) {
+    return (
+      <a className={className} href={href}>
+        {content}
+      </a>
+    );
   }
 
   return (
@@ -76,16 +77,26 @@ function Login() {
       <div className="card">
         <div className="card-body">
           <h2 className="text-center">Log in</h2>
-          {makeTextInput("email","login","email")}
-            <br></br>
-          {makeTextInput("password","login","password")}
-            <div>
-              {makeActionButton("button","btn btn-block",()=>doLogin(),"Login","loginButton")}
-            </div>
+          {makeTextInput("email", "login", "email")}
+          <br></br>
+          {makeTextInput("password", "login", "password")}
+          <div>
+            {makeActionButton(
+              "button",
+              "btn btn-block",
+              () => doLogin(),
+              "Login",
+              "loginButton"
+            )}
+          </div>
           <div id="formFooter">
-            {makeLinkDiv("underLineHover","s","Forgot Password?")}
+            {makeLinkDiv(
+              "underLineHover",
+              "forgot-password",
+              "Forgot Password?"
+            )}
             <br></br>
-            {makeLinkDiv("underLineHover","signup","Create an Account")}
+            {makeLinkDiv("underLineHover", "signup", "Create an Account")}
           </div>
         </div>
       </div>

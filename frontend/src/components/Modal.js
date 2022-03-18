@@ -1,10 +1,10 @@
 import React from "react";
-import { RiCloseLine } from "react-icons/ri";
+//import { RiCloseLine } from "react-icons/ri";
 
 const Modal = ({ setIsOpen }) => {
   return (
     <>
-      <div className="darkBG"/>
+      <div className="darkBG" />
       <div className="centered">
         <div className="theModal">
           <div className="modalContent">
@@ -12,7 +12,10 @@ const Modal = ({ setIsOpen }) => {
           </div>
           <div className="modalActions">
             <div className="actionsContainer">
-              <button className="okayBtn" onClick={() => window.location.href = "/"}>
+              <button
+                className="okayBtn"
+                onClick={() => (window.location.href = "/")}
+              >
                 Okay
               </button>
             </div>

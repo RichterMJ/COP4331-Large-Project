@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import {
   BrowserRouter as Router,
   Route,
@@ -18,6 +19,9 @@ function App() {
         </Route>
         <Route path="/signup" exact>
           <SignupPage />
+        </Route>
+        <Route path="/forgot-password" exact>
+          <ForgotPasswordPage />
         </Route>
         <Redirect to="/" />
       </Switch>
