@@ -1,3 +1,4 @@
+// FIXME, change to herku with better name
 const app_name = 'lordkingtutshort'
 
 function buildPath(route) {
