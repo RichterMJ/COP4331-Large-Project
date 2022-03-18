@@ -1,6 +1,7 @@
 import { Express, Request, RequestHandler, Response } from 'express'
 import { MongoClient, ObjectId } from 'mongodb'
-import { extractRecipe, isObjectIdString, isRecipe, ObjectIdString, Recipe } from '../global-types'
+import { brotliDecompressSync } from 'zlib'
+import { extractRecipe, isObjectIdString, isPortion, isRecipe, isRecipeFood, ObjectIdString, Portion, Recipe, RecipeFood } from '../global-types'
 
 ////////////////////////////////////////
 // POST
@@ -12,7 +13,12 @@ export enum RecipesPostError {
     ServerError,
 }
 
-export type RecipesPostRequest = Recipe
+export type RecipesPostRequest = {
+    userId?: ObjectIdString
+    ingredients: RecipeFood[]
+    description: string
+    portions: Portion[]
+}
 
 export type RecipesPostResponse = {
     recipeId?: ObjectIdString
@@ -23,21 +29,33 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
 
     function isRecipesPostRequest(obj: any): obj is RecipesPostRequest {
         return obj != null && typeof obj === 'object'
-            && isRecipe(obj)
+            && 'ingredients' in obj && Array.isArray(obj.ingredients) && obj.ingredients.every(isRecipeFood)
+            && 'description' in obj && typeof obj.description === 'string'
+            && 'portions' in obj && Array.isArray(obj.portions) && obj.portions.every(isPortion)
     }
 
     return async (req: Request, res: Response) => {
 
         let response: RecipesPostResponse = { error: 0 }
 
+        const paramUserId = req.params.userId ?? req.body.userId
+
         try {
-            if (!isRecipesPostRequest(req.body)) {
+            if (!isRecipesPostRequest(req.body) || !isObjectIdString(paramUserId)) {
                 response.error = RecipesPostError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const recipe: Recipe = extractRecipe(req.body)
+            const recipe: Recipe = {
+                userId: paramUserId,
+                ingredients: req.body.ingredients,
+
+                fdcId: 0,
+                description: req.body.description,
+                nutrients: [], // TODO Calculate total nutrients.
+                portions: req.body.portions,
+            }
 
             const db = client.db()
             const queryResult = await db.collection('Recipes').insertOne(recipe)
@@ -73,7 +91,7 @@ export enum RecipesGetError {
 
 export type RecipesGetRequest = {
     recipeId?: ObjectIdString,
-    recipeName?: string,
+    description?: string,
 }
 
 export type RecipesGetResponse = {
@@ -95,7 +113,7 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
         try {
 
             const recipeId = req.query.recipeId ?? req.body.recipeId
-            const recipeName = req.query.recipeName ?? req.body.recipeName
+            const description = req.query.description?? req.body.description
 
             const db = client.db()
 
@@ -122,7 +140,7 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                 
                 // Search by name.
 
-                if (typeof recipeName !== 'string') {
+                if (typeof description !== 'string') {
                     response.error = RecipesGetError.InvalidRequest
                     res.status(200).json(response)
                     return
@@ -132,8 +150,8 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                     {
                         $search: {
                             text: {
-                                query: recipeName,
-                                path: 'recipeName',
+                                query: description,
+                                path: 'description',
                                 fuzzy: {},
                             }
                         }

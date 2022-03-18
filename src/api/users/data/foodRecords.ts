@@ -24,7 +24,6 @@ export enum FoodRecordPostError {
 export type FoodRecordPostRequest = {
     food: Food
     userId: ObjectIdString
-    portionId: number
     eatenTimestamp: IsoTimestamp
     amountConsumed: AmountConsumed
 }
@@ -47,11 +46,10 @@ function getTotalNutrients(food: Food, consumed: AmountConsumed): Nutrient[] {
     ]
 
     let totalNutrients: Nutrient[] = [];
-    
 
     const foodPortion = consumed.portion;
     food.nutrients.forEach((curNutrient: Nutrient) => {
-        if(keepOnlyNutrients.indexOf(curNutrient.nutrientId) != -1){
+        if (keepOnlyNutrients.indexOf(curNutrient.nutrientId) != -1) {
             const temp = {
                 nutrientId: curNutrient.nutrientId,
                 nutrientName: curNutrient.nutrientName,
@@ -62,9 +60,8 @@ function getTotalNutrients(food: Food, consumed: AmountConsumed): Nutrient[] {
         }
     });
 
-    
     return totalNutrients
-  }
+}
 
 
 export function foodRecordsPost(app: Express, client: MongoClient): RequestHandler {
@@ -96,7 +93,7 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 eatenTimestamp: new Date(eatenTimestamp),
                 food,
                 amountConsumed,
-                totalNutrients: getTotalNutrients(food, amountConsumed), // TODO calculate the total nutrients based on `food` + `amountConsumed`.
+                totalNutrients: getTotalNutrients(food, amountConsumed),
             }
 
             const db = client.db()
@@ -130,14 +127,14 @@ export enum FoodRecordGetError {
 }
 
 export type FoodRecordGetRequest =
-{
-    userId?: ObjectIdString
-    foodRecordId: ObjectIdString
-} | {
-    userId?: ObjectIdString
-    startDate: IsoDate
-    endDate: IsoDate
-}
+    {
+        userId?: ObjectIdString
+        foodRecordId: ObjectIdString
+    } | {
+        userId?: ObjectIdString
+        startDate: IsoDate
+        endDate: IsoDate
+    }
 
 export type FoodRecordGetResponse = {
     foodRecords: FoodRecord[]
@@ -178,17 +175,17 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
         try {
             const db = client.db()
-            
+
             if (paramFoodRecordId != null) {
 
                 // API search via ID.
-                
+
                 if (!isObjectIdString(paramFoodRecordId) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     res.status(200).json(response)
                     return
                 }
-                
+
                 const foodRecordId = paramFoodRecordId
 
                 const queryResults = await db.collection('FoodRecords').find({
