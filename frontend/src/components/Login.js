@@ -4,10 +4,25 @@ import buildPath from "./path";
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
+  function checkBlackInput(htmlId) {
+    if (document.getElementById(htmlId).value == "") {
+      document.getElementById(htmlId).classList.add("is-invalid");
+      return 1;
+    }
+
+    return 0;
+  }
   const doLogin = async (event) => {
     let email = document.getElementById("email");
     let password = document.getElementById("password");
 
+    if (checkBlackInput("email")) {
+      console.log("email empty");
+      return;
+    }
+    if (checkBlackInput("password")) {
+      return;
+    }
     const loginData = {
       email: email.value,
       password: password.value,
@@ -26,7 +41,7 @@ function Login() {
 
       console.log(res);
 
-      if (res.error == 1) {
+      if (res.error == 3) {
         setMessage("Incorrect email/password");
       } else {
         const user = {
@@ -44,18 +59,23 @@ function Login() {
     }
   };
 
-  function makeTextInput(id, name, placeholder) {
+  function makeInput(type, id, name, placeholder) {
     return (
-      <input
-        className="form-control"
-        type="text"
-        id={id}
-        name={name}
-        placeholder={placeholder}
-      />
+      <div className="has-validation">
+        <input
+          className="form-control"
+          type={type}
+          id={id}
+          name={name}
+          placeholder={placeholder}
+        />
+        <div className="invalid-feedback">{name} cannot be blank</div>
+      </div>
     );
   }
-
+  function makeErrorMessage(className, error) {
+    return <p className={className}>{error}</p>;
+  }
   function makeActionButton(type, className, event, text, id = "") {
     return (
       <button type={type} className={className} onClick={event} id={id}>
@@ -77,9 +97,9 @@ function Login() {
       <div className="card">
         <div className="card-body">
           <h2 className="text-center">Log in</h2>
-          {makeTextInput("email", "login", "email")}
+          {makeInput("email", "email", "login", "email")}
           <br></br>
-          {makeTextInput("password", "login", "password")}
+          {makeInput("password", "password", "login", "password")}
           <div>
             {makeActionButton(
               "button",
@@ -89,12 +109,9 @@ function Login() {
               "loginButton"
             )}
           </div>
+          {errorMessage != "" && makeErrorMessage("text-danger", errorMessage)}
           <div id="formFooter">
-            {makeLinkDiv(
-              "underLineHover",
-              "forgot-password",
-              "Forgot Password?"
-            )}
+            {makeLinkDiv("underLineHover", "s", "Forgot Password?")}
             <br></br>
             {makeLinkDiv("underLineHover", "signup", "Create an Account")}
           </div>
