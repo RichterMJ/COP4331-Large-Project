@@ -13,7 +13,7 @@ jobs:
         uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.6
         with:
           herokuApiKey: ${{ secrets.HEROKU_API_KEY}}
-          herokuAppName: ${git-fit-with-rick}
+          herokuAppName: git-fit-with-rick
           # herokuAppName: ${git-fit-with-rick}
           # herokuAppName: ${{"git-fit-with-rick"}}
 
