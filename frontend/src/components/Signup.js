@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
+import Food from "../components/Food";
 
 // var ph = require('./path.js');
 import buildPath from "./path";
@@ -208,7 +209,9 @@ function Signup() {
       <main>
       {isOpen && <Modal setIsOpen={setIsOpen} />}
       </main>
+      <br></br>
     </div>
+
   );
 }
 export default Signup;
