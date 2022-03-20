@@ -14,42 +14,42 @@ import {
 import {URL} from '../../../index'
 
 
-export enum sendEmailError {
+export enum sendVerificationEmailError {
     Ok = 0,
     InvalidRequest,
     ServerError,
 }
 
-export type sendEmailRequest = {
+export type sendVerificationEmailRequest = {
     userId: ObjectIdString
-    emailAddress: string
+    email: string
 }
 
-export type sendEmailResponse = {
-    error: sendEmailError
+export type sendVerificationEmailResponse = {
+    error: sendVerificationEmailError
 }
 
 
-export function sendEmail(app: Express, client: MongoClient): RequestHandler {
+export function sendVerificationEmail(app: Express, client: MongoClient): RequestHandler {
 
-    /* Programmatically ensure the request body is of type `sendEmailRequest`. */
-    function isSendEmailRequest(obj: any): obj is sendEmailRequest {
+    /* Programmatically ensure the request body is of type `sendVerificationEmailRequest`. */
+    function isSendVerificationEmailRequest(obj: any): obj is sendVerificationEmailRequest {
         return obj != null && typeof obj === 'object'
             && 'userId' in obj && isObjectIdString(obj.userId)
-            && 'emailAddress' in obj && typeof obj.emailAddress === 'string'
+            && 'email' in obj && typeof obj.email === 'string'
     }
 
     return async (req: Request, res: Response) => {
-        let response: sendEmailResponse = { error: 0 }
+        let response: sendVerificationEmailResponse = { error: 0 }
 
         try {
-            if (!isSendEmailRequest(req.body)) {
-                response.error = sendEmailError.InvalidRequest
+            if (!isSendVerificationEmailRequest(req.body)) {
+                response.error = sendVerificationEmailError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { userId, emailAddress } = req.body
+            const { userId, email } = req.body
 
             // Send email
             var transporter = nodemailer.createTransport(smtpTransport({
@@ -63,14 +63,14 @@ export function sendEmail(app: Express, client: MongoClient): RequestHandler {
 
             var mailOptions = {
                 from: process.env.EMAIL_ADDRESS,
-                to: emailAddress,
+                to: email,
                 subject: 'Verify Your Account',
                 text: `Go to the following link to verify your account: ${URL}/api/users/emailVerification/verifyEmail?userId=${userId}`
             };
 
             transporter.sendMail(mailOptions, (error, info) => {
                 if(error){
-                    response.error = sendEmailError.ServerError
+                    response.error = sendVerificationEmailError.ServerError
                     console.log(error)
                 } else {
                     console.log(info)
@@ -79,7 +79,7 @@ export function sendEmail(app: Express, client: MongoClient): RequestHandler {
 
 
         } catch (e) {
-            response.error = sendEmailError.ServerError
+            response.error = sendVerificationEmailError.ServerError
             console.log(e)
         }
 
