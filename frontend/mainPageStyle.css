@@ -14,13 +14,16 @@
     background-color:palegreen;
     display:flex;
 }
+
 #leftPanel{
-    width: 20vw;
     height:100vh;
     background-color:orange;
+    float:left;
 }
+
 #rightPanel{
-    width:80wv;
     height:100vh;
+    width:150vh;
     background-color:red;
+    float:left;
 }
