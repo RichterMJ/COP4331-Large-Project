@@ -21,4 +21,4 @@ function TopPanel(){
         </div>
     )
 }
-export default TopPanel;
+export default TopSubPanel;
