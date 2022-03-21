@@ -7,11 +7,17 @@ function TopPanel(){
         )
     }
 
+    function makeButton(className, onClick, txt) {
+        return (
+          <button type="button" className={className} onClick={onClick}>
+            {txt}
+          </button>
+        );
+      }
+
     return(
-        <div className="leftPanel">
-            {makeDiv("", "leftPanelButton", "Add Food")}
-            {makeDiv("", "leftPanelButton", "Make Recipe")}
-            {makeDiv("", "leftPanelButton", "Make Recipe")}
+        <div>
+
         </div>
     )
 }

@@ -9,7 +9,7 @@ function UserPage() {
         <div id="content">
             <div id="panels">
                 <LeftPanel/>
-
+                <RightPanel/>
             </div>
         </div>
     );
