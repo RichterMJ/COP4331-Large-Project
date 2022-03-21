@@ -15,7 +15,7 @@
 - [About](#about)
 - [Setup](#setup)
 - [Authors](#authors)
-- [Building](#building)
+- [Running](#running)
 - [Team](#team)
 - [License](#license)
 
