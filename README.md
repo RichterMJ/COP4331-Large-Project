@@ -15,7 +15,7 @@
 - [About](#about)
 - [Setup](#setup)
 - [Authors](#authors)
-- [Building](#building)
+- [Running](#running)
 - [Team](#team)
 - [License](#license)
 
@@ -65,11 +65,11 @@ Afterwards you can (build + run)[#running] as normal.
 # Running
 
 In development mode:
-- Run `yarn start` from the root directory to compile + run the API server.
+- Run `yarn run watch` from the root directory to compile + run the API server. Alternatively, one can manually run `yarn run build` followed by `yarn run start`.
 - Run `yarn start` from the *frontend* directory to run the React frontent server.
 
-Production mode is not complete as of yet. But once it is the steps for production mode are:
-- Run `yarn start` from the root directory to compile + run the API server and the frontend.
+Production mode on Heroku:
+- Heroku will automaticlaly run the necessary steps to compile + run the frontend and backend -- simply push to it.
 
 
 # Team
