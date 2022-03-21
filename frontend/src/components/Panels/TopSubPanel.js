@@ -1,6 +1,6 @@
 import React from "react";
 
-function TopPanel(){
+function TopSubPanel(){
     function makeDiv(id = "", className = "", text = "", divContent = ""){
         return(
             <div id={id} className={className}>{text}{divContent}</div>
