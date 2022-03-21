@@ -85,6 +85,7 @@
 
 .weightLabel{
   margin-left: 50px;
+<<<<<<< HEAD
 }
 
 .darkBG {
@@ -185,15 +186,4 @@
   box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
   transform: translateY(-1px);
   background: rgb(32, 32, 223)
-}
-
-.smallCard{
-  width: 200px;
-  height: 200px;
-}
-
-.smallImage{
-  width: 100px;
-  height: 100px;
-  margin-left: 25px;
 }
