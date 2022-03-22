@@ -1,8 +1,24 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
+import buildPath from "./path";
 
 function ForgotPassword() {
   const [isOpen, setIsOpen] = useState(false);
+  const [errorMessage, setMessage] = useState("");
+
+  function blankValidator(...fields) {
+    let isBlanked = false;
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].value == "") {
+        fields[i].classList.add("is-invalid");
+        isBlanked = true;
+      } else {
+        fields[i].classList.remove("is-invalid");
+      }
+    }
+
+    return isBlanked;
+  }
   function makeInputDiv(label, id, className, type) {
     return (
       <div className={className}>
@@ -30,7 +46,41 @@ function ForgotPassword() {
     );
   }
   const sendResetLink = async (event) => {
-    setIsOpen(true);
+    let email = document.getElementById("resetEmail");
+
+    if (blankValidator(email)) {
+      return;
+    }
+
+    const emailRetriever = {
+      email: email.value,
+    };
+
+    const emailJSON = JSON.stringify(emailRetriever);
+
+    try {
+      const response = await fetch(
+        buildPath("api/users/forgotPassword/forgotPasswordEmail'"),
+        {
+          method: "POST",
+          body: emailJSON,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      let res = JSON.parse(await response.text());
+
+      console.log(res);
+
+      if (res.error > 0) {
+        setMessage("Error email retrieving ");
+      } else {
+        setIsOpen(true);
+      }
+    } catch (e) {
+      console.log(e.toString());
+      return;
+    }
   };
 
   return (
@@ -44,7 +94,7 @@ function ForgotPassword() {
             <div className="d-flex align-item-center justify-content-center">
               {makeInputDiv(
                 "Please enter your email",
-                "resetPassword",
+                "resetEmail",
                 "w-50",
                 "email"
               )}
