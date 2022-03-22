@@ -1,28 +1,33 @@
+import e from "cors";
 import React, { useState } from "react";
 import buildPath from "./path";
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
-  function checkBlackInput(htmlId) {
-    if (document.getElementById(htmlId).value == "") {
-      document.getElementById(htmlId).classList.add("is-invalid");
-      return 1;
+  // funtion return 1 if input is blank
+  // return 0 if not blank
+  function blankValidator(...fields) {
+    let isBlanked = false;
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].value == "") {
+        fields[i].classList.add("is-invalid");
+        isBlanked = true;
+      } else {
+        fields[i].classList.remove("is-invalid");
+      }
     }
 
-    return 0;
+    return isBlanked;
   }
   const doLogin = async (event) => {
     let email = document.getElementById("email");
     let password = document.getElementById("password");
 
-    if (checkBlackInput("email")) {
-      console.log("email empty");
+    if (blankValidator(email, password)) {
       return;
     }
-    if (checkBlackInput("password")) {
-      return;
-    }
+
     const loginData = {
       email: email.value,
       password: password.value,
@@ -69,7 +74,7 @@ function Login() {
           name={name}
           placeholder={placeholder}
         />
-        <div className="invalid-feedback">{name} cannot be blank</div>
+        <div className="invalid-feedback">{id} cannot be blank</div>
       </div>
     );
   }
