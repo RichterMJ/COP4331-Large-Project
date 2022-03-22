@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import UserPageLPanel from "../components/Panels/UserPageLPanel";
 import UserPageRPanel from "../components/Panels/UserPageRPanel";
+import "./mainPageStyle.css"
 
 
 
