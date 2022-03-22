@@ -4,7 +4,7 @@ import buildPath from "./path";
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
-  const doLogin = async (event) => {
+  const doLogin = async () => {
     let email = document.getElementById('email');
     let password = document.getElementById('password');
 
@@ -80,7 +80,7 @@ function Login() {
             <br></br>
           {makeTextInput("password","login","password")}
             <div>
-              {makeActionButton("button","btn btn-block",()=>doLogin(),"Login","loginButton")}
+              {makeActionButton("button","btn btn-block",()=>window.location.href='/EmailVerify',"Login","loginButton")}
             </div>
           <div id="formFooter">
             {makeLinkDiv("underLineHover","s","Forgot Password?")}

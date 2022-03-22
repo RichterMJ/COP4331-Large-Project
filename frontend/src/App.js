@@ -3,6 +3,7 @@ import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UserPage from "./pages/UserPage";
+import EmailVerifyPage from "./pages/EmailVerifyPage";
 import {
   BrowserRouter as Router,
   Route,
@@ -22,6 +23,8 @@ function App() {
         </Route>
         <Route path ="/userPage" exact>
           <UserPage />
+        <Route path="/emailVerify" exact>
+          <EmailVerifyPage/>
         </Route>
         <Redirect to="/" />
       </Switch>
