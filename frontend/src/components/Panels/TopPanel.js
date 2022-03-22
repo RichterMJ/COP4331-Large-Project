@@ -13,7 +13,7 @@ function TopPanel(){
             {txt}
           </button>
         );
-      }
+    }
 
     return(
         <div>

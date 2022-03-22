@@ -51,7 +51,7 @@ function Signup() {
   const doSignup = async (event) => {
     //event.preventDefault();
 
-	errors = [];
+	  errors = [];
 	
     let fName = document.getElementById('fName');
     let lName = document.getElementById('lName');
@@ -67,8 +67,8 @@ function Signup() {
     }
 	
     const signupInfo = {
-      firstName: fName.value,
-      lastName: lName.value,
+      firstname: fName.value,
+      lastname: lName.value,
       weight: Number(weight.value),
       email: email.value,
       password: password.value,
