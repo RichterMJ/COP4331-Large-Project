@@ -18,13 +18,13 @@ function leftPanelLogoHeader(){
 function LeftPanel(){
 
     return(
-        <div className="leftPanel">
+        <div id="leftPanel">
           {leftPanelLogoHeader()}
-          {makeActionButton("", "leftPanelButton",addFoodEvent(),
+          {makeActionButton("button", "leftPanelButton",addFoodEvent(),
                             "Add Food","addFoodButton")}
-          {makeActionButton("", "leftPanelButton",makeRecipeEvent(),
+          {makeActionButton("button", "leftPanelButton",makeRecipeEvent(),
                             "Make Recipe","makeRecipeButton")}
-          {makeActionButton("", "leftPanelButton",editUserPrefEvent(),
+          {makeActionButton("button", "leftPanelButton",editUserPrefEvent(),
                             "Edit User Preferences","EditUserPrefButton")}
         </div>
     )
