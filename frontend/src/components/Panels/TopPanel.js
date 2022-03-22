@@ -1,23 +1,44 @@
-import React from "react";
+import React,{useState} from "react";
+import makeActionButton from "../divHelpers/divHelpers.js"
 
-function TopPanel(){
-    function makeDiv(id = "", className = "", text = "", divContent = ""){
-        return(
-            <div id={id} className={className}>{text}{divContent}</div>
-        )
-    }
+function leftDayEvent(){
 
-    function makeButton(className, onClick, txt) {
-        return (
-          <button type="button" className={className} onClick={onClick}>
-            {txt}
-          </button>
-        );
-      }
+}
+function rightDayEvent(){
+
+}
+function leftButton (){
+    return makeActionButton
+    ("button","directionButton",leftDayEvent(),"<",leftButton);
+}
+
+function rightButton (){
+    return makeActionButton
+    ("button","directionButton",rightDayEvent(),">","rightButton");
+}
+
+function mainInfoBox(date){
 
     return(
-        <div>
+        <div id = "mainInfoBox">
+            <div id = "timeHeader">
+                Your Day
+            </div>
+            <div id = "timeSubHeader">
+              {date}
+            </div>
+        </div>
+)
+}
 
+function TopPanel(){
+    const [date,setDate] = useState("March 22nd 2022");
+
+    return(
+        <div id = "topPanel">
+          {leftButton()}
+          {mainInfoBox(date)}
+          {rightButton()}
         </div>
     )
 }
