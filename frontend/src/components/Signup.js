@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
-import Food from "../components/Food";
+import {makeButton, makeLink, makeSpan} from "./HTMLTags";
 
 // var ph = require('./path.js');
 import buildPath from "./path";
@@ -124,30 +124,6 @@ function Signup() {
     return <input type={type} id={id} className={className + " form-control form-control-lg"}/>;
   }
 
-  function makeButton(className, onClick, txt) {
-    return (
-      <button type="button" className={className} onClick={onClick}>
-        {txt}
-      </button>
-    );
-  }
-
-  function makeLink(href, className, txt) {
-    return (
-      <a href={href} className={className}>
-        <u>{txt}</u>
-      </a>
-    );
-  }
-
-  function makeSpan(className, txt){
-    return (<span className={className}>{txt}</span>);
-  }
-
-  function makeModal(){
-    return (null);
-  }
-
   return (
     <div className="container">
       
@@ -193,7 +169,7 @@ function Signup() {
         </div>
 
         <div className="signupButton">
-          {makeButton(
+          {makeButton("",
             "btn btn-success btn-block btn-lg gradient-custom-4 text-body",
             () => doSignup(),
             "Register"
@@ -207,7 +183,7 @@ function Signup() {
       </div>
 
       <main>
-      {isOpen && <Modal setIsOpen={setIsOpen} />}
+      {isOpen && <Modal/>}
       </main>
       <br></br>
     </div>

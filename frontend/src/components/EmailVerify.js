@@ -1,5 +1,6 @@
 import React from "react";
 import buildPath from "./path";
+import {makeButton, makeH2} from "./HTMLTags";
 
 function EmailVerify(){
 
@@ -33,18 +34,6 @@ function EmailVerify(){
             console.log(e.toString());
             return;
           }
-    }
-
-    function makeH2(id, className, text){
-        return (<h2 id={id} className={className}>{text}</h2>)
-    }
-
-    function makeButton(id, className, onClick, txt) {
-        return (
-          <button type="button" id={id} className={className} onClick={onClick}>
-            {txt}
-          </button>
-        );
     }
 
     return (
