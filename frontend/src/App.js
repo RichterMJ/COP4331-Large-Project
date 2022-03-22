@@ -9,6 +9,7 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
         </Route>
         <Route path="/forgot-password" exact>
           <ForgotPasswordPage />
+        </Route>
+        <Route path="/reset-password" exact>
+          <ResetPasswordPage />
         </Route>
         <Redirect to="/" />
       </Switch>

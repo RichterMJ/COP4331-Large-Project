@@ -43,29 +43,22 @@ function ResetPassword() {
           <br></br>
           <div className="resetPasswordDiv">
             <div className="d-flex flex-column">
-              <div className="">
-                {makeInputDiv("Password", "resetPassword", "w-50", "password")}
-              </div>
-
-              <div className="">
-                {makeInputDiv(
-                  "Confirm Password",
-                  "confirmResetPassword",
-                  "w-50",
-                  "password"
-                )}
-              </div>
-            </div>
-
-            <div className="pt-3">
-              {makeActionButton(
-                "button",
-                "btn btn-success btn-lg",
-                () => doResetPassword(),
-                "Done",
-                "resetPasswordButton"
+              {makeInputDiv("Password", "resetPassword", "w-50", "password")}
+              {makeInputDiv(
+                "Confirm Password",
+                "confirmResetPassword",
+                "w-50",
+                "password"
               )}
             </div>
+
+            {makeActionButton(
+              "button",
+              "btn btn-success btn-lg mt-3",
+              () => doResetPassword(),
+              "Done",
+              "resetPasswordButton"
+            )}
           </div>
           <div id="formFooter">{makeLinkDiv("pt-2 pl-1", "/", "Cancel")}</div>
         </div>

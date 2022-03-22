@@ -6,7 +6,7 @@ function ResetPasswordPage() {
   return (
     <div className="content">
       <LoginPageHeader />
-      <ResetPasswordPage />
+      <ResetPassword />
     </div>
   );
 }

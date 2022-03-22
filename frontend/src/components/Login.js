@@ -111,7 +111,11 @@ function Login() {
           </div>
           {errorMessage != "" && makeErrorMessage("text-danger", errorMessage)}
           <div id="formFooter">
-            {makeLinkDiv("underLineHover", "s", "Forgot Password?")}
+            {makeLinkDiv(
+              "underLineHover",
+              "forgot-password",
+              "Forgot Password?"
+            )}
             <br></br>
             {makeLinkDiv("underLineHover", "signup", "Create an Account")}
           </div>
