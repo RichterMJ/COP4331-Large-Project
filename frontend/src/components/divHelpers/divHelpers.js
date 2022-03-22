@@ -8,4 +8,4 @@ import React from "react";
              {text}
            </button>)
   }
-export default {makeActionButton};
+export default makeActionButton;
