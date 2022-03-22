@@ -78,6 +78,8 @@
 }
 #leftPanel {
     width: 20vw;
+    display: flex;
+    flex-direction: column;
 }
 #logoHeader {
   display:flex;
@@ -90,7 +92,7 @@
   height:50px;
   text-align: center;
   text-justify: center;
-  padding-top:10px;
+  padding-top:4px;
   margin-bottom:50px;
   border-radius: 5px;
 }
