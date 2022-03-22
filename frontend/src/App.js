@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import UserPage from "./page/UserPage";
+import UserPage from "./pages/UserPage";
 import {
   BrowserRouter as Router,
   Route,

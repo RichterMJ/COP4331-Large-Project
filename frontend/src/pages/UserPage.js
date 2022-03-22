@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import LeftPanel from "../components/Panels/LeftPanel";
-import RightPanel from "../components/Panels/RightPanel";
+import UserPageLPanel from "../components/Panels/UserPageLPanel";
+import UserPageRPanel from "../components/Panels/UserPageRPanel";
 
 
 
@@ -8,8 +8,8 @@ function UserPage() {
     return(
         <div id="content">
             <div id="panels">
-                <LeftPanel/>
-                <RightPanel/>
+                <UserPageLPanel/>
+                <UserPageRPanel/>
             </div>
         </div>
     );
