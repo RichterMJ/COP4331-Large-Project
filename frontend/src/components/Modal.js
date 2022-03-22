@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = ({ setIsOpen }) => {
+const Modal = () => {
   return (
     <>
       <div className="darkBG"/>

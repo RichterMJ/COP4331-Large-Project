@@ -138,6 +138,10 @@
   width: 100%;
 }
 
+#verifyButtonDiv{
+  text-align: center;
+}
+
 .actionsContainer {
   display: flex;
   justify-content: space-around;
@@ -187,13 +191,16 @@
   background: rgb(32, 32, 223)
 }
 
-.smallCard{
-  width: 200px;
-  height: 200px;
+#verifyButton{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(255, 37, 37, 0.911);
+  border-color: black;
 }
 
-.smallImage{
-  width: 100px;
-  height: 100px;
-  margin-left: 25px;
+#verifyButton:hover {
+  box-shadow: 0 5px 13px -10px black;
+  transform: translateY(-1px);
 }
+

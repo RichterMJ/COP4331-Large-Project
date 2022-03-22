@@ -71,12 +71,12 @@ export function verifyEmail(app: Express, client: MongoClient): RequestHandler {
             // Go to the data base and update
             const db = client.db()
 
-            const result = await db.collection('Users').updateOne(
+            let result = await db.collection('Users').updateOne(
                     {'_id': new ObjectId(userId)},
                     {
                         $set: {hasVerifiedEmail: true}
                     }
-                )
+            )
         
             if(result.modifiedCount != 1){
                 response.error = verifyEmailError.InvalidCredentials
