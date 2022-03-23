@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import buildPath from "./path";
+import {makeLink} from "./divHelpers/divHelpers";
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
@@ -65,12 +66,6 @@ function Login() {
            </button>)
   }
 
-  function makeLinkDiv ( className, href, content){
-    return (<a className={className} href={href}>
-              {content}
-            </a>)
-  }
-
   return (
     <div className="container">
       <div className="card">
@@ -80,12 +75,12 @@ function Login() {
             <br></br>
           {makeTextInput("password","login","password")}
             <div>
-              {makeActionButton("button","btn btn-block",()=>window.location.href='/EmailVerify',"Login","loginButton")}
+              {makeActionButton("button","btn btn-block",()=> doLogin(),"Login","loginButton")}
             </div>
           <div id="formFooter">
-            {makeLinkDiv("underLineHover","s","Forgot Password?")}
+            {makeLink("s", "underLineHover","Forgot Password?")}
             <br></br>
-            {makeLinkDiv("underLineHover","signup","Create an Account")}
+            {makeLink("signup", "signup","Create an Account")}
           </div>
         </div>
       </div>

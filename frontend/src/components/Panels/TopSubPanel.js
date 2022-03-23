@@ -1,4 +1,5 @@
 import React from "react";
+import {makeDiv, makeButton} from "../divHelpers/divHelpers.js";
 
 function TopSubPanel(){
        return(

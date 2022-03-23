@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import makeActionButton from "../divHelpers/divHelpers.js"
+import {makeActionButton} from "../divHelpers/divHelpers.js";
 
 function leftDayEvent(){
 
