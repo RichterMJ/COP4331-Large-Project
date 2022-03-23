@@ -1,6 +1,26 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import buildPath from "./path";
 
 function ResetPassword() {
+  const search = useLocation().search;
+  const userId = new URLSearchParams(search).get("userId");
+  const [errorMessage, setMessage] = useState("");
+
+  function blankValidator(...fields) {
+    let isBlanked = false;
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].value == "") {
+        fields[i].classList.add("is-invalid");
+        isBlanked = true;
+      } else {
+        fields[i].classList.remove("is-invalid");
+      }
+    }
+
+    return isBlanked;
+  }
+
   function makeInputDiv(label, id, className, type) {
     return (
       <div className={className}>
@@ -29,9 +49,48 @@ function ResetPassword() {
   }
   const doResetPassword = async (event) => {
     // implement reset password function
-    console.log("reset button clicked!");
-    document.getElementById("resetPasswordDiv").style.display = "none";
-    document.getElementById("resetPasswordDiv").style.display = "block";
+    let password = document.getElementById("resetPassword");
+    let confirmPassword = document.getElementById("confirmResetPassword");
+
+    if (blankValidator(confirmPassword, password)) {
+      return;
+    }
+    if (confirmPassword.value != password.value) {
+      return;
+    }
+
+    const resetPasswordData = {
+      userId: userId,
+      newPassword: password.value,
+    };
+
+    console.log(resetPasswordData);
+
+    const resetPasswordJSON = JSON.stringify(resetPasswordData);
+
+    try {
+      const response = await fetch(
+        buildPath("api/users/forgotPassword/forgotPasswordReset"),
+        {
+          method: "POST",
+          body: resetPasswordJSON,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      let res = JSON.parse(await response.text());
+
+      console.log(res);
+
+      if (res.error != 0) {
+        setMessage("Error!");
+      } else {
+        window.location.href = "/";
+      }
+    } catch (e) {
+      console.log(e.toString());
+      return;
+    }
   };
 
   return (

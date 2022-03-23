@@ -52,15 +52,15 @@ function ForgotPassword() {
       return;
     }
 
-    const emailRetriever = {
+    const emailRetriver = {
       email: email.value,
     };
 
-    const emailJSON = JSON.stringify(emailRetriever);
+    const emailJSON = JSON.stringify(emailRetriver);
 
     try {
       const response = await fetch(
-        buildPath("api/users/forgotPassword/forgotPasswordEmail'"),
+        buildPath("api/users/forgotPassword/forgotPasswordEmail"),
         {
           method: "POST",
           body: emailJSON,
@@ -72,10 +72,16 @@ function ForgotPassword() {
 
       console.log(res);
 
-      if (res.error > 0) {
-        setMessage("Error email retrieving ");
+      if (res.error == 3) {
+        setMessage("Incorrect email/password");
       } else {
+        const user = {
+          error: res.error,
+        };
+        localStorage.setItem("user_data", JSON.stringify(user));
+        setMessage("");
         setIsOpen(true);
+        //window.location.href = "/userpage";
       }
     } catch (e) {
       console.log(e.toString());

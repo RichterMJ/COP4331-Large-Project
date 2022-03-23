@@ -3,6 +3,8 @@ import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import UserPage from "./pages/UserPage";
+import EmailVerifyPage from "./pages/EmailVerifyPage";
 import {
   BrowserRouter as Router,
   Route,
@@ -24,7 +26,7 @@ function App() {
         <Route path="/forgot-password" exact>
           <ForgotPasswordPage />
         </Route>
-        <Route path="/reset-password" exact>
+        <Route path="/api/users/forgotPassword/forgotPasswordReset" exact>
           <ResetPasswordPage />
         </Route>
         <Route path="/userPage" exact>
