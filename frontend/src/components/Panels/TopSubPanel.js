@@ -1,15 +1,9 @@
 import React from "react";
-import {makeDiv, makeButton} from "../HTMLTags";
+import {makeDiv, makeButton} from "../divHelpers/divHelpers.js";
 
 function TopSubPanel(){
-<<<<<<< HEAD
-    return(
-        <div>
-
-=======
        return(
         <div id = "topSubPanel">
->>>>>>> 6d2404f253015580032ad5d2ef4b5aff845414ba
         </div>
     )
 }

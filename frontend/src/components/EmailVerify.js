@@ -1,6 +1,6 @@
 import React from "react";
 import buildPath from "./path";
-import {makeButton, makeH2} from "./HTMLTags";
+import {makeButton, makeH2} from "./divHelpers/divHelpers";
 
 function EmailVerify(){
 

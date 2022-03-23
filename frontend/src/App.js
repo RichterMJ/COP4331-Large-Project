@@ -23,6 +23,7 @@ function App() {
         </Route>
         <Route path ="/userPage" exact>
           <UserPage />
+        </Route>
         <Route path="/emailVerify" exact>
           <EmailVerifyPage/>
         </Route>
