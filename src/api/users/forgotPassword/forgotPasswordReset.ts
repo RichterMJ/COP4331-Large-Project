@@ -11,40 +11,45 @@ import {
 } from '../../global-types'
 
 
-export enum verifyEmailError {
+export enum forgotPasswordResetError {
     Ok = 0,
     InvalidRequest,
     ServerError,
     InvalidCredentials
 }
 
-export type verifyEmailRequest = {
+export type forgotPasswordResetRequest = {
     userId: ObjectIdString
+    email: string;
+    newPassword: string
 }
 
-export type verifyEmailResponse = {
-    error: verifyEmailError
+export type forgotPasswordResetResponse = {
+    error: forgotPasswordResetError
 }
 
 
-export function verifyEmail(app: Express, client: MongoClient): RequestHandler {
+export function forgotPasswordReset(app: Express, client: MongoClient): RequestHandler {
 
-    /* Programmatically ensure the request body is of type `verifyEmailRequest`. */
-    function isVerifyEmailRequest(obj: any): obj is verifyEmailRequest {
+    /* Programmatically ensure the request body is of type `forgotPasswordResetRequest`. */
+    function isForgotPasswordResetRequest(obj: any): obj is forgotPasswordResetRequest {
         return obj != null && typeof obj === 'object'
-        && 'userId' in obj && isObjectIdString(obj.userId)
+            && 'userId' in obj && isObjectIdString(obj.userId)
+            && 'email' in obj && typeof obj.email === 'string'
+            && 'newPassword' in obj && typeof obj.newPassword === 'string'
     }
 
     return async (req: Request, res: Response) => {
-        let response: verifyEmailResponse = { error: 0 }
+        let response: forgotPasswordResetResponse = { error: 0 }
+
         try {
-            if (!isVerifyEmailRequest(req.body)) {
-                response.error = verifyEmailError.InvalidRequest
+            if (!isForgotPasswordResetRequest(req.body)) {
+                response.error = forgotPasswordResetError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { userId } = req.body
+            const { userId, email, newPassword} = req.body
             /*
             if(userId != null && typeof userId === 'string'){
                 // Go to the data base and update
@@ -58,32 +63,31 @@ export function verifyEmail(app: Express, client: MongoClient): RequestHandler {
                     )
             
                 if(result.modifiedCount != 1){
-                    response.error = verifyEmailError.InvalidCredentials
+                    response.error = forgotPasswordResetError.InvalidCredentials
                 }
             } else {
-                response.error = verifyEmailError.InvalidRequest
+                response.error = forgotPasswordResetError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
-
             */
 
             // Go to the data base and update
             const db = client.db()
 
             const result = await db.collection('Users').updateOne(
-                    {'_id': new ObjectId(userId)},
+                    {'_id': new ObjectId(userId), 'email': email},
                     {
-                        $set: {hasVerifiedEmail: true}
+                        $set: {password: newPassword}
                     }
-            )
+                )
         
             if(result.modifiedCount != 1){
-                response.error = verifyEmailError.InvalidCredentials
+                response.error = forgotPasswordResetError.InvalidCredentials
             }
            
         } catch (e) {
-            response.error = verifyEmailError.ServerError
+            response.error = forgotPasswordResetError.ServerError
             console.log(e)
         }
 

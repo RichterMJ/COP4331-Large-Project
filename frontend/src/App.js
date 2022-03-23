@@ -27,6 +27,12 @@ function App() {
         <Route path="/reset-password" exact>
           <ResetPasswordPage />
         </Route>
+        <Route path="/userPage" exact>
+          <UserPage />
+        </Route>
+        <Route path="/emailVerify" exact>
+          <EmailVerifyPage />
+        </Route>
         <Redirect to="/" />
       </Switch>
     </Router>

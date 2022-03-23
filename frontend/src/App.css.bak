@@ -1,3 +1,4 @@
+
 *,
 *:before,
 *:after {
@@ -27,7 +28,7 @@
   margin-bottom: 20px;
 }
 
-.container {
+.container{
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -46,7 +47,7 @@
   margin-right: 125px;
 }
 
-.weightBox {
+.weightBox{
   margin-left: -50px;
 }
 
@@ -62,28 +63,29 @@
   margin-top: 50px;
 }
 
-.fNameInput {
+.fNameInput{
   min-width: 325px;
   max-width: 325px;
 }
 
-.lNameInput {
+.lNameInput{
   min-width: 325px;
   max-width: 325px;
   margin-left: 50px;
 }
 
-.weightInput {
+.weightInput{
   max-width: 85px;
   margin-left: 50px;
 }
 
-.lNameLabel {
+.lNameLabel{
   margin-left: 50px;
 }
 
-.weightLabel {
+.weightLabel{
   margin-left: 50px;
+<<<<<<< HEAD
 }
 
 .darkBG {
@@ -137,10 +139,6 @@
   width: 100%;
 }
 
-#verifyButtonDiv{
-  text-align: center;
-}
-
 .actionsContainer {
   display: flex;
   justify-content: space-around;
@@ -187,19 +185,5 @@
 .okayBtn:hover {
   box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
   transform: translateY(-1px);
-  background: rgb(32, 32, 223);
+  background: rgb(32, 32, 223)
 }
-
-#verifyButton{
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: rgba(255, 37, 37, 0.911);
-  border-color: black;
-}
-
-#verifyButton:hover {
-  box-shadow: 0 5px 13px -10px black;
-  transform: translateY(-1px);
-}
-

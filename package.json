@@ -18,7 +18,7 @@
         "build": "tsc",
         "postinstall": "yarn run build",
         "start": "node ./dist/index.js",
-        "watch": "nodemon -e js,ts --watch src --exec \"yarn run start\"",
+        "watch": "nodemon -e js,ts --watch src --exec \"yarn run build && yarn run start\"",
         "lint": "echo \"No linter yet\"",
         "test": "echo \"No testing framework yet\"",
         "heroku-postbuild": "YARN_PRODUCTION=false yarn --cwd ./frontend install && yarn --cwd ./frontend run build",

@@ -55,6 +55,7 @@ export function register(app: Express, client: MongoClient): RequestHandler {
         .insertOne(user)
       
       response.userId = queryResult.insertedId.toString()
+      console.log(response);
       res.status(200).json(response)
       return
 

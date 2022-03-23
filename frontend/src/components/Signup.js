@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
+import { makeButton, makeLink, makeSpan } from "./divHelpers/divHelpers";
 
 // var ph = require('./path.js');
 import buildPath from "./path";
@@ -65,21 +66,20 @@ function Signup() {
       return;
     }
 
-    const obj = {
-      firstName: fName.value,
-      lastName: lName.value,
+    const signupInfo = {
+      firstname: fName.value,
+      lastname: lName.value,
       weight: Number(weight.value),
       email: email.value,
       password: password.value,
     };
 
-    const js = JSON.stringify(obj);
-    setIsOpen(true);
+    const jsonPayload = JSON.stringify(signupInfo);
 
     try {
       const response = await fetch(buildPath("api/users/register"), {
         method: "POST",
-        body: js,
+        body: jsonPayload,
         headers: { "Content-Type": "application/json" },
       });
 
@@ -95,8 +95,9 @@ function Signup() {
           lastName: res.lastName,
           id: res.id,
         };
-        localStorage.setItem("user_data", JSON.stringify(user));
+        //localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
+        setIsOpen(true);
       }
     } catch (e) {
       console.log(e.toString());
@@ -120,26 +121,6 @@ function Signup() {
         className={className + " form-control form-control-lg"}
       />
     );
-  }
-
-  function makeButton(className, onClick, txt) {
-    return (
-      <button type="button" className={className} onClick={onClick}>
-        {txt}
-      </button>
-    );
-  }
-
-  function makeLink(href, className, txt) {
-    return (
-      <a href={href} className={className}>
-        <u>{txt}</u>
-      </a>
-    );
-  }
-
-  function makeSpan(className, txt) {
-    return <span className={className}>{txt}</span>;
   }
 
   function makeModal() {
@@ -190,6 +171,7 @@ function Signup() {
 
         <div className="signupButton">
           {makeButton(
+            "",
             "btn btn-success btn-block btn-lg gradient-custom-4 text-body",
             () => doSignup(),
             "Register"
@@ -205,6 +187,7 @@ function Signup() {
       <main>
         {isOpen && <Modal setIsOpen={setIsOpen} purpose="Email Verification" />}
       </main>
+      <br></br>
     </div>
   );
 }

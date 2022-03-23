@@ -6,8 +6,10 @@ import { foodRecordsDelete, foodRecordsGet, foodRecordsPost, foodRecordsPut } fr
 import { login } from './api/users/login'
 import { register } from './api/users/register'
 import { recipesDelete, recipesGet, recipesPost, recipesPut } from './api/food/recipes'
-import { sendEmail } from './api/users/emailVerification/sendEmail'
+import { sendVerificationEmail } from './api/users/emailVerification/sendVerificationEmail'
 import { verifyEmail } from './api/users/emailVerification/verifyEmail'
+import { forgotPasswordEmail } from './api/users/forgotPassword/forgotPasswordEmail'
+import { forgotPasswordReset } from './api/users/forgotPassword/forgotPasswordReset'
 
 /* Set up the routing. Logic should go under './api/'. */
 export function setApp (app: Express, client: MongoClient) {
@@ -15,8 +17,11 @@ export function setApp (app: Express, client: MongoClient) {
     app.post('/api/users/login', login(app, client))
     app.post('/api/users/register', register(app, client))
 
-    app.post('/api/users/emailVerification/sendEmail', sendEmail(app, client))
+    app.post('/api/users/emailVerification/sendVerificationEmail', sendVerificationEmail(app, client))
     app.post('/api/users/emailVerification/verifyEmail', verifyEmail(app, client))
+    
+    app.post('/api/users/forgotPassword/forgotPasswordEmail', forgotPasswordEmail(app, client))
+    app.post('/api/users/forgotPassword/forgotPasswordReset', forgotPasswordReset(app, client))
 
     app.post('/api/food/searchByName', searchFoodByName(app, client))
     app.post('/api/food/searchById', searchFoodById(app, client))
