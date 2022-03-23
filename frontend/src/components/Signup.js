@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
-import {makeButton, makeLink, makeSpan} from "./HTMLTags";
+import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 
 // var ph = require('./path.js');
 import buildPath from "./path";
@@ -75,7 +75,6 @@ function Signup() {
     };
 
     const jsonPayload = JSON.stringify(signupInfo);
-    setIsOpen(true);
 
     try {
       const response = await fetch(buildPath("api/users/register"), {
@@ -96,8 +95,9 @@ function Signup() {
           lastName: res.lastName,
           id: res.id,
         };
-        localStorage.setItem("user_data", JSON.stringify(user));
+        //localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
+        setIsOpen(true);
       }
     }catch(e){
       console.log(e.toString());

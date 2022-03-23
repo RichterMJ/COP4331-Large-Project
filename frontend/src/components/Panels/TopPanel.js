@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-import React from "react";
-import {makeDiv, makeButton} from "../HTMLTags";
-
-function TopPanel(){
-=======
 import React,{useState} from "react";
-import makeActionButton from "../divHelpers/divHelpers.js"
+import {makeActionButton} from "../divHelpers/divHelpers.js";
 
 function leftDayEvent(){
 
@@ -25,7 +19,6 @@ function rightButton (){
 
 function mainInfoBox(date){
 
->>>>>>> 6d2404f253015580032ad5d2ef4b5aff845414ba
     return(
         <div id = "mainInfoBox">
             <div id = "timeHeader">

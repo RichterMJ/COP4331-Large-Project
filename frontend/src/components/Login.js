@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import buildPath from "./path";
-import {makeLink} from "./HTMLTags";
+import {makeLink} from "./divHelpers/divHelpers";
 
 function Login() {
   const [errorMessage, setMessage] = useState("");

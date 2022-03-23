@@ -1,5 +1,6 @@
 import React from "react";
-import makeActionButton from "../divHelpers/divHelpers.js"
+import {makeActionButton} from "../divHelpers/divHelpers.js";
+
 function addFoodEvent(){
 }
 function makeRecipeEvent(){
