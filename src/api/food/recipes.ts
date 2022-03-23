@@ -90,8 +90,9 @@ export enum RecipesGetError {
 }
 
 export type RecipesGetRequest = {
-    recipeId?: ObjectIdString,
-    description?: string,
+    recipeId: ObjectIdString,
+} | {
+    description: string,
 }
 
 export type RecipesGetResponse = {
