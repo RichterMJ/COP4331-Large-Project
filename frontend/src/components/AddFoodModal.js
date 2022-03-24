@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import buildPath from "./path";
 import {makeButton} from "./divHelpers/divHelpers";
+import { RiCloseLine } from "react-icons/ri";
 
 function AddFoodModal(){
     const [foodQuery, setFoodQuery] = useState("");
+    const [isOpen, setIsOpen] = useState("");
 
     function makeTextInput (id,name,placeholder, onChange){
         return(<input
@@ -18,7 +19,6 @@ function AddFoodModal(){
     }
 
     function search(text){
-        console.log(text);
     }
 
     return (
@@ -28,6 +28,7 @@ function AddFoodModal(){
             <div className="largeModal theModal">
               <div className="modalContent">
                 Add Food
+                {makeButton("", "closeBtn",() => setIsOpen(false), <RiCloseLine/>)}
                 <div className="addFoodSearchComponents">
                     {makeTextInput("foodSearch", "foodSearch", "Insert Food", (srch) => setFoodQuery(srch.target.value))}
                     {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(foodQuery), "Search")}
