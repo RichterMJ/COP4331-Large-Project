@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
 import buildPath from "./path";
+import { blankValidator} from "./Validators/InputValidator";
+import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
 function ForgotPassword() {
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setMessage] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+ 
 
-  function blankValidator(...fields) {
-    let isBlanked = false;
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].value == "") {
-        fields[i].classList.add("is-invalid");
-        isBlanked = true;
-      } else {
-        fields[i].classList.remove("is-invalid");
-      }
-    }
-
-    return isBlanked;
-  }
   function makeInputDiv(label, id, className, type) {
     return (
       <div className={className}>
@@ -29,24 +20,10 @@ function ForgotPassword() {
       </div>
     );
   }
-  function makeActionButton(type, className, event, text, id = "") {
-    return (
-      <button type={type} className={className} onClick={event} id={id}>
-        {text}
-      </button>
-    );
-  }
-  function makeLinkDiv(className, href, content) {
-    return (
-      <div className={className}>
-        <a className="text-danger" href={href}>
-          {content}
-        </a>
-      </div>
-    );
-  }
+  
   const sendResetLink = async (event) => {
     let email = document.getElementById("resetEmail");
+    setUserEmail(email.value);
 
     if (blankValidator(email)) {
       return;
@@ -72,8 +49,8 @@ function ForgotPassword() {
 
       console.log(res);
 
-      if (res.error == 3) {
-        setMessage("Incorrect email/password");
+      if (res.error != 0) {
+        setMessage("Error occurred");
       } else {
         const user = {
           error: res.error,
@@ -81,7 +58,7 @@ function ForgotPassword() {
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
         setIsOpen(true);
-        //window.location.href = "/userpage";
+        //window.location.href = "/";
       }
     } catch (e) {
       console.log(e.toString());
@@ -93,7 +70,7 @@ function ForgotPassword() {
     <div className="container">
       <div className="card">
         <div className="card-body rounded-1">
-          <h2 className="text-center">Forgot Password</h2>
+          {makeH2("", "text-center", "Forgot Password")}
 
           <br></br>
           <div className="text-center">
@@ -115,13 +92,14 @@ function ForgotPassword() {
                 "resetPasswordButton"
               )}
             </div>
+            {errorMessage != "" && makePTag("text-danger pt-2", errorMessage)}
 
-            <div id="formFooter">{makeLinkDiv("pt-2 pl-1", "/", "Cancel")}</div>
+            <div id="formFooter" className="pt-2">{makeLink("/","pt-2 pl-1 text-danger", "Cancel")}</div>
           </div>
         </div>
       </div>
       <main>
-        {isOpen && <Modal setIsOpen={setIsOpen} purpose="reset password" />}
+        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage={`Reset link has been sent ${userEmail}. Please check your inbox.`} />}
       </main>
     </div>
   );

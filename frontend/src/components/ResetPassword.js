@@ -1,25 +1,15 @@
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import buildPath from "./path";
+import { blankValidator} from "./Validators/InputValidator";
+import Modal from "../components/Modal";
+import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
 function ResetPassword() {
   const search = useLocation().search;
   const userId = new URLSearchParams(search).get("userId");
   const [errorMessage, setMessage] = useState("");
-
-  function blankValidator(...fields) {
-    let isBlanked = false;
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].value == "") {
-        fields[i].classList.add("is-invalid");
-        isBlanked = true;
-      } else {
-        fields[i].classList.remove("is-invalid");
-      }
-    }
-
-    return isBlanked;
-  }
+  const [isOpen, setIsOpen] = useState(false);
 
   function makeInputDiv(label, id, className, type) {
     return (
@@ -31,22 +21,7 @@ function ResetPassword() {
       </div>
     );
   }
-  function makeActionButton(type, className, event, text, id = "") {
-    return (
-      <button type={type} className={className} onClick={event} id={id}>
-        {text}
-      </button>
-    );
-  }
-  function makeLinkDiv(className, href, content) {
-    return (
-      <div className={className}>
-        <a className="text-danger" href={href}>
-          {content}
-        </a>
-      </div>
-    );
-  }
+
   const doResetPassword = async (event) => {
     // implement reset password function
     let password = document.getElementById("resetPassword");
@@ -83,9 +58,10 @@ function ResetPassword() {
       console.log(res);
 
       if (res.error != 0) {
-        setMessage("Error!");
+        setMessage("Error occurred");
       } else {
-        window.location.href = "/";
+        setIsOpen(true);
+        //window.location.href = "/";
       }
     } catch (e) {
       console.log(e.toString());
@@ -118,10 +94,15 @@ function ResetPassword() {
               "Done",
               "resetPasswordButton"
             )}
+            {errorMessage != "" && makePTag("text-danger", errorMessage)}
           </div>
-          <div id="formFooter">{makeLinkDiv("pt-2 pl-1", "/", "Cancel")}</div>
+
+          <div id="formFooter" className="pt-2">{makeLink("/", "pt-2 pl-1","Cancel")}</div>
         </div>
       </div>
+      <main>
+        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage="Password has been reset successfully" />}
+      </main>
     </div>
   );
 }

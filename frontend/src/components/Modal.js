@@ -1,14 +1,14 @@
 import React from "react";
 //import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({ setIsOpen, purpose }) => {
+const Modal = ({ setIsOpen, responseMessage }) => {
   return (
     <>
       <div className="darkBG" />
       <div className="centered">
         <div className="theModal">
           <div className="modalContent">
-            Check your Email Address for {purpose}!
+            {responseMessage}!
           </div>
           <div className="modalActions">
             <div className="actionsContainer">

@@ -23,10 +23,10 @@ function App() {
         <Route path="/signup" exact>
           <SignupPage />
         </Route>
-        <Route path="/forgot-password" exact>
+        <Route path="/forgotPassword" exact>
           <ForgotPasswordPage />
         </Route>
-        <Route path="/api/users/forgotPassword/forgotPasswordReset" exact>
+        <Route path="/resetPassword" exact>
           <ResetPasswordPage />
         </Route>
         <Route path="/userPage" exact>

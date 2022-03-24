@@ -1,26 +1,14 @@
 import e from "cors";
 import React, { useState } from "react";
 import buildPath from "./path";
-import { makeLink } from "./divHelpers/divHelpers";
+import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import { blankValidator} from "./Validators/InputValidator";
+
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
-  // funtion return 1 if input is blank
-  // return 0 if not blank
-  function blankValidator(...fields) {
-    let isBlanked = false;
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].value == "") {
-        fields[i].classList.add("is-invalid");
-        isBlanked = true;
-      } else {
-        fields[i].classList.remove("is-invalid");
-      }
-    }
-
-    return isBlanked;
-  }
+  
   const doLogin = async (event) => {
     let email = document.getElementById("email");
     let password = document.getElementById("password");
@@ -75,38 +63,23 @@ function Login() {
           name={name}
           placeholder={placeholder}
         />
-        <div className="invalid-feedback">{id} cannot be blank</div>
+        <div className="invalid-feedback">{name} cannot be blank</div>
       </div>
     );
   }
-  function makeErrorMessage(className, error) {
-    return <p className={className}>{error}</p>;
-  }
-  function makeActionButton(type, className, event, text, id = "") {
-    return (
-      <button type={type} className={className} onClick={event} id={id}>
-        {text}
-      </button>
-    );
-  }
+  
 
-  function makeLinkDiv(className, href, content) {
-    return (
-      <a className={className} href={href}>
-        {content}
-      </a>
-    );
-  }
 
   return (
     <div className="container">
       <div className="card">
         <div className="card-body">
           <h2 className="text-center">Log in</h2>
-          {makeInput("email", "email", "login", "email")}
-          <br></br>
-          {makeInput("password", "password", "login", "password")}
-          <div>
+          <div className="d-flex flex-column">
+          {makeInput("email", "email", "email", "email")}
+          
+          {makeInput("password", "password", "password", "password")}
+
             {makeActionButton(
               "button",
               "btn btn-block",
@@ -114,16 +87,18 @@ function Login() {
               "Login",
               "loginButton"
             )}
+          {errorMessage != "" && makePTag("text-danger", errorMessage)}
           </div>
-          {errorMessage != "" && makeErrorMessage("text-danger", errorMessage)}
           <div id="formFooter">
-            {makeLinkDiv(
+            {makeLink(
+              "forgotPassword",
               "underLineHover",
-              "forgot-password",
               "Forgot Password?"
             )}
             <br></br>
-            {makeLinkDiv("underLineHover", "signup", "Create an Account")}
+            <div className="underLineHover">
+            {makeLink("signup", "", "Create an Account")}
+            </div>
           </div>
         </div>
       </div>
