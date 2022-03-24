@@ -80,6 +80,17 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
       && 'start' in obj && typeof obj.start === 'number'
   }
 
+  function convertDbRowToFood(dbRow: any): Food {
+    const food: Food = {
+      fdcId: dbRow.fdcId,
+      description: dbRow.description,
+      nutrients: [],
+      portions: []
+    }
+
+    return food
+  }
+
   return async (req: Request, res: Response) => {
     let response: SearchFoodByNameResponse = { currentPage: 0, foods: [], error: SearchFoodByNameError.Ok }
 
@@ -94,18 +105,40 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
       const { query, pageSize, start } = req.body
       const db = client.db()
 
-      const body = {
-        query: `*${query}*`,
-        dataType: [
-          'SR Legacy'
-        ],
-        pageSize: pageSize,
-        pageNumber: start
-      }
+      // Old way of doing it, might revert idk.
+      //const body = {
+      //  query: `*${query}*`,
+      //  dataType: [
+      //    'SR Legacy'
+      //  ],
+      //  pageSize: pageSize,
+      //  pageNumber: start
+      //}
 
-      const queryResult = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
+      //const queryResult = await axios.post(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}`, body);
 
-      response.foods = queryResult.data.foods.map(convertUsdaFood)
+      //response.foods = queryResult.data.foods.map(convertUsdaFood)
+
+      const queryResponse = await db
+        .collection('FoodFuzzySearch')
+        .aggregate([
+          {
+            $search: {
+              // Syntax is taken from: https://docs.atlas.mongodb.com/atlas-search/text/#fuzzy-examples
+              text: {
+                query: query,
+                path: 'description',
+                fuzzy: {}
+              }
+            }
+          },
+          {
+            $limit: pageSize + pageSize * start
+          }
+        ])
+        .toArray()
+
+      response.foods = queryResponse.slice(pageSize * start, pageSize + pageSize * start).map(convertDbRowToFood)
       response.currentPage = start
       res.status(200).json(response)
       return

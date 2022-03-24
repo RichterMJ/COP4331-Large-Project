@@ -61,11 +61,20 @@ export function sendVerificationEmail(app: Express, client: MongoClient): Reques
                 }
             }));
 
+            const emailUrl = `${URL}/emailVerify?userId=${userId}`
+            const logoRef = 'design_assets/Logo/thirdLogo.png'
+            const html = `<p>Click <a href=${emailUrl}>here</a> to verify your account. </p> <p>From GitFit</p> <img src="cid:img"/>`
+            
             var mailOptions = {
                 from: process.env.EMAIL_ADDRESS,
                 to: email,
                 subject: 'Verify Your Account',
-                text: `Go to the following link to verify your account: ${URL}/api/users/emailVerification/verifyEmail?userId=${userId}`
+                html: html,
+                attachments: [{
+                    filename: 'logo.png',
+                    path: logoRef, 
+                    cid: 'img' 
+                   }]
             };
 
             transporter.sendMail(mailOptions, (error, info) => {

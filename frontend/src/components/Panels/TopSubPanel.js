@@ -1,4 +1,5 @@
 import React from "react";
+
 function removeFood(){}
 function editFood(){}
 
@@ -37,6 +38,7 @@ function foodList(list){
         list?.map(food=> ()=>makeElementFood(food))
     )
 }
+
 
 function TopSubPanel(){
     const [foodList,setFoodList] = useState([]);
