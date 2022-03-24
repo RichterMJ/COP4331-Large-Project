@@ -30,7 +30,6 @@ function mainInfoBox(date){
         </div>
 )
 }
-
 function TopPanel(){
     const [date,setDate] = useState("March 22nd 2022");
 
