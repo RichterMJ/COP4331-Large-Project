@@ -83,12 +83,22 @@ export function forgotPasswordEmail(app: Express, client: MongoClient): RequestH
                 }
             }));
 
+            const emailUrl = `${URL}/forgotPassword?userId=${userId}`
+            const logoRef = 'design_assets/Logo/thirdLogo.png'
+            const html = `<p>Click <a href=${emailUrl}>here</a> to reset your password. </p> <p>From GitFit</p> <img src="cid:img"/>`
+
             var mailOptions = {
                 from: process.env.EMAIL_ADDRESS,
                 to: email,
                 subject: 'Change your password',
-                text: `Go to the following link to change your password: ${URL}/api/users/forgotPassword/forgotPasswordReset?userId=${userId}`
+                html: html,
+                attachments: [{
+                    filename: 'logo.png',
+                    path: logoRef, 
+                    cid: 'img' 
+                   }]
             };
+
 
             transporter.sendMail(mailOptions, (error, info) => {
                 if(error){
