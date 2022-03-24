@@ -211,5 +211,26 @@
 
 #foodSearch{
   width: 80%;
+  float: left;
+  height: 40px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.addFoodSearchComponents{
+  margin-top: 10px;
+}
+
+#addFoodSearchButton{
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 0px;
+  background-color: #fc5d51;
+  border-color: black;
+}
+
+#addFoodSearchButton:hover {
+  transform: translate(-0.5px, 0.5px);
 }
 
