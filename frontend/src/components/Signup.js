@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../components/Modal";
+import VerifyModal from "./VerifyModal";
 import AddFoodModal from "../components/AddFoodModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 
@@ -184,7 +184,7 @@ function Signup() {
       </div>
 
       <main>
-      {isOpen && <Modal/>}
+      {isOpen && <VerifyModal/>}
       </main>
       <br></br>
       <AddFoodModal/>

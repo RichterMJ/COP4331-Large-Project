@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = () => {
+const VerifyModal = () => {
   return (
     <>
       <div className="darkBG"/>
@@ -21,4 +21,4 @@ const Modal = () => {
     </>
   );
 };
-export default Modal;
+export default VerifyModal;
