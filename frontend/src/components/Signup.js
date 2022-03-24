@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/Modal";
+import AddFoodModal from "../components/AddFoodModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 
 // var ph = require('./path.js');
@@ -186,6 +187,7 @@ function Signup() {
       {isOpen && <Modal/>}
       </main>
       <br></br>
+      <AddFoodModal/>
     </div>
 
   );

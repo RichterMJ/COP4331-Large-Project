@@ -204,3 +204,12 @@
   transform: translateY(-1px);
 }
 
+.largeModal{
+  width: 1000px;
+  height: 500px;
+}
+
+#foodSearch{
+  width: 80%;
+}
+
