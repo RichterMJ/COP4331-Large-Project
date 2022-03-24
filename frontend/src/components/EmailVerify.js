@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import buildPath from "./path";
 import {makeButton, makeH2} from "./divHelpers/divHelpers";
 
 function EmailVerify(){
+
+    const [boxTextMessage, setMessage] = useState('Git Fit Account Verification');
 
     const verify = async () => {
         const url = window.location.href;
@@ -23,11 +25,11 @@ function EmailVerify(){
             let res = JSON.parse(await response.text());
       
             console.log(res);
-      
+
             if (res.error != 0) {
               console.log('An error has occured');
             } else {
-              document.getElementById('boxText').innerHTML = "Success!";
+              setMessage('Success!');
               window.setTimeout(() => {window.location.href = "/login"}, 1500);
             }
           } catch (e) {
@@ -40,7 +42,7 @@ function EmailVerify(){
             <div className="container">
                 <div className="card">
                     <div className="card-body">
-                        {makeH2("boxText", "text-center", "Git Fit Account Verification")}
+                        {makeH2("boxText", "text-center", boxTextMessage)}
                         <br></br>
                         <div id="verifyButtonDiv">
                             {makeButton("verifyButton", "btn btn-success btn-block btn-lg  text-body", ()=> verify(), "Verify")}
