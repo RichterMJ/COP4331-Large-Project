@@ -1,7 +1,7 @@
 import e from "cors";
 import React, { useState } from "react";
 import buildPath from "./path";
-import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { blankValidator} from "./Validators/InputValidator";
 
 
@@ -53,32 +53,14 @@ function Login() {
     }
   };
 
-  function makeInput(type, id, name, placeholder) {
-    return (
-      <div className="has-validation">
-        <input
-          className="form-control"
-          type={type}
-          id={id}
-          name={name}
-          placeholder={placeholder}
-        />
-        <div className="invalid-feedback">{name} cannot be blank</div>
-      </div>
-    );
-  }
   
-
-
-  return (
-    <div className="container">
-      <div className="card">
-        <div className="card-body">
-          <h2 className="text-center">Log in</h2>
-          <div className="d-flex flex-column">
-          {makeInput("email", "email", "email", "email")}
-          
-          {makeInput("password", "password", "password", "password")}
+  function makeLoginForm(){
+    return (
+      <div className="d-flex flex-column">
+            
+            {makeInputDiv("email", "email","pt-2","email", "email")}
+            
+            {makeInputDiv("password", "password","pt-2", "password", "password")}
 
             {makeActionButton(
               "button",
@@ -87,18 +69,30 @@ function Login() {
               "Login",
               "loginButton"
             )}
-          {errorMessage != "" && makePTag("text-danger", errorMessage)}
-          </div>
+            {errorMessage != "" && makePTag("text-danger", errorMessage)}
+      </div>
+    );
+  }
+
+
+  return (
+    <div className="container">
+      <div className="card">
+        <div className="card-body">
+          
+          {makeH2("", "text-center", "Log in")}
+
+          {makeLoginForm()}
+
           <div id="formFooter">
             {makeLink(
               "forgotPassword",
-              "underLineHover",
+              "underLineHover d-block",
               "Forgot Password?"
             )}
-            <br></br>
-            <div className="underLineHover">
-            {makeLink("signup", "", "Create an Account")}
-            </div>
+
+            {makeLink("signup", "underLineHover d-block", "Create an Account")}
+            
           </div>
         </div>
       </div>

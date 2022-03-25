@@ -3,24 +3,13 @@ import React, { useState } from "react";
 import buildPath from "./path";
 import { blankValidator} from "./Validators/InputValidator";
 import Modal from "../components/Modal";
-import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
 function ResetPassword() {
   const search = useLocation().search;
   const userId = new URLSearchParams(search).get("userId");
   const [errorMessage, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
-  function makeInputDiv(label, id, className, type) {
-    return (
-      <div className={className}>
-        <label className="form-label" htmlFor={id}>
-          {label}
-        </label>
-        <input className="form-control" type={type} id={id} />
-      </div>
-    );
-  }
 
   const doResetPassword = async (event) => {
     // implement reset password function
@@ -67,37 +56,43 @@ function ResetPassword() {
       console.log(e.toString());
       return;
     }
+    
   };
-
+  
+  function makeResetPasswordInputs(){
+    return (
+      <div className="d-flex flex-column">
+              {makeInputDiv("Password", "resetPassword", "w-50 pt-2", "password","password")}
+              {makeInputDiv(
+                "Confirm Password",
+                "confirmResetPassword",
+                "w-50 pt-2",
+                "confirmed password",
+                "confirm password"
+              )}
+      </div>
+    )
+  }
   return (
     <div className="container">
       <div className="card">
         <div className="card-body">
-          <h2 className="text-center">Reset Password</h2>
 
-          <br></br>
-          <div className="resetPasswordDiv">
-            <div className="d-flex flex-column">
-              {makeInputDiv("Password", "resetPassword", "w-50", "password")}
-              {makeInputDiv(
-                "Confirm Password",
-                "confirmResetPassword",
-                "w-50",
-                "password"
-              )}
-            </div>
+          {makeH2("", "text-center pb-4", "Reset Password")}
+          
+          {makeResetPasswordInputs()}
 
-            {makeActionButton(
-              "button",
-              "btn btn-success btn-lg mt-3",
-              () => doResetPassword(),
-              "Done",
-              "resetPasswordButton"
-            )}
-            {errorMessage != "" && makePTag("text-danger", errorMessage)}
-          </div>
+          {makeActionButton(
+            "button",
+            "btn btn-success btn-lg mt-3",
+            () => doResetPassword(),
+            "Done",
+            "resetPasswordButton"
+          )}
+          {errorMessage != "" && makePTag("text-danger", errorMessage)}
 
           <div id="formFooter" className="pt-2">{makeLink("/", "pt-2 pl-1","Cancel")}</div>
+          
         </div>
       </div>
       <main>

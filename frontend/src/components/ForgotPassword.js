@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "../components/Modal";
 import buildPath from "./path";
 import { blankValidator} from "./Validators/InputValidator";
-import { makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import { makePTag,makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
 function ForgotPassword() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,17 +10,6 @@ function ForgotPassword() {
   const [userEmail, setUserEmail] = useState("");
  
 
-  function makeInputDiv(label, id, className, type) {
-    return (
-      <div className={className}>
-        <label className="form-label" htmlFor={id}>
-          {label}
-        </label>
-        <input className="form-control" type={type} id={id} />
-      </div>
-    );
-  }
-  
   const sendResetLink = async (event) => {
     let email = document.getElementById("resetEmail");
     setUserEmail(email.value);
@@ -65,41 +54,45 @@ function ForgotPassword() {
       return;
     }
   };
+  function makeEmailInput(){
+    return(
+      <div className="d-flex align-item-center justify-content-center">
+        {makeInputDiv(
+          "Please enter your email",
+          "resetEmail",
+          "w-50",
+          "email",
+          "email"
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="container">
       <div className="card">
-        <div className="card-body rounded-1">
-          {makeH2("", "text-center", "Forgot Password")}
+        <div className="card-body text-center">
 
-          <br></br>
-          <div className="text-center">
-            <div className="d-flex align-item-center justify-content-center">
-              {makeInputDiv(
-                "Please enter your email",
-                "resetEmail",
-                "w-50",
-                "email"
-              )}
-            </div>
+          {makeH2("", "pb-4", "Forgot Password")}
+          
+          {makeEmailInput()}
+            
+          {makeActionButton(
+            "button",
+            "btn btn-success btn-lg mt-3",
+            () => sendResetLink(),
+            "Confirm",
+            "resetPasswordButton"
+          )}
 
-            <div className="pt-3">
-              {makeActionButton(
-                "button",
-                "btn btn-success btn-lg",
-                () => sendResetLink(),
-                "Confirm",
-                "resetPasswordButton"
-              )}
-            </div>
-            {errorMessage != "" && makePTag("text-danger pt-2", errorMessage)}
+          {errorMessage != "" && makePTag("text-danger pt-2", errorMessage)}
 
-            <div id="formFooter" className="pt-2">{makeLink("/","pt-2 pl-1 text-danger", "Cancel")}</div>
-          </div>
+          <div id="formFooter" className="pt-2">{makeLink("/","text-danger", "Cancel")}</div>
+          
         </div>
       </div>
       <main>
-        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage={`Reset link has been sent ${userEmail}. Please check your inbox.`} />}
+        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage={`Reset link has been sent ${userEmail}. Please check your Inbox`} />}
       </main>
     </div>
   );

@@ -10,7 +10,7 @@ function makeActionButton(type,className,event,text,id=""){
           </button>)
 }
 
-function makeDiv(id = "", className = "", text = "", divContent = ""){
+function makeDiv(id = "", className = "", text = "", divContent=""){
     return(
       <div id={id} className={className}>{text}{divContent}</div>
     )
@@ -42,5 +42,19 @@ function makeH2(id, className, text){
 function makePTag(className, text) {
   return <p className={className}>{text}</p>;
 }
+function makeInputDiv(type, id, className, name, placeholder) {
+  return (
+    <div className={className}>
+      <input
+        className="form-control"
+        type={type}
+        id={id}
+        name={name}
+        placeholder={placeholder}
+      />
+      <div className="invalid-feedback">{name} cannot be blank</div>
+    </div>
+  );
+}
 
-export {makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2};
+export {makeInputDiv, makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2};
