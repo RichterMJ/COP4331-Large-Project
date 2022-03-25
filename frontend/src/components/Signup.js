@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+
 import ResponseModal from "./Modals/ResponseModal";
-import { makeButton, makeLink, makeSpan } from "./divHelpers/divHelpers";
+import VerifyModal from "./VerifyModal";
+import AddFoodModal from "../components/AddFoodModal";
+import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
+
 
 // var ph = require('./path.js');
 import buildPath from "./path";
@@ -185,9 +189,14 @@ function Signup() {
       </div>
 
       <main>
-        {isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage="Email has been sent for verfication. Please check your inbox" />}
+
+       // Idk if this one or the one below is the correct one{isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage="Email has been sent for verfication. Please check your inbox" />}
+
+      {isOpen && <VerifyModal/>}
+
       </main>
       <br></br>
+      <AddFoodModal/>
     </div>
   );
 }
