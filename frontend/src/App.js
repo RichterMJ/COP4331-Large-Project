@@ -24,7 +24,7 @@ function App() {
         <Route path ="/userPage" exact>
           <UserPage />
         </Route>
-        <Route path="/emailVerify" exact>
+        <Route path="/emailVerify">
           <EmailVerifyPage/>
         </Route>
         <Redirect to="/" />

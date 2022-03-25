@@ -150,26 +150,20 @@
 
 .closeBtn {
   cursor: pointer;
-  font-weight: 500;
-  padding: 4px 8px;
+  font-weight: 1000;
   border-radius: 8px;
   border: none;
-  font-size: 18px;
-  color: #2c3e50;
-  background: white;
+  font-size: 25px;
+  background: none;
   transition: all 0.25s ease;
-  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 10px;
+  top: 0px;
   align-self: flex-end;
-  margin-top: -7px;
-  margin-right: -7px;
 }
 
 .closeBtn:hover {
-  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
-  transform: translate(-4px, 4px);
+  color: red;
 }
 
 .okayBtn {
@@ -202,5 +196,35 @@
 #verifyButton:hover {
   box-shadow: 0 5px 13px -10px black;
   transform: translateY(-1px);
+}
+
+.largeModal{
+  width: 1000px;
+  height: 500px;
+}
+
+#foodSearch{
+  width: 80%;
+  float: left;
+  height: 40px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.addFoodSearchComponents{
+  margin-top: 10px;
+}
+
+#addFoodSearchButton{
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 0px;
+  background-color: #fc5d51;
+  border-color: black;
+}
+
+#addFoodSearchButton:hover {
+  transform: translate(-0.5px, 0.5px);
 }
 
