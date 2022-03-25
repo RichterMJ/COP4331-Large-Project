@@ -227,3 +227,22 @@
   transform: translate(-0.5px, 0.5px);
 }
 
+.foodSearchTable{
+  height: 350px;
+  overflow-y: scroll;
+}
+
+#addFoodButton{
+  display:inline-block;
+  width: 100px;
+  height: 40px;
+  line-height: 0px;
+  background-color: #4de611;
+  border-color: black;
+}
+
+#addFoodButton:hover {
+  transform: translate(-0.5px, 0.5px);
+}
+
+
