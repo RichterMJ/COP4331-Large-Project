@@ -1,5 +1,5 @@
 // FIXME, change to herku with better name
-const app_name = 'git-fit-with-rick'
+const app_name = 'git-fit-cop4331'
 
 function buildPath(route) {
     if (process.env.NODE_ENV === 'production') {
