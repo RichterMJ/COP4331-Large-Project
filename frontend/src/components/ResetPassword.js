@@ -2,8 +2,9 @@ import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import buildPath from "./path";
 import { blankValidator} from "./Validators/InputValidator";
-import Modal from "../components/Modal";
+import Modal from "./Modals/ResponseModal";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import ResponseModal from "./Modals/ResponseModal";
 
 function ResetPassword() {
   const search = useLocation().search;
@@ -58,7 +59,7 @@ function ResetPassword() {
     }
     
   };
-  
+
   function makeResetPasswordInputs(){
     return (
       <div className="d-flex flex-column">
@@ -96,7 +97,7 @@ function ResetPassword() {
         </div>
       </div>
       <main>
-        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage="Password has been reset successfully" />}
+        {isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage="Password has been reset successfully" />}
       </main>
     </div>
   );

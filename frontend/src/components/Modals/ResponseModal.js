@@ -1,7 +1,7 @@
 import React from "react";
 //import { RiCloseLine } from "react-icons/ri";
 
-const Modal = ({ setIsOpen, responseMessage }) => {
+const ResoponseModal = ({ setIsOpen, responseMessage }) => {
   return (
     <>
       <div className="darkBG" />
@@ -25,4 +25,4 @@ const Modal = ({ setIsOpen, responseMessage }) => {
     </>
   );
 };
-export default Modal;
+export default ResoponseModal;

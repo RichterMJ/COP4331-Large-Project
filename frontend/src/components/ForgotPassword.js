@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../components/Modal";
+import ResponseModal from "./Modals/ResponseModal";
 import buildPath from "./path";
 import { blankValidator} from "./Validators/InputValidator";
 import { makePTag,makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
@@ -92,7 +92,7 @@ function ForgotPassword() {
         </div>
       </div>
       <main>
-        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage={`Reset link has been sent ${userEmail}. Please check your Inbox`} />}
+        {isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage={`Reset link has been sent ${userEmail}. Please check your Inbox`} />}
       </main>
     </div>
   );

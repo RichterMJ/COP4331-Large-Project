@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../components/Modal";
+import ResponseModal from "./Modals/ResponseModal";
 import { makeButton, makeLink, makeSpan } from "./divHelpers/divHelpers";
 
 // var ph = require('./path.js');
@@ -185,7 +185,7 @@ function Signup() {
       </div>
 
       <main>
-        {isOpen && <Modal setIsOpen={setIsOpen} responseMessage="Email has been sent for verfication. Please check your inbox" />}
+        {isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage="Email has been sent for verfication. Please check your inbox" />}
       </main>
       <br></br>
     </div>
