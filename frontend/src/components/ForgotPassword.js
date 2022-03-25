@@ -58,7 +58,7 @@ function ForgotPassword() {
     return(
       <div className="d-flex align-item-center justify-content-center">
         {makeInputDiv(
-          "Please enter your email",
+          "email",
           "resetEmail",
           "w-50",
           "email",

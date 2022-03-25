@@ -14,10 +14,11 @@ function ResetPassword() {
 
   const doResetPassword = async (event) => {
     // implement reset password function
+    let email  = document.getElementById("resetEmail");
     let password = document.getElementById("resetPassword");
     let confirmPassword = document.getElementById("confirmResetPassword");
 
-    if (blankValidator(confirmPassword, password)) {
+    if (blankValidator(email, confirmPassword, password)) {
       return;
     }
     if (confirmPassword.value != password.value) {
@@ -26,6 +27,7 @@ function ResetPassword() {
 
     const resetPasswordData = {
       userId: userId,
+      email: email.value,
       newPassword: password.value,
     };
 
@@ -63,13 +65,14 @@ function ResetPassword() {
   function makeResetPasswordInputs(){
     return (
       <div className="d-flex flex-column">
-              {makeInputDiv("Password", "resetPassword", "w-50 pt-2", "password","password")}
+              {makeInputDiv("email","resetEmail", "w-50 pt-2 pb-3", "Reset email", "Email")}
+              {makeInputDiv("password", "resetPassword", "w-50 pt-2", "password","New Password")}
               {makeInputDiv(
-                "Confirm Password",
+                "password",
                 "confirmResetPassword",
                 "w-50 pt-2",
-                "confirmed password",
-                "confirm password"
+                "Confirmed password",
+                "Confirm Password"
               )}
       </div>
     )
