@@ -1,17 +1,25 @@
-import React, {useState} from "react";
+import e from "cors";
+import React, { useState } from "react";
 import buildPath from "./path";
-import {makeLink} from "./divHelpers/divHelpers";
+import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
+import { blankValidator} from "./Validators/InputValidator";
+
 
 function Login() {
   const [errorMessage, setMessage] = useState("");
 
-  const doLogin = async () => {
-    let email = document.getElementById('email');
-    let password = document.getElementById('password');
+  
+  const doLogin = async (event) => {
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
+
+    if (blankValidator(email, password)) {
+      return;
+    }
 
     const loginData = {
       email: email.value,
-      password: password.value
+      password: password.value,
     };
 
     const loginJSON = JSON.stringify(loginData);
@@ -22,12 +30,12 @@ function Login() {
         body: loginJSON,
         headers: { "Content-Type": "application/json" },
       });
-      
+
       let res = JSON.parse(await response.text());
 
       console.log(res);
 
-      if (res.error == 1) {
+      if (res.error == 3) {
         setMessage("Incorrect email/password");
       } else {
         const user = {
@@ -45,42 +53,46 @@ function Login() {
     }
   };
 
-  function makeTextInput (id,name,placeholder){
-    return(<input
-              className="form-control"
-              type="text"
-              id={id}
-              name={name}
-              placeholder={placeholder}
-            />
-          )
+  
+  function makeLoginForm(){
+    return (
+      <div className="d-flex flex-column">
+            
+            {makeInputDiv("email", "email","pt-2","email", "email")}
+            
+            {makeInputDiv("password", "password","pt-2", "password", "password")}
+
+            {makeActionButton(
+              "button",
+              "btn btn-block",
+              () => doLogin(),
+              "Login",
+              "loginButton"
+            )}
+            {errorMessage != "" && makePTag("text-danger", errorMessage)}
+      </div>
+    );
   }
 
-  function makeActionButton(type,className,event,text,id=""){
-    return(<button
-           type = {type}
-           className={className}
-           onClick = {event}
-           id = {id}>
-             {text}
-           </button>)
-  }
 
   return (
     <div className="container">
       <div className="card">
         <div className="card-body">
-          <h2 className="text-center">Log in</h2>
-          {makeTextInput("email","login","email")}
-            <br></br>
-          {makeTextInput("password","login","password")}
-            <div>
-              {makeActionButton("button","btn btn-block",()=> doLogin(),"Login","loginButton")}
-            </div>
+          
+          {makeH2("", "text-center", "Log in")}
+
+          {makeLoginForm()}
+
           <div id="formFooter">
-            {makeLink("s", "underLineHover","Forgot Password?")}
-            <br></br>
-            {makeLink("signup", "signup","Create an Account")}
+            {makeLink(
+              "forgotPassword",
+              "underLineHover d-block",
+              "Forgot Password?"
+            )}
+
+            {makeLink("signup", "underLineHover d-block", "Create an Account")}
+            
           </div>
         </div>
       </div>

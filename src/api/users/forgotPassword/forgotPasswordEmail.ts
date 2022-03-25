@@ -1,7 +1,5 @@
 import { RequestHandler, Request, Response, Express, query } from 'express'
 import { MongoClient, ObjectId, Timestamp } from 'mongodb'
-import nodemailer from "nodemailer";
-import smtpTransport from "nodemailer-smtp-transport";
 import {
     ObjectIdString, isObjectIdString,
     IsoDate, isIsoDate,
@@ -11,107 +9,84 @@ import {
     Portion, isPortion,
     AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
-import {URL} from '../../../index'
 
 
-export enum forgotPasswordEmailError {
+export enum forgotPasswordResetError {
     Ok = 0,
     InvalidRequest,
     ServerError,
-    InvalidCredentials,
+    InvalidCredentials
 }
 
-export type forgotPasswordEmailRequest = {
-    email: string
+export type forgotPasswordResetRequest = {
+    userId: ObjectIdString
+    email: string;
+    newPassword: string
 }
 
-export type forgotPasswordEmailResponse = {
-    error: forgotPasswordEmailError
+export type forgotPasswordResetResponse = {
+    error: forgotPasswordResetError
 }
 
 
-export function forgotPasswordEmail(app: Express, client: MongoClient): RequestHandler {
+export function forgotPasswordReset(app: Express, client: MongoClient): RequestHandler {
 
-    /* Programmatically ensure the request body is of type `forgotPasswordEmailRequest`. */
-    function isForgotPasswordEmailRequest(obj: any): obj is forgotPasswordEmailRequest {
+    /* Programmatically ensure the request body is of type `forgotPasswordResetRequest`. */
+    function isForgotPasswordResetRequest(obj: any): obj is forgotPasswordResetRequest {
         return obj != null && typeof obj === 'object'
+            && 'userId' in obj && isObjectIdString(obj.userId)
             && 'email' in obj && typeof obj.email === 'string'
+            && 'newPassword' in obj && typeof obj.newPassword === 'string'
     }
 
     return async (req: Request, res: Response) => {
-        let response: forgotPasswordEmailResponse = { error: 0 }
+        let response: forgotPasswordResetResponse = { error: 0 }
 
         try {
-            if (!isForgotPasswordEmailRequest(req.body)) {
-                response.error = forgotPasswordEmailError.InvalidRequest
+            if (!isForgotPasswordResetRequest(req.body)) {
+                response.error = forgotPasswordResetError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { email } = req.body
-
-            //Get userId from emailAddress
-
-            let userId;
-            
-            if(email != null && typeof email === 'string'){
+            const { userId, email, newPassword} = req.body
+            /*
+            if(userId != null && typeof userId === 'string'){
                 // Go to the data base and update
                 const db = client.db()
-
-                const result = await db.collection('Users').findOne(
-                        { 'email': email}
+                const result = await db.collection('Users').updateOne(
+                        {'_id': new ObjectId(userId)},
+                        {
+                            $set: {hasVerifiedEmail: true}
+                        }
                     )
             
-                if(result == null){
-                    response.error = forgotPasswordEmailError.InvalidCredentials
-                } else {
-                    userId = result._id
+                if(result.modifiedCount != 1){
+                    response.error = forgotPasswordResetError.InvalidCredentials
                 }
             } else {
-                response.error = forgotPasswordEmailError.InvalidRequest
+                response.error = forgotPasswordResetError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
+            */
 
-            // Send email
-            var transporter = nodemailer.createTransport(smtpTransport({
-                service: 'gmail',
-                host: 'smtp.gmail.com',
-                auth: { 
-                    user: process.env.EMAIL_ADDRESS,
-                    pass: process.env.PASSWORD
-                }
-            }));
+            // Go to the data base and update
+            const db = client.db()
 
-            const emailUrl = `${URL}/forgotPassword?userId=${userId}`
-            const logoRef = 'design_assets/Logo/thirdLogo.png'
-            const html = `<p>Click <a href=${emailUrl}>here</a> to reset your password. </p> <p>From GitFit</p> <img src="cid:img"/>`
-
-            var mailOptions = {
-                from: process.env.EMAIL_ADDRESS,
-                to: email,
-                subject: 'Change your password',
-                html: html,
-                attachments: [{
-                    filename: 'logo.png',
-                    path: logoRef, 
-                    cid: 'img' 
-                   }]
-            };
-
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if(error){
-                    response.error = forgotPasswordEmailError.ServerError
-                    console.log(error)
-                } else {
-                    console.log(info)
-                }
-            })
-
-
+            const result = await db.collection('Users').updateOne(
+                    {'_id': new ObjectId(userId), 'email': email},
+                    {
+                        $set: {password: newPassword}
+                    }
+                )
+        
+            if(result.modifiedCount != 1){
+                response.error = forgotPasswordResetError.InvalidCredentials
+            }
+           
         } catch (e) {
-            response.error = forgotPasswordEmailError.ServerError
+            response.error = forgotPasswordResetError.ServerError
             console.log(e)
         }
 
