@@ -1,4 +1,3 @@
-import e from "cors";
 import React, { useState } from "react";
 import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
