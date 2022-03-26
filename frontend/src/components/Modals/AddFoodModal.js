@@ -6,6 +6,7 @@ function AddFoodModal(){
     const [foodQuery, setFoodQuery] = useState("");
     const [isOpen, setIsOpen] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
+    const [tableContent, setTableContent] = useState("");
 
     function makeTextInput (id,name,placeholder, onChange){
         return(<input
@@ -21,11 +22,33 @@ function AddFoodModal(){
 
     //These will be added to separate files
     function search(text){
+        setTableContent(getContent);
+    }
 
+    //Temporary method for testing
+    function getContent(){
+      const foods = ['apple', 'banana', 'orange', 'pineapple'];
+      const calories = [100, 200, 300, 400];
+      let content = [];
+      for(let i = 0; i < 4; i++){
+        content.push(createItem(foods[i], calories[i]));
+      }
+      return content;
+    }
+
+    function createItem(food, calories){
+      return (
+          <button className="foodItem" onClick={function(){setSelectedFood(food)}}>
+          {food}
+          <br/>
+          {calories + " calories"}
+          <br/>
+          </button>
+      )
     }
 
     function addFood(){
-
+      console.log(selectedFood);
     }
 
     return (
@@ -41,9 +64,9 @@ function AddFoodModal(){
                     {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(foodQuery), "Search")}
                 </div>
                 <div className="foodSearchTable">
-
+                  {tableContent};
                 </div>
-                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", addFood(), "Add")}
+                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
               </div>
             </div>
           </div>

@@ -212,6 +212,7 @@
 
 .addFoodSearchComponents{
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #addFoodSearchButton{
@@ -228,7 +229,7 @@
 }
 
 .foodSearchTable{
-  height: 350px;
+  height: 325px;
   overflow-y: scroll;
 }
 
@@ -236,6 +237,7 @@
   display:inline-block;
   width: 100px;
   height: 40px;
+  margin-top: 10px;
   line-height: 0px;
   background-color: #4de611;
   border-color: black;
@@ -243,6 +245,18 @@
 
 #addFoodButton:hover {
   transform: translate(-0.5px, 0.5px);
+}
+
+.foodItem{
+  width:930px;
+  height:100px;
+  margin-left: 20px;
+  border:2px solid grey;
+  background-color: white;
+}
+
+.foodItem:focus{
+  background-color: rgb(240, 240, 104);
 }
 
 

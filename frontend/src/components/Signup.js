@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 import ResponseModal from "./Modals/ResponseModal";
-import VerifyModal from "./VerifyModal";
-import AddFoodModal from "../components/AddFoodModal";
+import VerifyModal from "./Modals/VerifyModal";
+import AddFoodModal from "./Modals/AddFoodModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 
 
