@@ -2,11 +2,9 @@ import React, {useState} from "react";
 import {makeButton} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
 
-function AddFoodModal(){
+function AddFoodModal({open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
-    const [isOpen, setIsOpen] = useState(true);
     const [selectedFood, setSelectedFood] = useState("");
-    const [tableContent, setTableContent] = useState("");
 
     function makeTextInput (id,name,placeholder, onChange){
         return(<input
@@ -22,7 +20,7 @@ function AddFoodModal(){
 
     //These will be added to separate files
     function search(text){
-        setTableContent(getContent);
+        setTC(getContent);
     }
 
     //Temporary method for testing
@@ -51,25 +49,27 @@ function AddFoodModal(){
       console.log(selectedFood);
     }
 
+    console.log('hello');
+
     return (
-        isOpen ? 
+        open ?
         <div className="darkBG">
             <div className="centered largeModal theModal">
               <div className="modalContent">
                 Add Food
-                {makeButton("", "closeBtn",() => setIsOpen(false), <RiCloseLine/>)}
+                {makeButton("", "closeBtn",() => {close(); setTC("")}, <RiCloseLine/>)}
                 <div className="addFoodSearchComponents">
                     {makeTextInput("foodSearch", "foodSearch", "Insert Food", (srch) => setFoodQuery(srch.target.value))}
                     {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(foodQuery), "Search")}
                 </div>
                 <div className="foodSearchTable">
-                  {tableContent};
+                  {tc};
                 </div>
                 {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
               </div>
             </div>
         </div>
-        : ""
+        : null
     );
 }
 

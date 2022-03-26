@@ -3,8 +3,8 @@ import {makeActionButton} from "../divHelpers/divHelpers.js";
 import AddFoodModal from "../Modals/AddFoodModal";
 
 
-function addFoodEvent(setAddFoodOpen){
-    setAddFoodOpen(true);
+function addFoodEvent(toggleAFM){
+    toggleAFM();
 }
 
 function makeRecipeEvent(){
@@ -24,18 +24,23 @@ function leftPanelLogoHeader(){
 
 function LeftPanel(){
     const [addFoodOpen, setAddFoodOpen] = useState(false);
+    const [tableContent, setContent] = useState("");
 
+    //Makes it so table content in add food is set to blank once opened
+    const toggleTC = (content) => setContent(content);
+    const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
+ 
     return(
         <div id="leftPanel">
           {leftPanelLogoHeader()}
-          {makeActionButton("button", "leftPanelButton",() => addFoodEvent(setAddFoodOpen),
+          {makeActionButton("button", "leftPanelButton",() => addFoodEvent(toggleAFM),
                             "Add Food","addFoodButton")}
           {makeActionButton("button", "leftPanelButton",() => makeRecipeEvent(),
                             "Make Recipe","makeRecipeButton")}
           {makeActionButton("button", "leftPanelButton",() => editUserPrefEvent(),
                             "Edit User Preferences","EditUserPrefButton")}
           <main>
-            {addFoodOpen && <AddFoodModal/>}
+            {<AddFoodModal open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
           </main>
         </div>
     )
