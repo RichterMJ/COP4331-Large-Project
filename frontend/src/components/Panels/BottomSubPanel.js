@@ -7,15 +7,17 @@ function makeNutrientBars(nutrients){
   )
 }
 function makeNutrientBar(nutrient){
-  d
+  return (
+    <div className = "nutrientElement" id = {nutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg"> </div> </div> <div class = "nutrientText"> 21/50g Protein</div> </div>
+  )
 }
 function makeNutrientCategory (nutrientCat){
   return(
-    <div className = "nutrientCategory",id = {nutrientCat.name}>
+    <div className = "nutrientCategory",id = {nutrientCat.id}>
       <div className = "nutrientCatHeading">
         {nutrientCat.name}
       </div>
-      {makeNutrientBars(nutrientCat)}
+      {makeNutrientBars(nutrientCat.nutrientBars)}
     </div>
   )
 }
