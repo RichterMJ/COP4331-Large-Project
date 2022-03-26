@@ -1,13 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers.js";
+import AddFoodModal from "../Modals/AddFoodModal";
 
-function addFoodEvent(){
+
+function addFoodEvent(setAddFoodOpen){
+    setAddFoodOpen(true);
 }
+
 function makeRecipeEvent(){
 }
 function editUserPrefEvent(){
 
 }
+
 function leftPanelLogoHeader(){
     return(
         <div id = "logoHeader">
@@ -16,17 +21,22 @@ function leftPanelLogoHeader(){
          </div>
     )
 }
+
 function LeftPanel(){
+    const [addFoodOpen, setAddFoodOpen] = useState(false);
 
     return(
         <div id="leftPanel">
           {leftPanelLogoHeader()}
-          {makeActionButton("button", "leftPanelButton",addFoodEvent(),
+          {makeActionButton("button", "leftPanelButton",() => addFoodEvent(setAddFoodOpen),
                             "Add Food","addFoodButton")}
-          {makeActionButton("button", "leftPanelButton",makeRecipeEvent(),
+          {makeActionButton("button", "leftPanelButton",() => makeRecipeEvent(),
                             "Make Recipe","makeRecipeButton")}
-          {makeActionButton("button", "leftPanelButton",editUserPrefEvent(),
+          {makeActionButton("button", "leftPanelButton",() => editUserPrefEvent(),
                             "Edit User Preferences","EditUserPrefButton")}
+          <main>
+            {addFoodOpen && <AddFoodModal/>}
+          </main>
         </div>
     )
 }

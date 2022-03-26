@@ -4,7 +4,7 @@ import { RiCloseLine } from "react-icons/ri";
 
 function AddFoodModal(){
     const [foodQuery, setFoodQuery] = useState("");
-    const [isOpen, setIsOpen] = useState("");
+    const [isOpen, setIsOpen] = useState(true);
     const [selectedFood, setSelectedFood] = useState("");
     const [tableContent, setTableContent] = useState("");
 
@@ -52,10 +52,9 @@ function AddFoodModal(){
     }
 
     return (
-        <>
-          <div className="darkBG"/>
-          <div className="centered">
-            <div className="largeModal theModal">
+        isOpen ? 
+        <div className="darkBG">
+            <div className="centered largeModal theModal">
               <div className="modalContent">
                 Add Food
                 {makeButton("", "closeBtn",() => setIsOpen(false), <RiCloseLine/>)}
@@ -69,9 +68,9 @@ function AddFoodModal(){
                 {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
               </div>
             </div>
-          </div>
-        </>
-      );
+        </div>
+        : ""
+    );
 }
 
 export default AddFoodModal;

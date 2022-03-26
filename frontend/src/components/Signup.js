@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-
-import ResponseModal from "./Modals/ResponseModal";
 import VerifyModal from "./Modals/VerifyModal";
-import AddFoodModal from "./Modals/AddFoodModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 
 
@@ -189,14 +186,8 @@ function Signup() {
       </div>
 
       <main>
-
-       // Idk if this one or the one below is the correct one{isOpen && <ResponseModal setIsOpen={setIsOpen} responseMessage="Email has been sent for verfication. Please check your inbox" />}
-
       {isOpen && <VerifyModal/>}
-
       </main>
-      <br></br>
-      <AddFoodModal/>
     </div>
   );
 }
