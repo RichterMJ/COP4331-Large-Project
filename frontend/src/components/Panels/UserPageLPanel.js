@@ -25,7 +25,12 @@ function leftPanelLogoHeader(){
 function LeftPanel(){
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [tableContent, setContent] = useState("");
-
+    const _ud = localStorage.getItem("user_data");
+    const ud = JSON.parse(_ud);
+    const userId = ud.userId;
+    const firstName = ud.firstName;
+    const lastName = ud.lastName;
+    
     //Makes it so table content in add food is set to blank once opened
     const toggleTC = (content) => setContent(content);
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
