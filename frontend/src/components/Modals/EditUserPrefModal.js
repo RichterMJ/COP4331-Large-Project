@@ -8,14 +8,14 @@ function EditUserPrefModal({firstName, lastName, open, close}) {
         return (
             <div className="container">
             <div className="row pt-5 justify-content-start">
-                <div className="col-5 text-left ">
+                <div className="col-5 text-left">
                 {makeLabel("firstNameEdit", "First Name")}
-                {makeInputDiv("text", "firstNameEdit", "" , "Hieu" ,"First name","First Name" )}
+                {makeInputDiv("text", "firstNameEdit", "" , firstName ,"First name","First Name" )}
                 </div>
 
                 <div className="col-5 text-left">
                 {makeLabel("lastNameEdit", "Last Name")}
-                {makeInputDiv("text", "lastNameEdit", "",  "Dang","Last name", "Last Name" )}
+                {makeInputDiv("text", "lastNameEdit", "", lastName,"Last name", "Last Name" )}
                 </div>
             </div>
             <div className="row pt-3 justify-content-start">
@@ -31,7 +31,7 @@ function EditUserPrefModal({firstName, lastName, open, close}) {
         );
     }
     function saveChanges(){
-        console.log("Save Changes button clicked " + firstName + " " + lastName);
+        // call API to update user preferences
         return null;
     }
     return (

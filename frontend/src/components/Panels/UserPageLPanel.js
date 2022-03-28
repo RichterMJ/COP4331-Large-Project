@@ -49,7 +49,7 @@ function LeftPanel(){
                             "Edit User Preferences","EditUserPrefButton")}
           <main>
             {<AddFoodModal open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
-            {<EditUserPrefModal open={editUserPrefOpen} close={toggleEUP} />}
+            {<EditUserPrefModal firstName={firstName} lastName={lastName} open={editUserPrefOpen} close={toggleEUP} />}
           </main>
         </div>
     )
