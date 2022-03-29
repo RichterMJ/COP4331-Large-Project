@@ -1,5 +1,6 @@
 import { RequestHandler, Request, Response, Express, query } from 'express'
 import { MongoClient, ObjectId, Timestamp } from 'mongodb'
+var token = require('../../createJWT');
 import {
     ObjectIdString, isObjectIdString,
     IsoDate, isIsoDate,
@@ -19,6 +20,7 @@ export enum FoodRecordPostError {
     Ok = 0,
     InvalidRequest,
     ServerError,
+    jwtError
 }
 
 export type FoodRecordPostRequest = {
@@ -26,11 +28,13 @@ export type FoodRecordPostRequest = {
     userId: ObjectIdString
     eatenTimestamp: IsoTimestamp
     amountConsumed: AmountConsumed
+    jwtToken: any
 }
 
 export type FoodRecordPostResponse = {
     foodRecordId?: ObjectIdString
     error: FoodRecordPostError
+    jwtToken: any
 }
 
 function getTotalNutrients(food: Food, consumed: AmountConsumed): Nutrient[] {
@@ -73,10 +77,11 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
             && 'userId' in obj && isObjectIdString(obj.userId)
             && 'eatenTimestamp' in obj && isIsoTimestamp(obj.eatenTimestamp)
             && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
+            && 'jwtToken' in obj && obj.jwtToken != null
     }
 
     return async (req: Request, res: Response) => {
-        let response: FoodRecordPostResponse = { error: 0 }
+        let response: FoodRecordPostResponse = { error: 0, jwtToken: null }
 
         try {
             if (!isFoodRecordPostRequest(req.body)) {
@@ -85,7 +90,17 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 return
             }
 
-            const { food, userId, eatenTimestamp, amountConsumed } = req.body
+            const { food, userId, eatenTimestamp, amountConsumed, jwtToken } = req.body
+
+            if( token.isExpired(jwtToken))
+            {
+                response.jwtToken = null;
+                response.error = FoodRecordPostError.jwtError
+                res.status(200).json(response);
+                return;
+            } else { 
+                response.jwtToken = jwtToken;
+            }
 
             const foodRecord: FoodRecord = {
                 userId,
@@ -103,11 +118,27 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 response.foodRecordId = queryResult.insertedId.toString()
             } else {
                 response.error = FoodRecordPostError.ServerError
+                response.jwtToken = null;
+                res.status(200).json(response);
+                return;
             }
 
         } catch (e) {
             response.error = FoodRecordPostError.ServerError
             console.log(e)
+            response.jwtToken = null;
+            res.status(200).json(response);
+            return;
+        }
+
+        try
+        {
+            response.jwtToken = token.refresh(response.jwtToken);
+        }
+        catch(e)
+        {
+            response.jwtToken = null
+            response.error = FoodRecordPostError.jwtError
         }
 
         res.status(200).json(response)
@@ -124,21 +155,25 @@ export enum FoodRecordGetError {
     InvalidRequest,
     ServerError,
     InvalidRange,
+    jwtError
 }
 
 export type FoodRecordGetRequest =
     {
         userId?: ObjectIdString
         foodRecordId: ObjectIdString
+        jwtToken: any
     } | {
         userId?: ObjectIdString
         startDate: IsoDate
         endDate: IsoDate
+        jwtToken: any
     }
 
 export type FoodRecordGetResponse = {
     foodRecords: FoodRecord[]
     error: FoodRecordGetError
+    jwtToken: any
 }
 
 // Accepts request in body or URI as a query parameter.
@@ -166,15 +201,26 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
     return async (req: Request, res: Response) => {
 
-        let response: FoodRecordGetResponse = { foodRecords: [], error: 0 }
+        let response: FoodRecordGetResponse = { foodRecords: [], error: 0, jwtToken: null }
 
         const paramFoodRecordId = req.query.foodRecordId ?? req.body.startDate
         const paramStartDate = req.query.startDate ?? req.body.startDate
         const paramEndDate = req.query.endDate ?? req.body.endDate
         const paramUserId = req.params.userId ?? req.query.userId ?? req.body.userId
+        const jwtToken = req.query.jwtToken ?? req.body.jwtToken
 
         try {
             const db = client.db()
+
+            if(token.isExpired(jwtToken))
+            {
+                response.jwtToken = null;
+                response.error = FoodRecordGetError.jwtError
+                res.status(200).json(response);
+                return;
+            } else { 
+                response.jwtToken = jwtToken;
+            }
 
             if (paramFoodRecordId != null) {
 
@@ -182,6 +228,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
                 if (!isObjectIdString(paramFoodRecordId) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
+                    response.jwtToken = null;
                     res.status(200).json(response)
                     return
                 }
@@ -203,6 +250,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
                 if (!isIsoDate(paramStartDate) || !isIsoDate(paramEndDate) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
+                    response.jwtToken = null;
                     res.status(200).json(response)
                     return
                 }
@@ -226,16 +274,29 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
-                res.status(200).json(response)
-                return
+                
             }
 
         } catch (e) {
             response.error = FoodRecordGetError.ServerError
+            response.jwtToken = null;
             console.log(e)
             res.status(200).json(response)
             return
         }
+
+        try
+        {
+            response.jwtToken = token.refresh(response.jwtToken);
+        }
+        catch(e)
+        {
+            response.jwtToken = null
+            response.error = FoodRecordGetError.jwtError
+        }
+
+        res.status(200).json(response)
+        return
     }
 }
 
@@ -249,25 +310,29 @@ export enum FoodRecordPutError {
     InvalidRequest,
     ServerError,
     InvalidId,
+    jwtError
 }
 
-export type FoodRecordPutRequest = FoodRecord & { foodRecordId: ObjectIdString }
+export type FoodRecordPutRequest = FoodRecord & { foodRecordId: ObjectIdString, jwtToken: any }
 
 export type FoodRecordPutResponse = {
     error: FoodRecordPutError
+    jwtToken: any
 }
 
 export function foodRecordsPut(app: Express, client: MongoClient): RequestHandler {
 
     /* Programmatically ensure the request body is of type `FoodRecordPutRequest`. */
     function isFoodRecordPutRequest(obj: any): obj is FoodRecordPutRequest {
-        return isFoodRecord(obj)
-            && 'foodRecordId' in obj && isObjectIdString(obj.foodRecordId)
+        return obj != null && typeof obj === 'object'
+                && 'jwtToken' in obj && obj.jwtToken != null
+                && isFoodRecord(obj)
+                && 'foodRecordId' in obj && isObjectIdString(obj.foodRecordId)
     }
 
     return async (req: Request, res: Response) => {
 
-        let response: FoodRecordPutResponse = { error: 0 }
+        let response: FoodRecordPutResponse = { error: 0, jwtToken: null }
 
         try {
             if (!isFoodRecordPutRequest(req.body)) {
@@ -276,8 +341,18 @@ export function foodRecordsPut(app: Express, client: MongoClient): RequestHandle
                 return
             }
 
-            const { foodRecordId, totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food } = req.body
+            const { foodRecordId, totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food, jwtToken } = req.body
             const update: FoodRecord = { totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food }
+
+            if( token.isExpired(jwtToken))
+            {
+                response.jwtToken = null;
+                response.error = FoodRecordPutError.jwtError
+                res.status(200).json(response);
+                return;
+            } else { 
+                response.jwtToken = jwtToken;
+            }
 
             const db = client.db()
             const queryResult = await db.collection('FoodRecords').replaceOne(
@@ -288,10 +363,26 @@ export function foodRecordsPut(app: Express, client: MongoClient): RequestHandle
             // If the query was acknowledged and there were no modifications, then the id was bad.
             if (queryResult.modifiedCount === 0 && queryResult.acknowledged) {
                 response.error = FoodRecordPutError.InvalidId
+                response.jwtToken = null;
+                res.status(200).json(response);
+                return;
             }
         } catch (e) {
             response.error = FoodRecordPutError.ServerError
             console.log(e)
+            response.jwtToken = null;
+            res.status(200).json(response);
+            return;
+        }
+
+        try
+        {
+            response.jwtToken = token.refresh(response.jwtToken);
+        }
+        catch(e)
+        {
+            response.jwtToken = null
+            response.error = FoodRecordPutError.jwtError
         }
 
         res.status(200).json(response)
@@ -308,14 +399,17 @@ export enum FoodRecordDeleteError {
     InvalidRequest,
     ServerError,
     InvalidId,
+    jwtError
 }
 
 export type FoodRecordDeleteRequest = {
     foodRecordId: ObjectIdString
+    jwtToken: any
 }
 
 export type FoodRecordDeleteResponse = {
     error: FoodRecordDeleteError
+    jwtToken: any
 }
 
 export function foodRecordsDelete(app: Express, client: MongoClient): RequestHandler {
@@ -323,10 +417,11 @@ export function foodRecordsDelete(app: Express, client: MongoClient): RequestHan
     function isFoodRecordDeleteRequest(obj: any): obj is FoodRecordDeleteRequest {
         return obj != null && typeof obj === 'object'
             && 'foodRecordId' in obj && isObjectIdString(obj.foodRecordId)
+            && 'jwtToken' in obj && obj.jwtToken != null
     }
 
     return async (req: Request, res: Response) => {
-        let response: FoodRecordDeleteResponse = { error: 0 }
+        let response: FoodRecordDeleteResponse = { error: 0, jwtToken: null }
 
         try {
             if (!isFoodRecordDeleteRequest(req.body)) {
@@ -334,8 +429,18 @@ export function foodRecordsDelete(app: Express, client: MongoClient): RequestHan
                 res.status(200).json(response)
                 return
             }
+        
+            const { foodRecordId, jwtToken } = req.body
 
-            const { foodRecordId } = req.body
+            if(token.isExpired(jwtToken))
+            {
+                response.jwtToken = null;
+                response.error = FoodRecordDeleteError.jwtError
+                res.status(200).json(response);
+                return;
+            } else { 
+                response.jwtToken = jwtToken;
+            }
 
             const db = client.db()
             const queryResult = await db
@@ -345,13 +450,30 @@ export function foodRecordsDelete(app: Express, client: MongoClient): RequestHan
             // If the query was acknowledged and there were no modifications, then the id was bad.
             if (queryResult.deletedCount === 0 && queryResult.acknowledged) {
                 response.error = FoodRecordDeleteError.InvalidId
+                response.jwtToken = null;
+                res.status(200).json(response);
+                return;
             }
         } catch (e) {
             response.error = FoodRecordDeleteError.ServerError
+            response.jwtToken = null;
             console.log(e)
+            res.status(200).json(response);
+            return;
         }
 
-        res.status(200).json(response)
+        try
+        {
+            response.jwtToken = token.refresh(response.jwtToken);
+        }
+        catch(e)
+        {
+            response.jwtToken = null
+            response.error = FoodRecordDeleteError.jwtError
+        }
+
+    res.status(200).json(response)
+    return
     }
 }
 
