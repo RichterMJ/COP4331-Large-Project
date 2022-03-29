@@ -1,30 +1,39 @@
 import React from "react";
-function makeNutrientBars(nutrients){
+function makeNutrientBars(nutrients)
+{
   return (
   <div className = "nutrientBars">
-    {nutrients.map(nutrient => () => makeNutrientBar(nutrient));}
+    {nutrients.map((nutrient) => makeNutrientBar(nutrient))}
   </div>
   )
 }
-function makeNutrientBar(nutrient){
+function getBarWidth(percentage)
+{
+  // this is the css value for the nutrition bar
+  const MAX_BAR_WIDTH = 80;
+  return percentage * (MAX_BAR_WIDTH);
+
+}
+function NutrientBar(nutrient)
+{
+  const [width, setWidth] = useState(getBarWidth(nutrient.percentage));
   return (
-    <div className = "nutrientElement" id = {nutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg"> </div> </div> <div class = "nutrientText"> 21/50g Protein</div> </div>
+    <div style ={{'width':width}} className = "nutrientElement" id = {nutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg"> </div> </div> <div class = "nutrientText"> 21/50g Protein</div> </div>
   )
 }
-function makeNutrientCategory (nutrientCat){
+function makeNutrientCategory (nutrientCat)
+{
   return(
-    <div className = "nutrientCategory",id = {nutrientCat.id}>
+    <div className = "nutrientCategory" id = {nutrientCat.id}>
       <div className = "nutrientCatHeading">
         {nutrientCat.name}
       </div>
-      {makeNutrientBars(nutrientCat.nutrientBars)}
+      {NutrientBar(nutrientCat.nutrientBars)}
     </div>
   )
 }
-function makeNutrientBar(nb){
-
-}
-function makeNutrientCategories (ncs){
+function makeNutrientCategories (ncs)
+{
 
 }
 function BottomSubPanel() {
@@ -40,3 +49,4 @@ function BottomSubPanel() {
   )
 
 }
+export default BottomSubPanel;
