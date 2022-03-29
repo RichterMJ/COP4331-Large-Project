@@ -57,9 +57,9 @@ function Login() {
     return (
       <div className="d-flex flex-column">
             
-            {makeInputDiv("email", "email","pt-2","email", "email")}
+            {makeInputDiv("email", "email","pt-2","","email", "email")}
             
-            {makeInputDiv("password", "password","pt-2", "password", "password")}
+            {makeInputDiv("password", "password","", "pt-2","password", "password")}
 
             {makeActionButton(
               "button",
