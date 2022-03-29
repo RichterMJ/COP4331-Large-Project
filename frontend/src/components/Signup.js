@@ -91,11 +91,11 @@ function Signup() {
       if (res.id <= 0) {
         setMessage("Duplicate email");
       } else {
-        const sendEmailPayload = {
+        const sendEmailInfo = {
           userId: res.userId,
           email: email.value
         };
-
+        const sendEmailPayload = JSON.stringify(sendEmailInfo);
         const sendEmailResponse = await fetch(buildPath("api/users/emailVerification/sendVerificationEmail"), {
           method: "POST",
           body: sendEmailPayload,
