@@ -11,7 +11,6 @@ import {
     Portion, isPortion,
     AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
-import {URL} from '../../../index'
 
 
 export enum forgotPasswordEmailError {
@@ -83,11 +82,20 @@ export function forgotPasswordEmail(app: Express, client: MongoClient): RequestH
                 }
             }));
 
+            const emailUrl = `http://${process.env.URL}/resetPassword?userId=${userId}`
+            const logoRef = 'design_assets/Logo/thirdLogo.png'
+            const html = `<p>Click <a href=${emailUrl}>here</a> to verify your account. </p> <p>From GitFit</p> <img src="cid:img"/>`
+            
             var mailOptions = {
                 from: process.env.EMAIL_ADDRESS,
                 to: email,
-                subject: 'Change your password',
-                text: `Go to the following link to change your password: ${URL}/api/users/forgotPassword/forgotPasswordReset?userId=${userId}`
+                subject: 'Change Your Password',
+                html: html,
+                attachments: [{
+                    filename: 'logo.png',
+                    path: logoRef, 
+                    cid: 'img' 
+                   }]
             };
 
             transporter.sendMail(mailOptions, (error, info) => {

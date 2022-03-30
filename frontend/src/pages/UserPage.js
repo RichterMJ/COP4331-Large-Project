@@ -3,8 +3,6 @@ import UserPageLPanel from "../components/Panels/UserPageLPanel";
 import UserPageRPanel from "../components/Panels/UserPageRPanel";
 import "./mainPageStyle.css"
 
-
-
 function UserPage() {
     return(
         <div id="content">

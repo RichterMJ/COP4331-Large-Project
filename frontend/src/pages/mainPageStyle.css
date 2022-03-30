@@ -115,9 +115,7 @@
   display:flex;
   flex-direction: column;
   margin-bottom:15px;
-
   flex-wrap:wrap;
-
 }
 .nutrientBarProg{
   width:20px;

@@ -89,16 +89,26 @@ function Signup() {
       console.log(res);
 
       if (res.id <= 0) {
-        setMessage("Duplicate username");
+        setMessage("Duplicate email");
       } else {
-        const user = {
-          firstName: res.firstName,
-          lastName: res.lastName,
-          id: res.id,
+        const sendEmailInfo = {
+          userId: res.userId,
+          email: email.value
         };
-        //localStorage.setItem("user_data", JSON.stringify(user));
-        setMessage("");
-        setIsOpen(true);
+        const sendEmailPayload = JSON.stringify(sendEmailInfo);
+        const sendEmailResponse = await fetch(buildPath("api/users/emailVerification/sendVerificationEmail"), {
+          method: "POST",
+          body: sendEmailPayload,
+          headers: { "Content-Type": "application/json" },
+        });
+
+        let sendEmailRes = JSON.parse(await sendEmailResponse.text());
+
+        if(sendEmailRes.error == 0){
+          setIsOpen(true);
+        }else{
+          console.log(sendEmailRes.error);
+        }
       }
     } catch (e) {
       console.log(e.toString());

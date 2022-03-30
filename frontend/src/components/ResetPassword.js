@@ -65,8 +65,8 @@ function ResetPassword() {
   function makeResetPasswordInputs(){
     return (
       <div className="d-flex flex-column">
-              {makeInputDiv("email","resetEmail", "w-50 pt-2 pb-3", "Reset email", "Email")}
-              {makeInputDiv("password", "resetPassword", "w-50 pt-2", "password","New Password")}
+              {makeInputDiv("email","resetEmail", "w-50 pt-2 pb-3","", "Reset email", "Email")}
+              {makeInputDiv("password", "resetPassword", "w-50 pt-2","","password","New Password")}
               {makeInputDiv(
                 "password",
                 "confirmResetPassword",
