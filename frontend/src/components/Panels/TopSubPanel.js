@@ -6,8 +6,8 @@ function editFood(){}
 function makeFoodButtons(id){
     return(
         <div className= "buttons">
-          {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
-          {makeActionButton("button","removeFoodButton",editFood(),"&#9998;",id)}
+          {makeActionButton("button","removeFoodButton",() => removeFood(),"x",id)}
+          {makeActionButton("button","removeFoodButton",() => editFood(),"&#9998;",id)}
         </div>
     )
 }
