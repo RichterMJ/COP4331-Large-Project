@@ -265,6 +265,14 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 const _endDate = new Date(new Date(endDate).toDateString())
                 _endDate.setDate(_endDate.getDate() + 1)
 
+                // Check if the end date is before the start date
+                if((_endDate.valueOf() - _startDate.valueOf()) < 0){
+                    response.error = FoodRecordGetError.InvalidRange
+                    response.jwtToken = null;
+                    res.status(200).json(response)
+                    return
+                }
+
                 const queryResults = await db.collection('FoodRecords').find({
                     userId: paramUserId,
                     'eatenTimestamp': {
