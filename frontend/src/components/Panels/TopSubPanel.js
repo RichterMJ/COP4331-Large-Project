@@ -10,40 +10,38 @@ function makeFoodButtons(id){
     return(
         <div className= "buttons">
           {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
-          {makeActionButton("button","removeFoodButton",editFood(),"&#9998;",id)}
+          {makeActionButton("button","editFoodButton",editFood(),"edit",id)}
         </div>
     )
 }
 
-function FoodElement(key,foodName, foodAmount,foodUnit,foodCalories){
+function FoodElement(props){
+    let foodEl = props.food;
 
     return(
 
-        <div className = "dayFood" id ={key}>
+        <div className = "dayFood" key={foodEl.id} >
           <div className ="foodName">
-            {foodName}
+            {foodEl.name}
           </div>
           <div className ="foodAmount">
-            {foodAmount}
+            {foodEl.amount}
           </div>
           <div className ="foodUnit">
-            {foodUnit}
+            {foodEl.unit}
           </div>
           <div className ="foodCalories">
-            {foodCalories}
+            {foodEl.calories}
           </div>
-          {makeFoodButtons(4)}
+          {makeFoodButtons(foodEl.id)}
         </div>
     )
 
 }
 
-function FoodList(foods){
-    console.log(Object.values(foods));
+function FoodList(props){
     return(
-        <div id="foodList" key="foodList">
-            {Object.values(foods)?.map(({id,name,amount,unit,calories}) => {<FoodElement id= {id}  foodName={name} foodAmount ={amount} foodUnit = {unit} foodCalories ={calories}></FoodElement>)}
-        </div>
+            props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
     )
 }
 
