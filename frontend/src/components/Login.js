@@ -5,7 +5,11 @@ import { blankValidator} from "./Validators/InputValidator";
 
 
 function Login() {
+  // Here are the various states for the login
   const [errorMessage, setMessage] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+
 
   
   const doLogin = async (event) => {
@@ -53,13 +57,13 @@ function Login() {
   };
 
   
-  function makeLoginForm(){
+  function LoginForm(props){
     return (
       <div className="d-flex flex-column">
             
-            {makeInputDiv("email", "email","pt-2","","email", "email")}
+            {makeInputDiv("email", "email","pt-2","","email", "email",setEmail)}
             
-            {makeInputDiv("password", "password","", "pt-2","password", "password")}
+            {makeInputDiv("password", "password","", "pt-2","password", "password",setPassword)}
 
             {makeActionButton(
               "button",
@@ -81,7 +85,7 @@ function Login() {
           
           {makeH2("", "text-center", "Log in")}
 
-          {makeLoginForm()}
+          <LoginForm email = {setEmail} password ={setPassword}/>
 
           <div id="formFooter">
             {makeLink(

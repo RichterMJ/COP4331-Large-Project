@@ -49,7 +49,7 @@ function makeH2(id, className, text){
 function makePTag(className, text) {
   return <p className={className}>{text}</p>;
 }
-function makeInputDiv(type, id, className, defaultValue, name, placeholder) {
+function makeInputDiv(type, id, className, defaultValue, name, placeholder,onChangeFunc) {
   return (
     <div className={className}>
       <input
@@ -59,6 +59,7 @@ function makeInputDiv(type, id, className, defaultValue, name, placeholder) {
         name={name}
         defaultValue={defaultValue}
         placeholder={placeholder}
+        onChange={(d)=>onChangeFunc(d.target.value)}
         
       />
       <div className="invalid-feedback">{name} cannot be blank</div>

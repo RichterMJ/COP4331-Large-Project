@@ -1,3 +1,4 @@
+/*
 import React from "react";
 function makeNutrientBars(nutrients)
 {
@@ -50,3 +51,4 @@ function BottomSubPanel() {
 
 }
 export default BottomSubPanel;
+*/

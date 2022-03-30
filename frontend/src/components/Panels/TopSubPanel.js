@@ -41,14 +41,13 @@ function FoodElement(props){
 
 function FoodList(props){
     return(
-            props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
+        props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
     )
 }
 
+function TopSubPanel(props){
 
-function TopSubPanel(){
-
-    //const [fl,setFl] = useState(FoodSample);
+    const [fl,setFl] = useState(props.foodList);
        return(
         <div id = "topSubPanel">
           <FoodList foods ={FoodSample}/>
