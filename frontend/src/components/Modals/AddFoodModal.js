@@ -1,10 +1,15 @@
 import React, {useState} from "react";
 import {makeButton} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
+import buildPath from "../path";
 
 function AddFoodModal({open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
+
+    let start = 0;
+    const pageSize = 10;
+    let lastQuery;
 
     function makeTextInput (id,name,placeholder, onChange){
         return(<input
@@ -19,17 +24,49 @@ function AddFoodModal({open, close, tc, setTC}){
     }
 
     //These will be added to separate files
-    function search(text){
-        setTC(getContent);
+    async function search(foodQuery){
+
+      //Reset table when new search
+      if(foodQuery != lastQuery){
+        setTC("");
+        start = 0;
+        lastQuery = foodQuery;
+      }
+
+      const searchInfo = {
+        query: foodQuery,
+        pageSize: pageSize,
+        start: start
+      };
+  
+      const searchPayload = JSON.stringify(searchInfo);
+  
+      try {
+        const response = await fetch(buildPath("api/food/searchByName"), {
+          method: "POST",
+          body: searchPayload,
+          headers: {"Content-Type": "application/json"},
+        });
+  
+        let res = JSON.parse(await response.text());
+        console.log(res);
+      
+        if (res.error != 0) {
+          setTC("An error has occurred. Try Again");
+        } else {
+          start++;
+          setTC(getContent(res.foods));
+        }
+      } catch (e) {
+        console.log(e);
+        return;
+      }
     }
 
-    //Temporary method for testing
-    function getContent(){
-      const foods = ['apple', 'banana', 'orange', 'pineapple'];
-      const calories = [100, 200, 300, 400];
+    function getContent(foods){
       let content = [];
-      for(let i = 0; i < 4; i++){
-        content.push(createItem(foods[i], calories[i]));
+      for(let i = 0; i < foods.length; i++){
+        content.push(createItem(foods[i].description, 100));
       }
       return content;
     }
@@ -48,8 +85,6 @@ function AddFoodModal({open, close, tc, setTC}){
     function addFood(){
       console.log(selectedFood);
     }
-
-    console.log('hello');
 
     return (
         open ?
