@@ -1,4 +1,7 @@
 import React from "react";
+import {FoodSample} from "./PanelTestData";
+import {useState} from "react";
+import {makeActionButton} from "../divHelpers/divHelpers";
 
 function removeFood(){}
 function editFood(){}
@@ -7,46 +10,50 @@ function makeFoodButtons(id){
     return(
         <div className= "buttons">
           {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
-          {makeActionButton("button","removeFoodButton",editFood(),"&#9998;",id)}
+          {makeActionButton("button","editFoodButton",editFood(),"edit",id)}
         </div>
     )
 }
 
-function makeElementFood(food){
+function FoodElement(props){
+    let foodEl = props.food;
+
     return(
-        <div className = "dayFood" id = {food.id}>
+
+        <div className = "dayFood" key={foodEl.id} >
           <div className ="foodName">
-            {food.name}
+            {foodEl.name}
           </div>
           <div className ="foodAmount">
-            {food.amount}
+            {foodEl.amount}
           </div>
           <div className ="foodUnit">
-            {food.unit}
+            {foodEl.unit}
           </div>
           <div className ="foodCalories">
-            {food.calories}
+            {foodEl.calories}
           </div>
-          {makeFoodButtons(food.id)}
+          {makeFoodButtons(foodEl.id)}
         </div>
     )
 
 }
 
-function foodList(list){
+function FoodList(props){
     return(
-        list?.map(food=> ()=>makeElementFood(food))
+            props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
     )
 }
 
 
 function TopSubPanel(){
-    const [foodList,setFoodList] = useState([]);
+
+    //const [fl,setFl] = useState(FoodSample);
        return(
         <div id = "topSubPanel">
-          {foodList(foodList)}
+          <FoodList foods ={FoodSample}/>
         </div>
     )
 }
 
-export default TopSubPanel;
+export {TopSubPanel};

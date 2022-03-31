@@ -3,16 +3,16 @@ import { MongoClient } from 'mongodb'
 import axios from 'axios';
 import { USDA_API_KEY } from '../../index';
 import { Food, Nutrient, Portion } from '../global-types';
+var token = require('../createJWT');
 
-function convertUsdaNutrient(nutrient: any): Nutrient {
+function convertUsdaNutrient(foodNutrient: any): Nutrient {
   // @ts-ignore
+  const nutrient = foodNutrient.nutrient
   const converted = {
-    nutrientId: nutrient.nutrientId,
-    nutrientName: nutrient.nutrientName,
-    nutrientNumber: nutrient.nutrientNumber,
+    nutrientId: nutrient.id,
+    nutrientName: nutrient.name,
     unitName: nutrient.unitName,
-    value: nutrient.value,
-    foodNutrientId: nutrient.foodNutrientId
+    value: foodNutrient.amount,
   }
 
   return converted
@@ -22,7 +22,7 @@ function convertUsdaPortion(portion: any): Portion {
   // @ts-ignore
   const converted = {
     portionId: portion.id,
-    portionName: portion.disseminationText,
+    portionName: portion.amount + " " + portion.modifier,
     gramAmount: portion.gramWeight
   }
 
@@ -55,9 +55,7 @@ function convertUsdaFood(food: any): Food {
     gramAmount: 100
   }
   converted.portions.unshift(standardPortion);
-
-  converted.nutrients = converted.nutrients
-    .filter((nutrient: Nutrient) => keepOnlyNutrients.includes(nutrient.nutrientId))
+  converted.nutrients = converted.nutrients.filter((nutrient: Nutrient) => keepOnlyNutrients.includes(nutrient.nutrientId))
 
   return converted
 }
@@ -67,15 +65,18 @@ export enum SearchFoodByIdError {
   Ok = 0,
   InvalidRequest,
   ServerError,
+  jwtError
 }
 
 export type SearchFoodByIdRequest = {
   fdcId: number,
+  jwtToken: any
 }
 
 export type SearchFoodByIdResponse = {
   food?: Food
   error: SearchFoodByIdError
+  jwtToken: any
 }
 
 /* Returns a function of type `RequestHandler` to be used in a route. */
@@ -84,10 +85,11 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
   function isSearchFoodByIdRequest(obj: any): obj is SearchFoodByIdRequest {
     return obj != null && typeof obj === 'object'
       && 'fdcId' in obj && typeof obj.fdcId === 'number'
+      && 'jwtToken' in obj && obj.jwtToken != null
   }
 
   return async (req: Request, res: Response) => {
-    let response: SearchFoodByIdResponse = { error: SearchFoodByIdError.Ok }
+    let response: SearchFoodByIdResponse = { error: SearchFoodByIdError.Ok, jwtToken: null }
 
     try {
 
@@ -97,15 +99,24 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
         return
       }
 
-      const { fdcId } = req.body
+      const { fdcId, jwtToken } = req.body
+
+      if( token.isExpired(jwtToken))
+      {
+        response.error = SearchFoodByIdError.jwtError;
+        response.jwtToken = null;
+        res.status(200).json(response);
+        return;
+      } else { 
+        response.jwtToken = jwtToken
+      }
+
       const db = client.db()
 
       const result = await axios.get(`https://api.nal.usda.gov/fdc/v1/food/${fdcId}?api_key=${USDA_API_KEY}`);
       const queryResults = result.data;
-
       response.food = convertUsdaFood(queryResults)
-      res.status(200).json(response)
-      return
+      
 
     } catch (e) {
 
@@ -114,8 +125,22 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
 
       console.log(e)
       response.error = SearchFoodByIdError.ServerError
+      response.jwtToken = null
       res.status(200).json(response)
       return
     }
+
+    try
+    {
+      response.jwtToken = token.refresh(response.jwtToken);
+    }
+    catch(e)
+    {
+      response.jwtToken = null
+      response.error = SearchFoodByIdError.jwtError
+    }
+
+    res.status(200).json(response)
+    return
   }
 }

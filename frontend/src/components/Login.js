@@ -32,19 +32,19 @@ function Login() {
 
       let res = JSON.parse(await response.text());
 
-      console.log(res);
+      // console.log(res); print out api response too see the data
 
       if (res.error == 3) {
         setMessage("Incorrect email/password");
       } else {
         const user = {
-          firstName: res.firstName,
-          lastName: res.lastName,
-          id: res.userId,
+          firstName: res.firstname,
+          lastName: res.lastname,
+          userId : res.userId
         };
         localStorage.setItem("user_data", JSON.stringify(user));
         setMessage("");
-        //window.location.href = "/userpage";
+        window.location.href = "/userpage";
       }
     } catch (e) {
       console.log(e.toString());
@@ -57,9 +57,9 @@ function Login() {
     return (
       <div className="d-flex flex-column">
             
-            {makeInputDiv("email", "email","pt-2","email", "email")}
+            {makeInputDiv("email", "email","pt-2","","email", "email")}
             
-            {makeInputDiv("password", "password","pt-2", "password", "password")}
+            {makeInputDiv("password", "password","", "pt-2","password", "password")}
 
             {makeActionButton(
               "button",

@@ -1,6 +1,6 @@
 import React from "react";
 
-function makeActionButton(type,className,event,text,id=""){
+function makeActionButton(type,className,event,text,id){
   return(<button
           type = {type}
           className={className}
@@ -14,6 +14,13 @@ function makeDiv(id = "", className = "", text = "", divContent=""){
     return(
       <div id={id} className={className}>{text}{divContent}</div>
     )
+}
+function makeLabel(htmlFor, txt, className = "") {
+  return (
+    <label className={className + "form-label"} htmlFor={htmlFor}>
+      {txt}
+    </label>
+  );
 }
 
 function makeButton(id, className, onClick, txt) {
@@ -42,7 +49,7 @@ function makeH2(id, className, text){
 function makePTag(className, text) {
   return <p className={className}>{text}</p>;
 }
-function makeInputDiv(type, id, className, name, placeholder) {
+function makeInputDiv(type, id, className, defaultValue, name, placeholder) {
   return (
     <div className={className}>
       <input
@@ -50,11 +57,13 @@ function makeInputDiv(type, id, className, name, placeholder) {
         type={type}
         id={id}
         name={name}
+        defaultValue={defaultValue}
         placeholder={placeholder}
+        
       />
       <div className="invalid-feedback">{name} cannot be blank</div>
     </div>
   );
 }
 
-export {makeInputDiv, makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2};
+export {makeInputDiv, makeLabel, makePTag, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2};

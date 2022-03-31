@@ -1,12 +1,15 @@
 import { RequestHandler, Request, Response, Express, query } from 'express'
 import { MongoClient, WriteError } from 'mongodb'
 import { isObjectIdString, ObjectIdString } from '../global-types'
+var token = require('../createJWT');
 
 export enum LoginError {
     Ok = 0,
     InvalidRequest,
     ServerError,
     InvalidCredentials,
+    emailVerification,
+    jwtError
 }
 
 export type LoginRequest = {
@@ -18,7 +21,9 @@ export type LoginResponse = {
     userId: ObjectIdString
     firstname: string
     lastname: string
+    hasVerifiedEmail: boolean
     error: LoginError
+    jwtToken: any
 }
 
 /* Returns a function of type `RequestHandler` to be used in a route. */
@@ -32,7 +37,7 @@ export function login(app: Express, client: MongoClient): RequestHandler {
 
     return async (req: Request, res: Response) => {
 
-        let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginError.Ok }
+        let response: LoginResponse = { userId: '', firstname: '', lastname: '', hasVerifiedEmail: false, error: LoginError.Ok, jwtToken: null }
 
         try {
 
@@ -50,11 +55,27 @@ export function login(app: Express, client: MongoClient): RequestHandler {
                 .toArray()
 
             if (queryResults.length > 0) {
+                if(!queryResults[0].hasVerifiedEmail){
+                    response.error = LoginError.emailVerification
+                    res.status(200).json(response)
+                    return
+                }
+
                 response = {
                     userId: queryResults[0]._id.toString(),
                     firstname: queryResults[0].firstname,
                     lastname: queryResults[0].lastname,
-                    error: LoginError.Ok
+                    hasVerifiedEmail: queryResults[0].hasVerifiedEmail,
+                    error: LoginError.Ok,
+                    jwtToken: null
+                }
+
+                const tokenResult = token.createToken( response.firstname, response.lastname, response.userId );
+                
+                if(tokenResult.error){
+                    response.error = LoginError.jwtError;
+                } else {
+                    response.jwtToken = tokenResult.accessToken;
                 }
                 res.status(200).json(response)
                 return
@@ -68,6 +89,5 @@ export function login(app: Express, client: MongoClient): RequestHandler {
             response.error = LoginError.ServerError,
             res.status(200).json(response)
         }
-
     }
 }
