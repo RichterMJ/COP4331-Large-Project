@@ -7,17 +7,17 @@ function leftDayEvent(){
 function rightDayEvent(){
 
 }
-function leftButton (){
+function LeftButton (){
     return makeActionButton
     ("button","directionButton",leftDayEvent(),"<","leftButton");
 }
 
-function ightButton (){
+function RightButton (){
     return makeActionButton
     ("button","directionButton",rightDayEvent(),">","rightButton");
 }
 
-function mainInfoBox(date){
+function MainInfoBox(props){
 
     return(
         <div id = "mainInfoBox">
@@ -25,7 +25,7 @@ function mainInfoBox(date){
                 Your Day
             </div>
             <div id = "timeSubHeader">
-              {date}
+              {props.date}
             </div>
         </div>
 )
@@ -35,10 +35,9 @@ function TopPanel({userId}){
 
     return(
         <div id = "topPanel">
-
-          <leftButton
-          {mainInfoBox(date)}
-          {rightButton()}
+          <LeftButton/>
+          <MainInfoBox date={date}/>
+          <RightButton/>
         </div>
     )
 }
