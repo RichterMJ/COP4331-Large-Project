@@ -104,15 +104,15 @@ function AddFoodModal({open, close, tc, setTC}){
     }
 
     const onScroll = () => {
-      if (listInnerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-        if (scrollTop + clientHeight === scrollHeight) {
+      if (scrollReference.current) {
+        const { top, totalHeight, visibleHeight } = scrollReference.current;
+        if (top + visibleHeight === totalHeight) {
           search(foodQuery, true);
         }
       }
     };
 
-    const listInnerRef = useRef();
+    const scrollReference = useRef();
 
     return (
         open ?
@@ -125,7 +125,7 @@ function AddFoodModal({open, close, tc, setTC}){
                     {makeTextInput("foodSearch", "foodSearch", "Insert Food", (srch) => setFoodQuery(srch.target.value))}
                     {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(foodQuery, false), "Search")}
                 </div>
-                <div className="foodSearchTable" onScroll={onScroll} ref={listInnerRef}>
+                <div className="foodSearchTable" onScroll={onScroll} ref={scrollReference}>
                   {tc}
                 </div>
                 {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
