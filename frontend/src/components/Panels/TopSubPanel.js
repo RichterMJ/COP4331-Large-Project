@@ -7,52 +7,50 @@ function removeFood(){}
 function editFood(){}
 
 function makeFoodButtons(id){
-    return(
-        <div className= "buttons">
-          {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
-          {makeActionButton("button","editFoodButton",editFood(),"edit",id)}
-        </div>
-    )
+  return(
+    <div className= "buttons">
+      {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
+      {makeActionButton("button","editFoodButton",editFood(),"edit",id)}
+    </div>
+  )
 }
 
 function FoodElement(props){
-    let foodEl = props.food;
+  let foodEl = props.food;
+  return(
 
-    return(
-
-        <div className = "dayFood" key={foodEl.id} >
-          <div className ="foodName">
-            {foodEl.name}
-          </div>
-          <div className ="foodAmount">
-            {foodEl.amount}
-          </div>
-          <div className ="foodUnit">
-            {foodEl.unit}
-          </div>
-          <div className ="foodCalories">
-            {foodEl.calories}
-          </div>
-          {makeFoodButtons(foodEl.id)}
-        </div>
-    )
-
+    <div className = "dayFood" key={foodEl.id} >
+      <div className ="foodName">
+        {foodEl.name}
+      </div>
+      <div className ="foodAmount">
+        {foodEl.amount}
+      </div>
+      <div className ="foodUnit">
+        {foodEl.unit}
+      </div>
+      <div className ="foodCalories">
+        {foodEl.calories}
+      </div>
+      {makeFoodButtons(foodEl.id)}
+    </div>
+  )
 }
 
 function FoodList(props){
-    return(
-        props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
-    )
+  return(
+    props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
+  )
 }
 
 function TopSubPanel(props){
 
-    const [fl,setFl] = useState(props.foodList);
-       return(
-        <div id = "topSubPanel">
-          <FoodList foods ={FoodSample}/>
-        </div>
-    )
+  const [fl,setFl] = useState(props.foodList);
+  return(
+    <div id = "topSubPanel">
+      <FoodList foods ={FoodSample}/>
+    </div>
+  )
 }
 
 export {TopSubPanel};

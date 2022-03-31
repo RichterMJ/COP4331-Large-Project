@@ -12,7 +12,7 @@ function leftButton (){
     ("button","directionButton",leftDayEvent(),"<","leftButton");
 }
 
-function rightButton (){
+function ightButton (){
     return makeActionButton
     ("button","directionButton",rightDayEvent(),">","rightButton");
 }
@@ -35,7 +35,8 @@ function TopPanel({userId}){
 
     return(
         <div id = "topPanel">
-          {leftButton()}
+
+          <leftButton
           {mainInfoBox(date)}
           {rightButton()}
         </div>
