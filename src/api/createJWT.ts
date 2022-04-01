@@ -30,6 +30,7 @@ let _createToken = function (fn: any, ln: any, id: any): CreateJWTResponse {
     }
     catch(e)
     {
+        console.log(e)
       ret = {accessToken: null, error: true};
     }
     return ret;
