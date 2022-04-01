@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import VerifyModal from "./Modals/VerifyModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
-import matchingPasswords from "./Validators/MatchingPasswordValidator";
+import {matchingPasswords, isBlank} from "./Validators/LoginValidators";
 
 
 // var ph = require('./path.js');
@@ -14,6 +14,13 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
+
+  const [fnErrorClass, setFNErrorClass] = useState("");
+  const [lnErrorClass, setLNErrorClass] = useState("");
+  const [weightErrorClass, setWeightErrorClass] = useState("");
+  const [emailErrorClass, setEmailErrorClass] = useState("");
+  const [pwErrorClass, setPWErrorClass] = useState("");
+  const [repeatErrorClass, setRepeatErrorClass] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,7 +60,6 @@ function Signup() {
       if (res.id <= 0) {
 
       } else {
-
         const emailJSON = makeEmailJSON(res);
 
         try{
@@ -73,9 +79,18 @@ function Signup() {
         console.log(sendEmailRes.error);
   }
 
+  function fieldsArray(){
+    return new Array(firstName, lastName, weight, email, password, passwordRepeat);
+  }
+
+  function setClassErrorArray(){
+    return new Array(setFNErrorClass, setLNErrorClass, setWeightErrorClass, setEmailErrorClass, setPWErrorClass, setRepeatErrorClass);  
+  }
+
   const doSignup = async (event) => {
 
-    if(!matchingPasswords(password, passwordRepeat))
+    console.log(firstName);
+    if(!matchingPasswords(password, passwordRepeat, setPWErrorClass, setRepeatErrorClass) || isBlank(fieldsArray(), setClassErrorArray()))
       return;
 
     //Make a different validity checker
@@ -103,18 +118,20 @@ function Signup() {
     return (
       <input
         type={type}
+        autoFocus="autoFocus"
         id={id}
         className={className + " form-control form-control-lg"}
-        onChange={(txt)=>onChange(txt.target.value)}
+        onChange={onChange}
       />
-    );
+    )
   }
+
 
   function FirstName(){
     return (
             <div className="fNameBox">
                 {makeLabel("signupFName", "First Name")}
-                {makeInput("text", "fName", "fNameInput", setFirstName)}
+                {makeInput("text", "fName", " " + fnErrorClass, (txt) => setFirstName(txt.target.value))}
             </div>
             )
   }
@@ -123,7 +140,7 @@ function Signup() {
     return (
             <div className="lNameBox">
               {makeLabel("signupLName", "Last Name", "lNameLabel")}
-              {makeInput("text", "lName", "lNameInput", setLastName)}
+              {makeInput("text", "lName", "lNameInput " + lnErrorClass, (txt) => setLastName(txt.target.value))}
             </div>
           )
   }
@@ -133,7 +150,7 @@ function Signup() {
             <div className="weightBox">
                 {makeLabel("signupWeight", "Weight", "weightLabel")}
                 <div className="input-group">
-                  {makeInput("text", "weight", "weightInput", setWeight)}
+                  {makeInput("text", "weight", "weightInput " + weightErrorClass, (txt) => setWeight(txt.target.value))}
                   <div className="input-group-append">
                     {makeSpan("input-group-text", "lbs")}
                   </div>
@@ -146,7 +163,7 @@ function Signup() {
     return (
           <div className="longBox">
             {makeLabel("signupEmail", "Email")}
-            {makeInput("email", "email", setEmail)}
+            {makeInput("email", "email", emailErrorClass, (txt) => setEmail(txt.target.value))}
           </div>
     )
   }
@@ -155,7 +172,7 @@ function Signup() {
     return (
             <div className="longBox">
               {makeLabel("signupPassword", "Password")}
-              {makeInput("password", "password", setPassword)}
+              {makeInput("password", "password", pwErrorClass, (txt) => setPassword(txt.target.value))}
             </div>
           )
   }
@@ -164,7 +181,7 @@ function Signup() {
     return (
               <div className="longBox">
                 {makeLabel("confirmPassword", "Repeat your password")}
-                {makeInput("password", "repeat", setPasswordRepeat)}
+                {makeInput("password", "repeat", repeatErrorClass, (txt) => setPasswordRepeat(txt.target.value))}
               </div>
           )
   }
@@ -172,9 +189,9 @@ function Signup() {
   function FirstRow(){
     return (
             <div className="firstRow">
-              <FirstName/>
-              <LastName/>
-              <Weight/>
+              {FirstName()}
+              {LastName()}
+              {Weight()}
             </div>
             )
   }
@@ -207,10 +224,10 @@ function Signup() {
       <div className="card">
         <h2 className="text-center"> Sign Up </h2>
 
-        <FirstRow/>
-        <Email/>
-        <Password/>
-        <PasswordRepeat/>
+        {FirstRow()}
+        {Email()}
+        {Password()}
+        {PasswordRepeat()}
 
         <SignupButton/>
       </div>
