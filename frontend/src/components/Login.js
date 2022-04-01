@@ -40,7 +40,7 @@ function Login() {
       return;
     }
     const loginJSON = makeLoginJSON(email,password);
-    let res = postJSON(loginJSON);
+    let res = postJSON(loginJSON,"api/users/login");
     handleLoginRes(res);
   };
 
@@ -87,6 +87,7 @@ function Login() {
           <h2 className="text-center">Log in</h2>
           <LoginForm email = {setEmail} password ={setPassword}/>
           <FormFooter/>
+        <Link/>
       </div>
     </div>
   );
