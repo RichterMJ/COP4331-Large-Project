@@ -1,40 +1,83 @@
-import React from "react";
-function makeNutrientBars(nutrients)
+import React, {useState} from "react";
+let nutrientTestArray = [
+    {
+        name:"Carbohydrates",
+        actualAmount:50,
+        totalAmount:100,
+        nutrientId:123,
+        unit:"G"
+    },
+    {
+        name:"Protein",
+        actualAmount:50,
+        totalAmount:100,
+        nutrientId:123,
+        unit:"G"
+    },
+    {
+        name:"Fat",
+        actualAmount:50,
+        totalAmount:100,
+        nutrientId:123,
+        unit:"G"
+    },
+    {
+        name:"Saturated Fat",
+        actualAmount:50,
+        totalAmount:100,
+        nutrientId:123,
+        unit:"G"
+    }
+
+    ];
+let nutrientsTestArray = [
+    nutrientTestArray
+]
+let nutrientCatTest = {
+    name:"Macros",
+    id:50,
+    nutrients:nutrientsTestArray
+
+}
+function NutrientBars(props)
 {
   return (
-  <div className = "nutrientBars">
-    {nutrients.map((nutrient) => makeNutrientBar(nutrient))}
-  </div>
+    <div className = "nutrientBars">
+      {props.nutrients.map((nutrient) => <NutrientBar nutrient={nutrient}/>)}
+    </div>
   )
 }
-function getBarWidth(percentage)
+function getBarWidth(n)
 {
   // this is the css value for the nutrition bar
   const MAX_BAR_WIDTH = 80;
-  return percentage * (MAX_BAR_WIDTH);
+  return (n.actualAmount/n.totalAmount) * (MAX_BAR_WIDTH);
 
 }
-function NutrientBar(nutrient)
+function NutrientBar(props)
 {
-  const [width, setWidth] = useState(getBarWidth(nutrient.percentage));
+    function getNutrientAmountString(n){
+        return n.actualAmount + "/"+n.totalAmount+" " +n.unit+" "+ n.name;
+    }
+    let curNutrient = props.nutrient;
+
+  const [width, setWidth] = useState(getBarWidth(curNutrient));
+
   return (
-    <div style ={{'width':width}} className = "nutrientElement" id = {nutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg"> </div> </div> <div class = "nutrientText"> 21/50g Protein</div> </div>
+    <div  className = "nutrientElement" id =
+        {curNutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg" style ={{'width':width.toString()}}> </div> </div> <div class = "nutrientText"> {getNutrientAmountString(curNutrient)}</div> </div>
   )
 }
-function makeNutrientCategory (nutrientCat)
-{
+function NutrientCategory (props){
+    let nutrientCat = props.nutrientCat;
   return(
     <div className = "nutrientCategory" id = {nutrientCat.id}>
       <div className = "nutrientCatHeading">
         {nutrientCat.name}
       </div>
-      {NutrientBar(nutrientCat.nutrientBars)}
+      <NutrientBars nutrients={nutrientsTestArray}/>
     </div>
   )
-}
-function makeNutrientCategories (ncs)
-{
-
 }
 function BottomSubPanel() {
   const [fitPercentage,setFitPercentage] = useState("50%");
@@ -42,9 +85,10 @@ function BottomSubPanel() {
 
   return(
     <div id= "BSP">
-        <div id = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
-        <div id = "bottomSubPanel">
-        </div>
+      <div id = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
+      <div id = "bottomSubPanel">
+          <NutrientCategory nutrientCat={nutrientCatTest}/>
+      </div>
     </div>
   )
 
