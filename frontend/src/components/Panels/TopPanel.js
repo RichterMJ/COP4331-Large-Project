@@ -9,12 +9,14 @@ function rightDayEvent(){
 }
 function LeftButton (){
     return makeActionButton
-    ("button","directionButton",leftDayEvent(),"<","leftButton");
+
+    ("button","directionButton",() => leftDayEvent(),"<",leftButton);
+
 }
 
 function RightButton (){
     return makeActionButton
-    ("button","directionButton",rightDayEvent(),">","rightButton");
+    ("button","directionButton",() => rightDayEvent(),">","rightButton");
 }
 
 function MainInfoBox(props){
