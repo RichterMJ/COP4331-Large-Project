@@ -87,7 +87,6 @@ function Login() {
           <h2 className="text-center">Log in</h2>
           <LoginForm email = {setEmail} password ={setPassword}/>
           <FormFooter/>
-        <Link/>
       </div>
     </div>
   );
