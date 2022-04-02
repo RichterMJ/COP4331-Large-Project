@@ -22,7 +22,7 @@ let _createToken = function (fn: any, ln: any, id: any): CreateJWTResponse {
        // following
       
       const accessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET, 
-         { expiresIn: '30s'} );
+         { expiresIn: '30m'} );
                     //   '24h'
                     //  '365d'
       
@@ -30,6 +30,7 @@ let _createToken = function (fn: any, ln: any, id: any): CreateJWTResponse {
     }
     catch(e)
     {
+        console.log(e)
       ret = {accessToken: null, error: true};
     }
     return ret;

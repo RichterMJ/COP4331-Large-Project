@@ -11,7 +11,6 @@ import {
     Portion, isPortion,
     AmountConsumed, isAmountConsumed, Food, isFood,
 } from '../../global-types'
-import {URL} from '../../../index'
 
 
 export enum sendVerificationEmailError {
@@ -61,7 +60,7 @@ export function sendVerificationEmail(app: Express, client: MongoClient): Reques
                 }
             }));
 
-            const emailUrl = `${URL}/emailVerify?userId=${userId}`
+            const emailUrl = `http://${process.env.URL}/emailVerify?userId=${userId}`
             const logoRef = 'design_assets/Logo/thirdLogo.png'
             const html = `<p>Click <a href=${emailUrl}>here</a> to verify your account. </p> <p>From GitFit</p> <img src="cid:img"/>`
             

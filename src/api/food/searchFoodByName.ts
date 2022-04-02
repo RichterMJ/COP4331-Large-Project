@@ -103,7 +103,7 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
 
   function convertDbRowToFood(dbRow: any): Food {
     const food: Food = {
-      fdcId: dbRow.fdcId,
+      fdcId: dbRow.fdc_id ?? dbRow.fdcId,
       description: dbRow.description,
       nutrients: [],
       portions: []
@@ -169,9 +169,14 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
         ])
         .toArray()
 
+      console.log(queryResponse)
+
       response.foods = queryResponse.slice(pageSize * start, pageSize + pageSize * start).map(convertDbRowToFood)
       response.currentPage = start
-      
+
+      res.status(200).json(response)
+      return
+
 
     } catch (e) {
       console.log(e)

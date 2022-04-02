@@ -1,9 +1,13 @@
 import React from "react";
+import {FoodSample} from "./PanelTestData";
+import {useState} from "react";
+import {makeActionButton} from "../divHelpers/divHelpers";
 
 function removeFood(){}
 function editFood(){}
 
 function makeFoodButtons(id){
+
     return(
         <div className= "buttons">
           {makeActionButton("button","removeFoodButton",() => removeFood(),"x",id)}
@@ -12,41 +16,43 @@ function makeFoodButtons(id){
     )
 }
 
-function makeElementFood(food){
-    return(
-        <div className = "dayFood" id = {food.id}>
-          <div className ="foodName">
-            {food.name}
-          </div>
-          <div className ="foodAmount">
-            {food.amount}
-          </div>
-          <div className ="foodUnit">
-            {food.unit}
-          </div>
-          <div className ="foodCalories">
-            {food.calories}
-          </div>
-          {makeFoodButtons(food.id)}
-        </div>
-    )
+function FoodElement(props){
+  let foodEl = props.food;
+  return(
 
-}
-
-function foodList(list){
-    return(
-        list?.map(food=> ()=>makeElementFood(food))
-    )
+    <div className = "dayFood" key={foodEl.id} >
+      <div className ="foodName">
+        {foodEl.name}
+      </div>
+      <div className ="foodAmount">
+        {foodEl.amount}
+      </div>
+      <div className ="foodUnit">
+        {foodEl.unit}
+      </div>
+      <div className ="foodCalories">
+        {foodEl.calories}
+      </div>
+      {makeFoodButtons(foodEl.id)}
+    </div>
+  )
 }
 
 
-function TopSubPanel(){
-    const [foodList,setFoodList] = useState([]);
-       return(
-        <div id = "topSubPanel">
-          {foodList(foodList)}
-        </div>
-    )
+function FoodList(props){
+  return(
+    props.foods.map(f=> <FoodElement key={f.id} food={f}/>)
+  )
 }
 
-export default TopSubPanel;
+function TopSubPanel(props){
+
+  const [fl,setFl] = useState(props.foodList);
+  return(
+    <div id = "topSubPanel">
+      <FoodList foods ={FoodSample}/>
+    </div>
+  )
+}
+
+export {TopSubPanel};

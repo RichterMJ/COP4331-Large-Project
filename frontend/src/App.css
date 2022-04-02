@@ -201,7 +201,10 @@
   width: 1000px;
   height: 500px;
 }
-
+.mediumModal{
+  width: 650px;
+  height: 400px;
+}
 #foodSearch{
   width: 80%;
   float: left;

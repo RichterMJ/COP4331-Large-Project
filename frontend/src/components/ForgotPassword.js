@@ -61,6 +61,7 @@ function ForgotPassword() {
           "email",
           "resetEmail",
           "w-50",
+          "",
           "email",
           "email"
         )}
