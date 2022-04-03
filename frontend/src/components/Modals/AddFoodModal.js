@@ -1,16 +1,15 @@
 import React, {useState, useRef} from "react";
 import {makeButton} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
-import buildPath from "../path";
+import postJSON from "../RESTHelpers/PostHelpers";
+import buildPath from "../path"
+
 
 let start = 0;
-let content = [];
 
 function AddFoodModal({open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
-    let storage = require('../tokenStorage.js');
-   
 
     const pageSize = 10;
 
@@ -26,79 +25,71 @@ function AddFoodModal({open, close, tc, setTC}){
               )
     }
 
-    //These will be added to separate files
-    async function search(foodQuery, scroll){
-
-      //Reset table when new search
-      if(!scroll)
-        resetTable();
-
-      console.log(start);
-
-
-      const currentToken = storage.retrieveToken();
+    function makeSearchJSON(){
       const searchInfo = {
         query: foodQuery,
         pageSize: pageSize,
         start: start,
-        jwtToken: currentToken
-      };
-  
-      const searchPayload = JSON.stringify(searchInfo);
+        jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ0YzEwMjNlOTgxYWQ4ZTNmZmIxMjYiLCJmaXJzdE5hbWUiOiJzdGVmIiwibGFzdE5hbWUiOiJoYXJ0IiwiaWF0IjoxNjQ4NjczNzQ5LCJleHAiOjE2NDg2NzU1NDl9.JFdostWfvfKFS0OZIXIAF5bpxJqM6uP-eGB0JisWc4U"
+      } 
 
-      console.log(searchPayload);
+      return JSON.stringify(searchInfo);
+    }
 
-      start++;
+    function displayTable(res, foods){
+      setTimeout(function(){
+        if (res.error != 0) {
+          setTC("An error has occurred. Try Again");
+        } else {
+          //Appends the new items to the table
+          setTC(<div>{foods} <FoodList foods={res.foods}/> </div>);
+          start++;
+        }
+      }, 1000);
+    }
+
+    function FoodList(props){
+      return(
+        props.foods.map(f=> <Food key={"test"} food={f.description} calories={100}/>)
+      )
+    }
+
+    //These will be added to separate files
+    async function search(scroll){
+
+      let flag = tc;
+      //Reset table when new search
+      if(!scroll){
+        resetTable();
+        flag = "";
+      }
   
+      const searchJSON = makeSearchJSON();
+
       try {
-        const response = await fetch(buildPath("api/food/searchByName"), {
-          method: "POST",
-          body: searchPayload,
-          headers: {"Content-Type": "application/json"},
-        });
-  
-        let res = JSON.parse(await response.text());
-        console.log(res);
+        let res = postJSON(searchJSON, "api/food/searchByName");
+
+        //For Testing Purposes:
+        //let res = {error: 0, foods:[{description:"Apple"}, {description:"Banana"}, {description:"orange"}, {description:"grape"}]};
       
-        //Wait briefly before adding to table
-        setTimeout(function(){
-          if (res.error != 0) {
-            setTC("An error has occurred. Try Again");
-          } else {
-            setTC(getContent(res.foods));
-            storage.storeToken(res.jwtToken);
-          }
-        }, 1000);
+        displayTable(res, flag);
       } catch (e) {
         console.log(e);
         return;
       }
     }
 
-    function getContent(foods){
-      let ret = [];
-
-      for(let i = 0; i < foods.length; i++)
-        content.push(createItem(foods[i].description, 100));
-      
-      for(let food of content)
-        ret.push(food);
-
-      return ret;
-    }
-
     function resetTable(){
       setTC("");
       start = 0;
-      content = [];
     }
 
-    function createItem(food, calories){
+    function Food(props){
       return (
-          <button className="foodItem" onClick={function(){setSelectedFood(food)}}>
-          {food}
+          <button className="foodItem" onClick={function(){setSelectedFood(props.food)}} key={props.key}>
+          {props.food}
           <br/>
-          {calories + " calories"}
+          {props.calories + " calories"}
           <br/>
           </button>
       )
@@ -107,12 +98,47 @@ function AddFoodModal({open, close, tc, setTC}){
     function addFood(){
       console.log(selectedFood);
     }
+    
+
+    function ModalHeader(){
+      return (       
+              <div>
+                Add Food
+                {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
+              </div>         
+            )
+    }
+
+    function FoodSearchComponents(){
+      return (
+              <div className="addFoodSearchComponents">
+                {makeTextInput("foodSearch", "foodSearch", "Insert Food", (srch) => setFoodQuery(srch.target.value))}
+                {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(false), "Search")}
+              </div>
+            )
+    }
+
+    function FoodSearchTable(){
+      return (
+                <div className="foodSearchTable" onScroll={onScroll} ref={scrollReference}>
+                  {tc}
+                </div>    
+            )
+    }
+
+    function AddFoodButton(){
+      return (
+              <div>
+                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
+              </div>
+            )
+    }
 
     const onScroll = () => {
       if (scrollReference.current) {
-        const { top, totalHeight, visibleHeight } = scrollReference.current;
-        if (top + visibleHeight === totalHeight) {
-          search(foodQuery, true);
+        const { scrollTop, scrollHeight, clientHeight } = scrollReference.current;
+        if (scrollTop + clientHeight === scrollHeight) {
+          search(true);
         }
       }
     };
@@ -124,16 +150,10 @@ function AddFoodModal({open, close, tc, setTC}){
         <div className="darkBG">
             <div className="centered largeModal theModal">
               <div className="modalContent">
-                Add Food
-                {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
-                <div className="addFoodSearchComponents">
-                    {makeTextInput("foodSearch", "foodSearch", "Insert Food", (srch) => setFoodQuery(srch.target.value))}
-                    {makeButton("addFoodSearchButton", "btn btn-success btn-block btn-lg text-body",() => search(foodQuery, false), "Search")}
-                </div>
-                <div className="foodSearchTable" onScroll={onScroll} ref={scrollReference}>
-                  {tc}
-                </div>
-                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
+                <ModalHeader/>
+                {FoodSearchComponents()}
+                {FoodSearchTable()}
+                <AddFoodButton/>
               </div>
             </div>
         </div>
