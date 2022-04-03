@@ -51,11 +51,12 @@ function Signup() {
     let email = document.getElementById("email");
     let password = document.getElementById("password");
     let repeat = document.getElementById("repeat");
-    let signIN= {
+    let signInStructure= {
       password:""
     }
 
     if (
+      
       !isProperSignup(signInStructure)
     ) {
       console.log(errors.length);

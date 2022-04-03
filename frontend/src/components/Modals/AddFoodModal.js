@@ -6,6 +6,8 @@ import buildPath from "../path";
 function AddFoodModal({open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
+    let storage = require('../tokenStorage.js');
+   
 
     let start = 0;
     const pageSize = 10;
@@ -32,11 +34,13 @@ function AddFoodModal({open, close, tc, setTC}){
         start = 0;
         lastQuery = foodQuery;
       }
-
+      const currentToken = storage.retrieveToken();
+      console.log(currentToken);
       const searchInfo = {
         query: foodQuery,
         pageSize: pageSize,
-        start: start
+        start: start,
+        jwtToken: currentToken
       };
   
       const searchPayload = JSON.stringify(searchInfo);
@@ -56,6 +60,7 @@ function AddFoodModal({open, close, tc, setTC}){
         } else {
           start++;
           setTC(getContent(res.foods));
+          storage.storeToken(res.jwtToken);
         }
       } catch (e) {
         console.log(e);

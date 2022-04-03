@@ -5,11 +5,12 @@ import React from 'react';
   function blankValidator(...fields) {
     let isBlanked = false;
     for (let i = 0; i < fields.length; i++) {
+      let element = document.getElementById(fields[i].value);
       if (fields[i].value == "") {
-        fields[i].classList.add("is-invalid");
+        element.classList.add("is-invalid");
         isBlanked = true;
       } else {
-        fields[i].classList.remove("is-invalid");
+        element.classList.remove("is-invalid");
       }
     }
 
