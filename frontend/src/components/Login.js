@@ -23,10 +23,8 @@ function Login() {
 
 
   function handleLoginRes(res){
-    console.log(res.error);
     if (res.error == 3) {
       setMessage("Incorrect email/password");
-      console.log(res.error);
     } else {
 
       storage.storeToken(res); // store the token into localStorage
@@ -35,8 +33,6 @@ function Login() {
         lastName: res.lastname,
         userId : res.userId
       };
-      console.log(res);
-      console.log("Token: " + res.jwtToken);
       localStorage.setItem("user_data", JSON.stringify(user));
       setMessage("");
       window.location.href = "/userpage";
@@ -58,7 +54,6 @@ function Login() {
     return (
       
       <div className="d-flex flex-column ">
-            <form>
             {makeInputDiv("email", "loginEmailInput","pt-2","","email", "email",setEmail)}
             
             {makeInputDiv("password", "loginPasswordInput","pt-2", "","password", "password",setPassword)}
@@ -71,7 +66,6 @@ function Login() {
               "loginButton"
             )}
             {errorMessage != "" && makePTag("text-danger", errorMessage)}
-            </form>
       </div>
     );
   }
