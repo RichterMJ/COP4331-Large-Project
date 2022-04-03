@@ -7,12 +7,13 @@ function removeFood(){}
 function editFood(){}
 
 function makeFoodButtons(id){
-  return(
-    <div className= "buttons">
-      {makeActionButton("button","removeFoodButton",removeFood(),"x",id)}
-      {makeActionButton("button","editFoodButton",editFood(),"edit",id)}
-    </div>
-  )
+
+    return(
+        <div className= "buttons">
+          {makeActionButton("button","removeFoodButton",() => removeFood(),"x",id)}
+          {makeActionButton("button","removeFoodButton",() => editFood(),"&#9998;",id)}
+        </div>
+    )
 }
 
 function FoodElement(props){

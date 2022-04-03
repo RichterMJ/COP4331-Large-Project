@@ -90,10 +90,12 @@ function Login() {
     <div className="container">
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
+
           {LoginForm()}
           {/* <LoginForm email = {setEmail} password ={setPassword}/> */}
           {FormFooter()}
         {/* <Link/> */}
+
       </div>
     </div>
   );
