@@ -59,8 +59,6 @@ function Signup() {
 
   function handleSignupRes(res){
       if (res.id <= 0) {
-
-
       } else {
         const emailJSON = makeEmailJSON(res);
 

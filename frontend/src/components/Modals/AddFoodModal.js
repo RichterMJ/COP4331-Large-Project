@@ -9,6 +9,8 @@ let content = [];
 function AddFoodModal({open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
+    let storage = require('../tokenStorage.js');
+   
 
     const pageSize = 10;
 
@@ -33,11 +35,13 @@ function AddFoodModal({open, close, tc, setTC}){
 
       console.log(start);
 
+
+      const currentToken = storage.retrieveToken();
       const searchInfo = {
         query: foodQuery,
         pageSize: pageSize,
         start: start,
-        jwtToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ0YzEwMjNlOTgxYWQ4ZTNmZmIxMjYiLCJmaXJzdE5hbWUiOiJzdGVmIiwibGFzdE5hbWUiOiJoYXJ0IiwiaWF0IjoxNjQ4NjczNzQ5LCJleHAiOjE2NDg2NzU1NDl9.JFdostWfvfKFS0OZIXIAF5bpxJqM6uP-eGB0JisWc4U"
+        jwtToken: currentToken
       };
   
       const searchPayload = JSON.stringify(searchInfo);
@@ -62,6 +66,7 @@ function AddFoodModal({open, close, tc, setTC}){
             setTC("An error has occurred. Try Again");
           } else {
             setTC(getContent(res.foods));
+            storage.storeToken(res.jwtToken);
           }
         }, 1000);
       } catch (e) {

@@ -10,12 +10,13 @@ function Login() {
   const [errorMessage, setMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
-
+  let storage = require('./tokenStorage.js');
+  
 
   function makeLoginJSON(email,password){
     const loginData = {
-      email: email.value,
-      password: password.value,
+      email: email,
+      password: password,
     };
     return JSON.stringify(loginData);
   }
@@ -25,6 +26,8 @@ function Login() {
     if (res.error == 3) {
       setMessage("Incorrect email/password");
     } else {
+
+      storage.storeToken(res); // store the token into localStorage
       const user = {
         firstName: res.firstname,
         lastName: res.lastname,
@@ -36,22 +39,24 @@ function Login() {
     }
   }
   const doLogin = async (event) => {
-    if (blankValidator(email, password)) {
-      return;
-    }
+    
+    // if (blankValidator(email, password)) {
+    //   return;
+    // }
     const loginJSON = makeLoginJSON(email,password);
-    let res = postJSON(loginJSON,"api/users/login");
+    let res = await postJSON(loginJSON,"api/users/login");
+    console.log(res);
     handleLoginRes(res);
   };
 
   
   function LoginForm(props){
     return (
-      <div className="d-flex flex-column">
+      
+      <div className="d-flex flex-column ">
+            {makeInputDiv("email", "loginEmailInput","pt-2","","email", "email",setEmail)}
             
-            {makeInputDiv("email", "email","pt-2","","email", "email",setEmail)}
-            
-            {makeInputDiv("password", "password","", "pt-2","password", "password",setPassword)}
+            {makeInputDiv("password", "loginPasswordInput","pt-2", "","password", "password",setPassword)}
 
             {makeActionButton(
               "button",
@@ -85,8 +90,12 @@ function Login() {
     <div className="container">
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
-          <LoginForm email = {setEmail} password ={setPassword}/>
-          <FormFooter/>
+
+          {LoginForm()}
+          {/* <LoginForm email = {setEmail} password ={setPassword}/> */}
+          {FormFooter()}
+        {/* <Link/> */}
+
       </div>
     </div>
   );
