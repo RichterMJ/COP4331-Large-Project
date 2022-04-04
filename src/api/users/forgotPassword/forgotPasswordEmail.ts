@@ -63,6 +63,8 @@ export function forgotPasswordEmail(app: Express, client: MongoClient): RequestH
             
                 if(result == null){
                     response.error = forgotPasswordEmailError.InvalidCredentials
+                    res.status(200).json(response)
+                    return
                 } else {
                     userId = result._id
                 }
@@ -84,7 +86,7 @@ export function forgotPasswordEmail(app: Express, client: MongoClient): RequestH
 
             const emailUrl = `http://${process.env.URL}/resetPassword?userId=${userId}`
             const logoRef = 'design_assets/Logo/thirdLogo.png'
-            const html = `<p>Click <a href=${emailUrl}>here</a> to verify your account. </p> <p>From GitFit</p> <img src="cid:img"/>`
+            const html = `<p>Click <a href=${emailUrl}>here</a> to change your password. </p> <p>From GitFit</p> <img src="cid:img"/>`
             
             var mailOptions = {
                 from: process.env.EMAIL_ADDRESS,
