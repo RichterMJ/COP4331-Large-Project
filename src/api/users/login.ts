@@ -21,7 +21,6 @@ export type LoginResponse = {
     userId: ObjectIdString
     firstname: string
     lastname: string
-    hasVerifiedEmail: boolean
     error: LoginError
     jwtToken: any
 }
@@ -37,7 +36,7 @@ export function login(app: Express, client: MongoClient): RequestHandler {
 
     return async (req: Request, res: Response) => {
 
-        let response: LoginResponse = { userId: '', firstname: '', lastname: '', hasVerifiedEmail: false, error: LoginError.Ok, jwtToken: null }
+        let response: LoginResponse = { userId: '', firstname: '', lastname: '', error: LoginError.Ok, jwtToken: null }
 
         try {
 
@@ -65,7 +64,6 @@ export function login(app: Express, client: MongoClient): RequestHandler {
                     userId: queryResults[0]._id.toString(),
                     firstname: queryResults[0].firstname,
                     lastname: queryResults[0].lastname,
-                    hasVerifiedEmail: queryResults[0].hasVerifiedEmail,
                     error: LoginError.Ok,
                     jwtToken: null
                 }

@@ -174,9 +174,6 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
       response.foods = queryResponse.slice(pageSize * start, pageSize + pageSize * start).map(convertDbRowToFood)
       response.currentPage = start
 
-      res.status(200).json(response)
-      return
-
 
     } catch (e) {
       console.log(e)
