@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers"
+import e from "cors";
 
 
 function Login() {
@@ -11,10 +12,12 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState({});
+  const [disabled, setDisabled] = useState(false);
+  const firstRender = useRef();
   
   let storage = require('./tokenStorage.js');
   
-  const validate = (email, password) =>{
+  function validate(email, password){
     const errors ={};
     errors.email= emailValidator(email);
     errors.password = passwordValidator(password, false); // second argument is whether we need to validate format
@@ -29,13 +32,18 @@ function Login() {
     };
     return JSON.stringify(loginData);
   }
+  useEffect(() =>{
+  
+    if (Object.keys(formError).length == 0){
+      
+    }
+  }, [formError])
 
 
   function handleLoginRes(res){
     if (res.error == 3) {
       setMessage("Incorrect email/password");
     } else {
-
       storage.storeToken(res); // store the token into localStorage
       const user = {
         firstName: res.firstname,
@@ -49,14 +57,23 @@ function Login() {
   }
   const doLogin = async (event) => {
     
-    setFormError(validate(email, password)); // validate form
+    // console.log("hello1");
+    // const errors = validate(email, password);
+    // setFormError(errors); // validate form
+    // console.log(formError);
     
-    if (formError.length != 0){
-      return // programs stops if there is error
+    // if (formError.email != "" ||formError.password != "" ||formError.confirmPassword != ""){
+    //   console.log("helllo3")
+    //   return // programs stops if there is error
+    // }
+    if (disabled){
+      return;
     }
     const loginJSON = makeLoginJSON(email,password);
+  
     let res = await postJSON(loginJSON,"api/users/login");
     console.log(res);
+    
     handleLoginRes(res);
   };
 

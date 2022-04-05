@@ -30,7 +30,7 @@ function ForgotPassword() {
 
     setInputError(emailValidator(userEmail));
     console.log(inputError)
-    if (inputError == ""){
+    if (inputError != ""){
       return // programs stops if there is error
     }
 

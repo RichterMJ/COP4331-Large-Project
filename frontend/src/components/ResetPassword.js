@@ -49,7 +49,7 @@ function ResetPassword() {
   const doResetPassword = async (event) => {
     setFormError(validate(email, passwordReset, confirmPasswordReset));
 
-    if (formError.length != 0){
+    if (formError.length == 0 ){
       return // programs stops if there is error
     }
 
