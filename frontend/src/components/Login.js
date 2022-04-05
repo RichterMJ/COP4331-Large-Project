@@ -3,6 +3,7 @@ import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { blankValidator} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers"
+let storage = require('./tokenStorage.js');
 
 
 function Login() {
@@ -10,7 +11,6 @@ function Login() {
   const [errorMessage, setMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
-  let storage = require('./tokenStorage.js');
   
 
   function makeLoginJSON(email,password){
@@ -33,6 +33,7 @@ function Login() {
         lastName: res.lastname,
         userId : res.userId
       };
+      console.log('token ', storage.retrieveToken());
       localStorage.setItem("user_data", JSON.stringify(user));
       setMessage("");
       window.location.href = "/userpage";
