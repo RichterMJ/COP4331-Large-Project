@@ -255,8 +255,6 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
-                res.status(200).json(response)
-                return
 
             } else {
 
