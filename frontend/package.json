@@ -4,19 +4,23 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
+    "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "^13.2.1",
     "@types/react": "^17.0.41",
     "@types/react-dom": "^17.0.14",
+    "@types/react-test-renderer": "^17.0.1",
     "bootstrap": "^4.1.1",
+    "jest-dom": "^4.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
+    "react-test-render": "^1.1.2",
     "stream": "^0.0.2",
     "web-vitals": "^2.1.0"
   },
+ 
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -40,5 +44,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/dom": "^8.12.0",
+    "@testing-library/react": "^13.0.0",
+    "react-test-render": "^1.1.2"
   }
 }

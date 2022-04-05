@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
-import { blankValidator} from "./Validators/InputValidator";
+import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers"
 
 
 function Login() {
   // Here are the various states for the login
   const [errorMessage, setMessage] = useState("");
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState({});
+  
   let storage = require('./tokenStorage.js');
   
+  const validate = (email, password) =>{
+    const errors ={};
+    errors.email= emailValidator(email);
+    errors.password = passwordValidator(password, false); // second argument is whether we need to validate format
+  
+    return errors;
+  }
 
   function makeLoginJSON(email,password){
     const loginData = {
@@ -40,9 +49,11 @@ function Login() {
   }
   const doLogin = async (event) => {
     
-    // if (blankValidator(email, password)) {
-    //   return;
-    // }
+    setFormError(validate(email, password)); // validate form
+    
+    if (formError.length != 0){
+      return // programs stops if there is error
+    }
     const loginJSON = makeLoginJSON(email,password);
     let res = await postJSON(loginJSON,"api/users/login");
     console.log(res);
@@ -52,12 +63,11 @@ function Login() {
   
   function LoginForm(props){
     return (
-      
       <div className="d-flex flex-column ">
-            {makeInputDiv("email", "loginEmailInput","pt-2","","email", "email",setEmail)}
-            
-            {makeInputDiv("password", "loginPasswordInput","pt-2", "","password", "password",setPassword)}
-
+            {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.email)}`,"","email", "email",setEmail)}
+            {makeErrorMessage(formError.email)}
+            {makeInputDiv("password", "loginPasswordInput",`mt-2 form-control ${addInvalidStyle(formError.password)}`, "","password", "password",setPassword)}
+            {makeErrorMessage(formError.password)}
             {makeActionButton(
               "button",
               "btn btn-block",
@@ -65,7 +75,7 @@ function Login() {
               "Login",
               "loginButton"
             )}
-            {errorMessage != "" && makePTag("text-danger", errorMessage)}
+            {makeErrorMessage(errorMessage)}
       </div>
     );
   }
@@ -84,10 +94,8 @@ function Login() {
     )
 
   }
-
-
   return (
-    <div className="container">
+    <div className="container" data-testid="login-test1">
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
 
