@@ -48,7 +48,7 @@ function blankValidator(...fields){
 // if error exist make a P tag with error message
 function makeErrorMessage(error){
   if (error){
-    return <p className="text-danger mb-0">error</p>;
+    return <p className="text-danger mb-0">{error}</p>;
   }
   return;
 }

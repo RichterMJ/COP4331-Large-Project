@@ -1,72 +1,55 @@
 import React, { useState } from "react";
 import ResponseModal from "./Modals/ResponseModal";
 import buildPath from "./path";
-import { blankValidator} from "./Validators/InputValidator";
+import postJSON from "./RESTHelpers/PostHelpers"
+import { blankValidator, addInvalidStyle, makeErrorMessage, emailValidator} from "./Validators/InputValidator";
 import { makePTag,makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
 function ForgotPassword() {
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setMessage] = useState("");
   const [userEmail, setUserEmail] = useState("");
- 
+  const [inputError, setInputError] = useState("");
 
-  const sendResetLink = async (event) => {
-    let email = document.getElementById("resetEmail");
-    setUserEmail(email.value);
-
-    if (blankValidator(email)) {
-      return;
-    }
-
+  function prepareJSON(){
     const emailRetriver = {
-      email: email.value,
+      email: userEmail,
     };
 
-    const emailJSON = JSON.stringify(emailRetriver);
-
-    try {
-      const response = await fetch(
-        buildPath("api/users/forgotPassword/forgotPasswordEmail"),
-        {
-          method: "POST",
-          body: emailJSON,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      let res = JSON.parse(await response.text());
-
-      console.log(res);
-
-      if (res.error != 0) {
-        setMessage("Error occurred");
-      } else {
-        const user = {
-          error: res.error,
-        };
-        localStorage.setItem("user_data", JSON.stringify(user));
-        setMessage("");
-        setIsOpen(true);
-        //window.location.href = "/";
-      }
-    } catch (e) {
-      console.log(e.toString());
-      return;
+    return JSON.stringify(emailRetriver);
+  }
+  function handleForgotPasswordRes(res){
+    if (res.error != 0) {
+      setMessage("Error occurred");
+    } else {
+      setMessage("");
+      setIsOpen(true);
     }
+  }
+  const sendResetLink = async (event) => {
+
+    setInputError(emailValidator(userEmail));
+    console.log(inputError)
+    if (inputError == ""){
+      return // programs stops if there is error
+    }
+
+    const emailJSON = prepareJSON();
+    
+    let res = await postJSON(emailJSON,"api/users/forgotPassword/forgotPasswordEmail");
+    handleForgotPasswordRes(res);
+
   };
   function makeEmailInput(){
     return(
-      <div className="d-flex align-item-center justify-content-center">
-        {makeInputDiv(
-          "email",
-          "resetEmail",
-          "w-50",
-          "",
-          "email",
-          "email"
-        )}
+      <div className="d-flex flex-column align-item-center justify-content-center">
+        {makeInputDiv("email", "forgotPasswordEmail", `form-control ${addInvalidStyle(inputError)}`, "","email","email", setUserEmail)}
+        {makeErrorMessage(inputError)}
       </div>
     );
+  }
+  function makeFooter(){
+    return (<div id="formFooter" className="pt-2">{makeLink("/","text-danger", "Cancel")}</div>);
   }
 
   return (
@@ -86,9 +69,9 @@ function ForgotPassword() {
             "resetPasswordButton"
           )}
 
-          {errorMessage != "" && makePTag("text-danger pt-2", errorMessage)}
+          {makeErrorMessage(errorMessage)}
 
-          <div id="formFooter" className="pt-2">{makeLink("/","text-danger", "Cancel")}</div>
+          {makeFooter()}
           
         </div>
       </div>
