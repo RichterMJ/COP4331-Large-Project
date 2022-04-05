@@ -25,7 +25,7 @@ export type RecipesPostRequest = {
 }
 
 export type RecipesPostResponse = {
-    recipeId?: ObjectIdString
+    recipeId: ObjectIdString | null
     error: RecipesPostError
     jwtToken: any
 }
@@ -42,7 +42,7 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
 
     return async (req: Request, res: Response) => {
 
-        let response: RecipesPostResponse = { error: 0, jwtToken: null }
+        let response: RecipesPostResponse = { recipeId: null, error: 0, jwtToken: null }
 
         const paramUserId = req.params.userId ?? req.body.userId
 
@@ -85,6 +85,7 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
             } else {
                 response.error = RecipesPostError.ServerError
                 response.jwtToken = null
+                response.recipeId = null
                 res.status(200).json(response)
                 return
             }
@@ -93,18 +94,28 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
             console.log(e)
             response.error = RecipesPostError.ServerError
             response.jwtToken = null
+            response.recipeId = null
             res.status(200).json(response)
             return
         }
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.recipeId = null
+            response.error = RecipesPostError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = RecipesPostError.jwtError
+          response.jwtToken = null
+          response.recipeId = null
+          response.error = RecipesPostError.jwtError
         }
 
         res.status(200).json(response)
@@ -175,6 +186,7 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                 if (!isObjectIdString(recipeId)) {
                     response.error = RecipesGetError.InvalidRequest
                     response.jwtToken = null;
+                    response.recipes = []
                     res.status(200).json(response)
                     return
                 }
@@ -195,6 +207,7 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                 if (typeof description !== 'string') {
                     response.error = RecipesGetError.InvalidRequest
                     response.jwtToken = null;
+                    response.recipes = []
                     res.status(200).json(response)
                     return
                 }
@@ -222,17 +235,27 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
             console.log(e)
             response.error = RecipesGetError.ServerError
             response.jwtToken = null;
+            response.recipes = []
             res.status(200).json(response)
             return
         }
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+            const jwtRefresh = token.refresh(response.jwtToken);
+            response.jwtToken = jwtRefresh.accessToken
+
+            if(jwtRefresh.error){
+                response.jwtToken = null
+                response.recipes = []
+                response.error = RecipesGetError.jwtError
+            }
+
         }
         catch(e)
         {
             response.jwtToken = null
+            response.recipes = []
             response.error = RecipesGetError.jwtError
         }
 
@@ -319,12 +342,19 @@ export function recipesPut(app: Express, client: MongoClient): RequestHandler {
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.error = RecipesPutError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = RecipesPutError.jwtError
+          response.jwtToken = null
+          response.error = RecipesPutError.jwtError
         }
 
         res.status(200).json(response)
@@ -409,12 +439,19 @@ export function recipesDelete(app: Express, client: MongoClient): RequestHandler
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.error = RecipesDeleteError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = RecipesDeleteError.jwtError
+          response.jwtToken = null
+          response.error = RecipesDeleteError.jwtError
         }
 
         res.status(200).json(response)

@@ -6,8 +6,9 @@ import postJSON from "./RESTHelpers/PostHelpers"
 let storage = require('./tokenStorage.js');
 
 
-function Login() {
+function Login(props) {
   // Here are the various states for the login
+
   const [errorMessage, setMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
@@ -22,36 +23,31 @@ function Login() {
   }
 
 
-  function handleLoginRes(res){
+  function handleLoginRes(res,user){
     if (res.error == 3) {
       setMessage("Incorrect email/password");
     } else {
-
-      storage.storeToken(res); // store the token into localStorage
-      const user = {
-        firstName: res.firstname,
-        lastName: res.lastname,
-        userId : res.userId
-      };
-      console.log('token ', storage.retrieveToken());
-      localStorage.setItem("user_data", JSON.stringify(user));
+      user.token = (res); // store the token into localStorage
+      user.firstName= res.firstname
+      user.lastName= res.lastname
+      user.userID= res.userId
       setMessage("");
       window.location.href = "/userpage";
     }
   }
-  const doLogin = async (event) => {
-    
+  const doLogin = async (user) => {
     // if (blankValidator(email, password)) {
     //   return;
     // }
     const loginJSON = makeLoginJSON(email,password);
     let res = await postJSON(loginJSON,"api/users/login");
     console.log(res);
-    handleLoginRes(res);
+    handleLoginRes(res,user);
   };
 
   
-  function LoginForm(props){
+  function LoginForm(user){
+    console.log(user.firstName)
     return (
       
       <div className="d-flex flex-column ">
@@ -62,7 +58,7 @@ function Login() {
             {makeActionButton(
               "button",
               "btn btn-block",
-              () => doLogin(),
+              () => doLogin(user),
               "Login",
               "loginButton"
             )}
@@ -92,7 +88,7 @@ function Login() {
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
 
-          {LoginForm()}
+        {LoginForm(props.user)}
           {/* <LoginForm email = {setEmail} password ={setPassword}/> */}
           {FormFooter()}
         {/* <Link/> */}
