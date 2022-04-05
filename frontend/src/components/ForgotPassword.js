@@ -70,7 +70,7 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="container">
+    <div className="container" data-testid="forgotPassword-container">
       <div className="card">
         <div className="card-body text-center">
 

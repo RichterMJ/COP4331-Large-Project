@@ -95,7 +95,7 @@ function Login() {
 
   }
   return (
-    <div className="container" data-testid="login-test1">
+    <div className="container" data-testid="login-container"> {/*data-testid is for unit test*/}
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
 
