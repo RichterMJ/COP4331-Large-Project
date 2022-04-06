@@ -262,4 +262,13 @@
   background-color: rgb(240, 240, 104);
 }
 
-
+.nutrientCatHeading{
+  font-size: 30px;
+  margin-bottom:20px;
+}
+#bottomSubPanelHeading{
+  margin-top:45px;
+  margin-bottom:30px;
+  font-size:30px;
+  text-align:center;
+}

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import LeftPanel from "../components/Panels/UserPageLPanel";
-import UserPageRPanel from "../components/Panels/UserPageRPanel";
+import RightPanel from "../components/Panels/UserPageRPanel";
 import "./mainPageStyle.css"
 
 function UserPage(props) {
@@ -8,7 +8,7 @@ function UserPage(props) {
         <div id="content">
             <div id="panels">
         <LeftPanel user ={props.user}/>
-        <UserPageRPanel user = {props.user}/>
+        <RightPanel user = {props.user}/>
             </div>
         </div>
     );

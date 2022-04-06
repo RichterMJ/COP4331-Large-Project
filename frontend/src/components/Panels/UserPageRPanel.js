@@ -7,6 +7,8 @@ function RightPanel(props){
     return(
         <div id="rightPanel">
           <TopPanel userId={props.user.userID} />
+          <TopSubPanel/>
+          <BottomSubPanel/>
         </div>
     )
 }

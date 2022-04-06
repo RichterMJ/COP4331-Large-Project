@@ -38,7 +38,7 @@ function App() {
           <ResetPasswordPage />
         </Route>
         <Route path="/userPage" exact>
-          <UserPage />
+          <UserPage user ={user}/>
         </Route>
         <Route path="/emailVerify" exact>
           <EmailVerifyPage />
