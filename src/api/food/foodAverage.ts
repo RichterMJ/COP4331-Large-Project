@@ -125,6 +125,7 @@ export function foodAverage(app: Express, client: MongoClient): RequestHandler {
             console.log(result.data)
             if(result.data.error){
                 response.jwtToken = null
+                response.averageNutrients = []
                 response.error = result.data.error
                 res.status(200).json(response)
                 return
@@ -137,17 +138,27 @@ export function foodAverage(app: Express, client: MongoClient): RequestHandler {
             response.error = FoodAverageError.ServerError
             console.log(e)
             response.jwtToken = null
+            response.averageNutrients = []
             res.status(200).json(response)
             return
         }
 
         try
         {
-          response.jwtToken = token.refresh(jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.averageNutrients = []
+            response.error = FoodAverageError.jwtError
+          }
+    
         }
         catch(e)
         {
           response.jwtToken = null
+          response.averageNutrients = []
           response.error = FoodAverageError.jwtError
         }
 

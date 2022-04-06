@@ -32,7 +32,7 @@ export type FoodRecordPostRequest = {
 }
 
 export type FoodRecordPostResponse = {
-    foodRecordId?: ObjectIdString
+    foodRecordId: ObjectIdString | null
     error: FoodRecordPostError
     jwtToken: any
 }
@@ -81,7 +81,7 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
     }
 
     return async (req: Request, res: Response) => {
-        let response: FoodRecordPostResponse = { error: 0, jwtToken: null }
+        let response: FoodRecordPostResponse = { foodRecordId: null, error: 0, jwtToken: null }
 
         try {
             if (!isFoodRecordPostRequest(req.body)) {
@@ -118,6 +118,7 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 response.foodRecordId = queryResult.insertedId.toString()
             } else {
                 response.error = FoodRecordPostError.ServerError
+                response.foodRecordId = null
                 response.jwtToken = null;
                 res.status(200).json(response);
                 return;
@@ -126,19 +127,30 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
         } catch (e) {
             response.error = FoodRecordPostError.ServerError
             console.log(e)
+            response.foodRecordId = null
             response.jwtToken = null;
             res.status(200).json(response);
             return;
         }
 
+
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.foodRecordId = null
+            response.error = FoodRecordPostError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = FoodRecordPostError.jwtError
+          response.jwtToken = null
+          response.foodRecordId = null
+          response.error = FoodRecordPostError.jwtError
         }
 
         res.status(200).json(response)
@@ -216,6 +228,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
             {
                 response.jwtToken = null;
                 response.error = FoodRecordGetError.jwtError
+                response.foodRecords = []
                 res.status(200).json(response);
                 return;
             } else { 
@@ -229,6 +242,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 if (!isObjectIdString(paramFoodRecordId) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
                     response.jwtToken = null;
+                    response.foodRecords = []
                     res.status(200).json(response)
                     return
                 }
@@ -241,8 +255,6 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 }).toArray()
 
                 response.foodRecords = queryResults.map(convertQueryResultToFoodRecord)
-                res.status(200).json(response)
-                return
 
             } else {
 
@@ -250,6 +262,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
                 if (!isIsoDate(paramStartDate) || !isIsoDate(paramEndDate) || !isObjectIdString(paramUserId)) {
                     response.error = FoodRecordGetError.InvalidRequest
+                    response.foodRecords = []
                     response.jwtToken = null;
                     res.status(200).json(response)
                     return
@@ -268,6 +281,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 // Check if the end date is before the start date
                 if((_endDate.valueOf() - _startDate.valueOf()) < 0){
                     response.error = FoodRecordGetError.InvalidRange
+                    response.foodRecords = []
                     response.jwtToken = null;
                     res.status(200).json(response)
                     return
@@ -287,6 +301,7 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
         } catch (e) {
             response.error = FoodRecordGetError.ServerError
+            response.foodRecords = []
             response.jwtToken = null;
             console.log(e)
             res.status(200).json(response)
@@ -295,12 +310,21 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.foodRecords = []
+            response.error = FoodRecordGetError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = FoodRecordGetError.jwtError
+          response.jwtToken = null
+          response.foodRecords = []
+          response.error = FoodRecordGetError.jwtError
         }
 
         res.status(200).json(response)
@@ -385,12 +409,19 @@ export function foodRecordsPut(app: Express, client: MongoClient): RequestHandle
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.error = FoodRecordPutError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = FoodRecordPutError.jwtError
+          response.jwtToken = null
+          response.error = FoodRecordPutError.jwtError
         }
 
         res.status(200).json(response)
@@ -472,12 +503,19 @@ export function foodRecordsDelete(app: Express, client: MongoClient): RequestHan
 
         try
         {
-            response.jwtToken = token.refresh(response.jwtToken);
+          const jwtRefresh = token.refresh(response.jwtToken);
+          response.jwtToken = jwtRefresh.accessToken
+    
+          if(jwtRefresh.error){
+            response.jwtToken = null
+            response.error = FoodRecordDeleteError.jwtError
+          }
+    
         }
         catch(e)
         {
-            response.jwtToken = null
-            response.error = FoodRecordDeleteError.jwtError
+          response.jwtToken = null
+          response.error = FoodRecordDeleteError.jwtError
         }
 
     res.status(200).json(response)

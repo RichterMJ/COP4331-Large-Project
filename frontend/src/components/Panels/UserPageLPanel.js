@@ -23,16 +23,12 @@ function leftPanelLogoHeader(){
     )
 }
 
-function LeftPanel(){
+function LeftPanel(props){
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [editUserPrefOpen, setEditUserPrefOpen] = useState(false);
     const [tableContent, setContent] = useState("");
-    const _ud = localStorage.getItem("user_data");
-    const ud = JSON.parse(_ud);
-    const userId = ud.userId;
-    const firstName = ud.firstName;
-    const lastName = ud.lastName;
-    
+    let user = props.user;
+
     //Makes it so table content in add food is set to blank once opened
     const toggleTC = (content) => setContent(content);
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
@@ -49,7 +45,7 @@ function LeftPanel(){
                             "Edit User Preferences","EditUserPrefButton")}
           <main>
             {<AddFoodModal open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
-            {<EditUserPrefModal firstName={firstName} lastName={lastName} open={editUserPrefOpen} close={toggleEUP} />}
+            {<EditUserPrefModal user={user} open={editUserPrefOpen} close={toggleEUP} />}
           </main>
         </div>
     )
