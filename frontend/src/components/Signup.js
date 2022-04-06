@@ -4,10 +4,6 @@ import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 import {matchingPasswords, isBlank} from "./Validators/LoginValidators";
 import postJSON from "./RESTHelpers/PostHelpers";
 
-
-// var ph = require('./path.js');
-import buildPath from "./path";
-
 function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -57,14 +53,14 @@ function Signup() {
     return JSON.stringify(sendEmailData);
   }
 
-  function handleSignupRes(res){
+  async function handleSignupRes(res){
       if (res.id <= 0) {
       } else {
         const emailJSON = makeEmailJSON(res);
 
         try{
           //For when this method is complete
-          let emailRes = postJSON(emailJSON, "api/users/emailVerification/sendVerificationEmail");
+          let emailRes = await postJSON(emailJSON, "api/users/emailVerification/sendVerificationEmail");
           handleSendEmailResponse(emailRes);
         }catch(e){
           console.log(e);
@@ -93,13 +89,11 @@ function Signup() {
     if(!matchingPasswords(password, passwordRepeat, setPWErrorClass, setRepeatErrorClass) || isBlank(fieldsArray(), setClassErrorArray()))
       return;
 
-    //Make a different validity checker
-
     const signupJSON = makeSignupJSON();
 
     try{
-        //For when this method is complete
-        let res = postJSON(signupJSON, "api/users/register");
+        let res = await postJSON(signupJSON, "api/users/register");
+        console.log(res);
         handleSignupRes(res);
     }catch(e){
       console.log(e);
