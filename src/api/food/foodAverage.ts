@@ -130,7 +130,7 @@ export function foodAverage(app: Express, client: MongoClient): RequestHandler {
                 res.status(200).json(response)
                 return
             }
-            response.jwtToken = result.data.jwt
+            response.jwtToken = result.data.jwtToken
             const queryResults = result.data.foodRecords;
             response.averageNutrients = getAverageForFoodRecords(queryResults, startDate, endDate);
             

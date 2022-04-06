@@ -243,6 +243,7 @@ export function isRecipeFood(obj: any): boolean {
         && 'amountUsed' in obj && isAmountConsumed(obj.amountUsed)
 }
 
+
 export type Recipe = Food & {
     recipeId?: ObjectIdString
     userId: ObjectIdString
