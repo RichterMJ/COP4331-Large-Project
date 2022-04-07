@@ -1,14 +1,14 @@
 import React, { PureComponent } from "react";
-import UserPageLPanel from "../components/Panels/UserPageLPanel";
-import UserPageRPanel from "../components/Panels/UserPageRPanel";
+import LeftPanel from "../components/Panels/UserPageLPanel";
+import RightPanel from "../components/Panels/UserPageRPanel";
 import "./mainPageStyle.css"
 
-function UserPage() {
+function UserPage(props) {
     return(
         <div id="content">
             <div id="panels">
-                <UserPageLPanel/>
-                <UserPageRPanel/>
+        <LeftPanel user ={props.user}/>
+        <RightPanel user = {props.user}/>
             </div>
         </div>
     );

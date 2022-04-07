@@ -2,14 +2,13 @@ import React from "react";
 import TopPanel from "./TopPanel";
 import BottomSubPanel from "./BottomSubPanel"
 import {TopSubPanel}from "./TopSubPanel"
-function RightPanel(){
-    const _ud = localStorage.getItem("user_data");
-    const ud = JSON.parse(_ud);
-    const userId = ud.userId;
+function RightPanel(props){
 
     return(
         <div id="rightPanel">
-            <TopPanel userId={userId} />
+          <TopPanel userId={props.user.userID} />
+          <TopSubPanel/>
+          <BottomSubPanel/>
         </div>
     )
 }
