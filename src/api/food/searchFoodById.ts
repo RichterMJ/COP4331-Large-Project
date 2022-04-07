@@ -74,7 +74,7 @@ export type SearchFoodByIdRequest = {
 }
 
 export type SearchFoodByIdResponse = {
-  food?: Food
+  food: Food | null
   error: SearchFoodByIdError
   jwtToken: any
 }
@@ -89,7 +89,7 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
   }
 
   return async (req: Request, res: Response) => {
-    let response: SearchFoodByIdResponse = { error: SearchFoodByIdError.Ok, jwtToken: null }
+    let response: SearchFoodByIdResponse = { food: null, error: SearchFoodByIdError.Ok, jwtToken: null }
 
     try {
 
@@ -125,6 +125,7 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
 
       console.log(e)
       response.error = SearchFoodByIdError.ServerError
+      response.food = null;
       response.jwtToken = null
       res.status(200).json(response)
       return
@@ -132,11 +133,20 @@ export function searchFoodById(app: Express, client: MongoClient): RequestHandle
 
     try
     {
-      response.jwtToken = token.refresh(response.jwtToken);
+      const jwtRefresh = token.refresh(response.jwtToken);
+      response.jwtToken = jwtRefresh.accessToken
+
+      if(jwtRefresh.error){
+        response.jwtToken = null
+        response.food = null
+        response.error = SearchFoodByIdError.jwtError
+      }
+
     }
     catch(e)
     {
       response.jwtToken = null
+      response.food = null
       response.error = SearchFoodByIdError.jwtError
     }
 

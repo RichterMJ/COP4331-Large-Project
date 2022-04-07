@@ -31,7 +31,7 @@ function MainInfoBox(props){
         </div>
 )
 }
-function TopPanel({userId}){
+function TopPanel(props){
     const [date,setDate] = useState("March 22nd 2022");
 
     return(

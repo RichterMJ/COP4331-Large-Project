@@ -65,10 +65,6 @@ function convertUsdaFood(food: any): Food {
 }
 
 
-////////////////////////////////////////
-// POST
-////////////////////////////////////////
-
 export enum SearchFoodByNameError {
   Ok = 0,
   InvalidRequest,
@@ -179,17 +175,30 @@ export function searchFoodByName(app: Express, client: MongoClient): RequestHand
       console.log(e)
       response.error = SearchFoodByNameError.ServerError
       response.jwtToken = null
+      response.currentPage = 0;
+      response.foods = []
       res.status(200).json(response)
       return
     }
 
     try
     {
-      response.jwtToken = token.refresh(response.jwtToken);
+      const jwtRefresh = token.refresh(response.jwtToken);
+      response.jwtToken = jwtRefresh.accessToken
+
+      if(jwtRefresh.error){
+        response.jwtToken = null
+        response.currentPage = 0;
+        response.foods = []
+        response.error = SearchFoodByNameError.jwtError
+      }
+
     }
     catch(e)
     {
       response.jwtToken = null
+      response.currentPage = 0;
+      response.foods = []
       response.error = SearchFoodByNameError.jwtError
     }
 

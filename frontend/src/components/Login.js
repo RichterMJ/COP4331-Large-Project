@@ -3,21 +3,22 @@ import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers"
-import e from "cors";
-import {isBlank} from "./Validators/LoginValidators"
+
+let storage = require('./tokenStorage.js');
 
 
-function Login() {
+
+function Login(props) {
   // Here are the various states for the login
+
   const [errorMessage, setMessage] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState({
     emailError: "",
     passwordError: ""
   });
-
-  let storage = require('./tokenStorage.js');
   
   // this function validate and set the fromError 
   // return true if Login inputs are valid, false otherwise.
@@ -46,17 +47,14 @@ function Login() {
   // }, [email, password, isFirstSubmit])
 
 
-  function handleLoginRes(res){
+  function handleLoginRes(res,user){
     if (res.error == 3) {
       setMessage("Incorrect email/password");
     } else if(res.error == 0){
-      storage.storeToken(res); // store the token into localStorage
-      const user = {
-        firstName: res.firstname,
-        lastName: res.lastname,
-        userId : res.userId
-      };
-      localStorage.setItem("user_data", JSON.stringify(user));
+      user.token = (res); // store the token into localStorage
+      user.firstName= res.firstname
+      user.lastName= res.lastname
+      user.userID= res.userId
       setMessage("");
       window.location.href = "/userpage";
     }
@@ -72,11 +70,12 @@ function Login() {
       const res = await postJSON(loginJSON,"api/users/login");
       console.log(res);
     
-      handleLoginRes(res);
+      handleLoginRes(res,user);
   };
 
   
-  function LoginForm(props){
+  function LoginForm(user){
+    console.log(user.firstName)
     return (
       <div className="d-flex flex-column ">
             {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.emailError)}`,"","email", "email",setEmail)}
@@ -86,7 +85,7 @@ function Login() {
             {makeActionButton(
               "button",
               "btn btn-block",
-              () => doLogin(),
+              () => doLogin(user),
               "Login",
               "loginButton"
             )}
@@ -114,7 +113,7 @@ function Login() {
       <div className="card card-body">
           <h2 className="text-center">Log in</h2>
 
-          {LoginForm()}
+        {LoginForm(props.user)}
           {/* <LoginForm email = {setEmail} password ={setPassword}/> */}
           {FormFooter()}
         {/* <Link/> */}

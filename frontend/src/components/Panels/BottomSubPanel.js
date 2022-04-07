@@ -4,28 +4,28 @@ let nutrientTestArray = [
         name:"Carbohydrates",
         actualAmount:50,
         totalAmount:100,
-        nutrientId:123,
+        ID:123,
         unit:"G"
     },
     {
         name:"Protein",
         actualAmount:50,
         totalAmount:100,
-        nutrientId:123,
+        ID:124,
         unit:"G"
     },
     {
         name:"Fat",
         actualAmount:50,
         totalAmount:100,
-        nutrientId:123,
+        ID:125,
         unit:"G"
     },
     {
         name:"Saturated Fat",
         actualAmount:50,
         totalAmount:100,
-        nutrientId:123,
+        ID:126,
         unit:"G"
     }
 
@@ -35,15 +35,15 @@ let nutrientsTestArray = [
 ]
 let nutrientCatTest = {
     name:"Macros",
-    id:50,
-    nutrients:nutrientsTestArray
+    ID:50,
+    nutrients:nutrientTestArray
 
 }
 function NutrientBars(props)
 {
   return (
     <div className = "nutrientBars">
-      {props.nutrients.map((nutrient) => <NutrientBar nutrient={nutrient}/>)}
+      {props.nutrients.map((nutrient) => <NutrientDiv key={nutrient.ID}  nutrient={nutrient}/>)}
     </div>
   )
 }
@@ -54,7 +54,12 @@ function getBarWidth(n)
   return (n.actualAmount/n.totalAmount) * (MAX_BAR_WIDTH);
 
 }
-function NutrientBar(props)
+function NutrientStatusBars(props){
+  return(
+    <div className = "nutrientBar"> <div className = "nutrientBarProg" style ={{'width':props.width.toString()}}> </div> </div>   )
+
+}
+function NutrientDiv(props)
 {
     function getNutrientAmountString(n){
         return n.actualAmount + "/"+n.totalAmount+" " +n.unit+" "+ n.name;
@@ -64,8 +69,10 @@ function NutrientBar(props)
   const [width, setWidth] = useState(getBarWidth(curNutrient));
 
   return (
-    <div  className = "nutrientElement" id =
-        {curNutrient.id}> <div className = "nutrientBar"> <div className = "nutrientBarProg" style ={{'width':width.toString()}}> </div> </div> <div class = "nutrientText"> {getNutrientAmountString(curNutrient)}</div> </div>
+    <div key ={curNutrient.ID} className = "nutrientElement">
+      <NutrientStatusBars width={width}/>
+      <div className = "nutrientText"> {getNutrientAmountString(curNutrient)}</div>
+    </div>
   )
 }
 function NutrientCategory (props){
@@ -75,7 +82,7 @@ function NutrientCategory (props){
       <div className = "nutrientCatHeading">
         {nutrientCat.name}
       </div>
-      <NutrientBars nutrients={nutrientsTestArray}/>
+      <NutrientBars nutrients={nutrientCat.nutrients}/>
     </div>
   )
 }
@@ -85,8 +92,11 @@ function BottomSubPanel() {
 
   return(
     <div id= "BSP">
-      <div id = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
+      <div id  = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
       <div id = "bottomSubPanel">
+          <NutrientCategory nutrientCat={nutrientCatTest}/>
+          <NutrientCategory nutrientCat={nutrientCatTest}/>
+          <NutrientCategory nutrientCat={nutrientCatTest}/>
           <NutrientCategory nutrientCat={nutrientCatTest}/>
       </div>
     </div>

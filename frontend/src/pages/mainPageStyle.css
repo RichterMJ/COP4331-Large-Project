@@ -57,6 +57,8 @@
 }
 #bottomSubPanel {
   margin-top:45px;
+  max-height: 430px;
+  overflow-x: hidden;
 }
 .subPanelHeading{
   margin-top:45px;
