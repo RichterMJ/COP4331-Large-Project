@@ -4,6 +4,7 @@ import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink
 import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers"
 import e from "cors";
+import {isBlank} from "./Validators/LoginValidators"
 
 
 function Login() {
@@ -11,18 +12,21 @@ function Login() {
   const [errorMessage, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formError, setFormError] = useState({});
-  const [disabled, setDisabled] = useState(false);
-  const firstRender = useRef();
-  
+  const [formError, setFormError] = useState({
+    emailError: "",
+    passwordError: ""
+  });
+
   let storage = require('./tokenStorage.js');
   
-  function validate(email, password){
-    const errors ={};
-    errors.email= emailValidator(email);
-    errors.password = passwordValidator(password, false); // second argument is whether we need to validate format
-  
-    return errors;
+  // this function validate and set the fromError 
+  // return true if Login inputs are valid, false otherwise.
+  function isValidLoginInputs(email, password){
+    let errors ={};
+    errors.emailError= emailValidator(email);
+    errors.passwordError = passwordValidator(password, false); // second argument is whether we need to validate format
+    setFormError(errors);
+    return (errors.emailError == "" && errors.passwordError =="");
   }
 
   function makeLoginJSON(email,password){
@@ -32,18 +36,20 @@ function Login() {
     };
     return JSON.stringify(loginData);
   }
-  useEffect(() =>{
-  
-    if (Object.keys(formError).length == 0){
-      
-    }
-  }, [formError])
+  // useEffect(() =>{
+  //   console.log(isFirstSubmit)
+  //   if (!isFirstSubmit){
+  //     return;
+  //   }
+  //   setFormError(validate(email, password));
+    
+  // }, [email, password, isFirstSubmit])
 
 
   function handleLoginRes(res){
     if (res.error == 3) {
       setMessage("Incorrect email/password");
-    } else {
+    } else if(res.error == 0){
       storage.storeToken(res); // store the token into localStorage
       const user = {
         firstName: res.firstname,
@@ -56,35 +62,27 @@ function Login() {
     }
   }
   const doLogin = async (event) => {
-    
-    // console.log("hello1");
-    // const errors = validate(email, password);
-    // setFormError(errors); // validate form
-    // console.log(formError);
-    
-    // if (formError.email != "" ||formError.password != "" ||formError.confirmPassword != ""){
-    //   console.log("helllo3")
-    //   return // programs stops if there is error
-    // }
-    if (disabled){
-      return;
+
+    if (!isValidLoginInputs(email, password)){
+      return; // if there is invalid inputs, abort
     }
+   
     const loginJSON = makeLoginJSON(email,password);
   
-    let res = await postJSON(loginJSON,"api/users/login");
-    console.log(res);
+      const res = await postJSON(loginJSON,"api/users/login");
+      console.log(res);
     
-    handleLoginRes(res);
+      handleLoginRes(res);
   };
 
   
   function LoginForm(props){
     return (
       <div className="d-flex flex-column ">
-            {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.email)}`,"","email", "email",setEmail)}
-            {makeErrorMessage(formError.email)}
-            {makeInputDiv("password", "loginPasswordInput",`mt-2 form-control ${addInvalidStyle(formError.password)}`, "","password", "password",setPassword)}
-            {makeErrorMessage(formError.password)}
+            {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.emailError)}`,"","email", "email",setEmail)}
+            {makeErrorMessage(formError.emailError)}
+            {makeInputDiv("password", "loginPasswordInput",`mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, "","password", "password",setPassword)}
+            {makeErrorMessage(formError.passwordError)}
             {makeActionButton(
               "button",
               "btn btn-block",

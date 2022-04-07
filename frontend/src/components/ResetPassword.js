@@ -18,16 +18,17 @@ function ResetPassword() {
   const [formError, setFormError] = useState({});
 
 
-  function validate (email, password, confirmPassword){
-    const errors = {};
-    errors.email = emailValidator(email);
-    errors.password = passwordValidator(password, true);
-    if ((errors.confirmPassword = passwordValidator(confirmPassword, false)) == ""){
+  function isValidResetPasswordInputs(email, password, confirmPassword){
+    let errors = {};
+    errors.emailError = emailValidator(email);
+    errors.passwordError = passwordValidator(password, true);
+    if ((errors.confirmPasswordError = passwordValidator(confirmPassword, false)) == ""){
       if( confirmPassword != password){
-        errors.confirmPassword = "Passwords not matching"
+        errors.confirmPasswordError = "Passwords not matching"
       }
     }
-    return errors;
+    setFormError(errors);
+    return (errors.emailError == "" && errors.passwordError == "" && errors.confirmPasswordError == "");
   }
   function prepareResetPasswordJSON(){
     const resetPasswordData = {
@@ -47,10 +48,8 @@ function ResetPassword() {
     }
   }
   const doResetPassword = async (event) => {
-    setFormError(validate(email, passwordReset, confirmPasswordReset));
-
-    if (formError.length == 0 ){
-      return // programs stops if there is error
+    if (!isValidResetPasswordInputs(email, passwordReset, confirmPasswordReset)){
+      return;
     }
 
     const resetPasswordJSON = prepareResetPasswordJSON();
@@ -64,12 +63,12 @@ function ResetPassword() {
   function makeResetPasswordInputs(){
     return (
       <div className="d-flex flex-column">
-              {makeInputDiv("email", "resetEmail", `w-50 mt-2 form-control ${addInvalidStyle(formError.email)}`, "", "resetEmail", "Email Reset", setEmail)}
-              {makeErrorMessage(formError.email)}
-              {makeInputDiv("password", "resetPassword",`w-50 mt-2 form-control ${addInvalidStyle(formError.password)}`, "", "resetPassword", "Password", setPasswordReset)}
-              {makeErrorMessage(formError.password)}
-              {makeInputDiv("password", "confirmResetPassword", `w-50 mt-2 form-control ${addInvalidStyle(formError.confirmPassword)}`, "", "confirmResetPassword", "Confirm Password", setConfirmPasswordReset)}
-              {makeErrorMessage(formError.confirmPassword)}
+              {makeInputDiv("email", "resetEmail", `w-50 mt-2 form-control ${addInvalidStyle(formError.emailError)}`, "", "resetEmail", "Email Reset", setEmail)}
+              {makeErrorMessage(formError.emailError)}
+              {makeInputDiv("password", "resetPassword",`w-50 mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, "", "resetPassword", "Password", setPasswordReset)}
+              {makeErrorMessage(formError.passwordError)}
+              {makeInputDiv("password", "confirmResetPassword", `w-50 mt-2 form-control ${addInvalidStyle(formError.confirmPasswordError)}`, "", "confirmResetPassword", "Confirm Password", setConfirmPasswordReset)}
+              {makeErrorMessage(formError.confirmPasswordError)}
             
       </div>
     )

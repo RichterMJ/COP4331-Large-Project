@@ -26,11 +26,15 @@ function ForgotPassword() {
       setIsOpen(true);
     }
   }
+  // return true if there is no invalid inputs, false otherwise
+  function isValidForgotPasswordInputs(email){
+    let inputError = emailValidator(email);
+    setInputError(inputError);
+    return (inputError == "");
+  }
   const sendResetLink = async (event) => {
 
-    setInputError(emailValidator(userEmail));
-    console.log(inputError)
-    if (inputError != ""){
+    if (!isValidForgotPasswordInputs(userEmail)){
       return // programs stops if there is error
     }
 
