@@ -268,6 +268,17 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                     return
                 }
 
+                // Check if the end date is before the start date
+                const actualStartDate = new Date(new Date(paramStartDate).toDateString());
+                const actualEndDate = new Date(new Date(paramEndDate).toDateString());
+                if((actualEndDate.valueOf() - actualStartDate.valueOf()) < 0){
+                    response.error = FoodRecordGetError.InvalidRange
+                    response.foodRecords = []
+                    response.jwtToken = null;
+                    res.status(200).json(response)
+                    return
+                }
+
                 // Hack to ensure that parsing via `new Date(..)` yields the correct date.
                 const startDate: string = paramStartDate + 'T23:59:59Z'
                 const endDate: string = paramEndDate + 'T23:59:59Z'
@@ -277,15 +288,6 @@ export function foodRecordsGet(app: Express, client: MongoClient): RequestHandle
                 const _startDate = new Date(new Date(startDate).toDateString())
                 const _endDate = new Date(new Date(endDate).toDateString())
                 _endDate.setDate(_endDate.getDate() + 1)
-
-                // Check if the end date is before the start date
-                if((_endDate.valueOf() - _startDate.valueOf()) < 0){
-                    response.error = FoodRecordGetError.InvalidRange
-                    response.foodRecords = []
-                    response.jwtToken = null;
-                    res.status(200).json(response)
-                    return
-                }
 
                 const queryResults = await db.collection('FoodRecords').find({
                     userId: paramUserId,
@@ -375,6 +377,7 @@ export function foodRecordsPut(app: Express, client: MongoClient): RequestHandle
 
             const { foodRecordId, totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food, jwtToken } = req.body
             const update: FoodRecord = { totalNutrients, creationTimestamp, eatenTimestamp, amountConsumed, userId, food }
+            update.totalNutrients = getTotalNutrients(food, amountConsumed)
 
             if( token.isExpired(jwtToken))
             {

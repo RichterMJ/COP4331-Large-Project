@@ -1,7 +1,7 @@
 import { Express, Request, RequestHandler, Response } from 'express'
 import { MongoClient, ObjectId } from 'mongodb'
 import { brotliDecompressSync } from 'zlib'
-import { extractRecipe, isObjectIdString, isPortion, isRecipe, isRecipeFood, ObjectIdString, Portion, Recipe, RecipeFood } from '../global-types'
+import { extractRecipe, isObjectIdString, isPortion, isRecipe, isRecipeFood, isNutrient, Nutrient, ObjectIdString, Portion, Recipe, RecipeFood } from '../global-types'
 import { FoodRecordDeleteError, FoodRecordPutError } from '../users/data/foodRecords';
 var token = require('../createJWT');
 
@@ -17,10 +17,9 @@ export enum RecipesPostError {
 }
 
 export type RecipesPostRequest = {
-    userId?: ObjectIdString
+    userId: ObjectIdString
     ingredients: RecipeFood[]
     description: string
-    portions: Portion[]
     jwtToken: any
 }
 
@@ -30,13 +29,46 @@ export type RecipesPostResponse = {
     jwtToken: any
 }
 
+function getTotalNutrientsRecipe(ingredients: RecipeFood[]): Nutrient[] {
+    // @ts-ignore
+
+    const keepOnlyNutrients = [
+        1106, 1109, 1114, 1124, 1162, 1165, 1166, 1167, 1174, 1175, 1176, 1177, 1178,
+        1180, 1183, 1184, 1185, 1187, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094,
+        1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1141, 1142, 1149, 1213,
+        1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226,
+        1227, 1232, 1233, 1234, 1003, 1004, 1005, 1009, 1010, 1011, 1012, 1013, 1050,
+        1063, 1257, 1258, 1291, 1292, 1293, 2047, 2048
+    ]
+
+    let totalNutrientsDict: any = {}
+    for (const recipeFood of ingredients) {
+        for (const nutrient of recipeFood.food.nutrients) {
+            if (nutrient.nutrientId in totalNutrientsDict) {
+                totalNutrientsDict[nutrient.nutrientId].value += (recipeFood.amountUsed.quantity *  nutrient.value * recipeFood.amountUsed.portion.gramAmount) / 100 
+            } else {
+                const newNutrient : Nutrient = {
+                    nutrientId: nutrient.nutrientId,
+                    nutrientName: nutrient.nutrientName,
+                    unitName: nutrient.unitName,
+                    value: (recipeFood.amountUsed.quantity *  nutrient.value * recipeFood.amountUsed.portion.gramAmount) / 100
+                }
+                totalNutrientsDict[nutrient.nutrientId] = newNutrient
+            }
+        }
+    }
+    let totalNutrients: Nutrient[] = Object.values(totalNutrientsDict)
+
+    return totalNutrients
+}
+
 export function recipesPost(app: Express, client: MongoClient): RequestHandler {
 
     function isRecipesPostRequest(obj: any): obj is RecipesPostRequest {
         return obj != null && typeof obj === 'object'
+            && 'userId' in obj && isObjectIdString(obj.userId)
             && 'ingredients' in obj && Array.isArray(obj.ingredients) && obj.ingredients.every(isRecipeFood)
             && 'description' in obj && typeof obj.description === 'string'
-            && 'portions' in obj && Array.isArray(obj.portions) && obj.portions.every(isPortion)
             && 'jwtToken' in obj && obj.jwtToken != null
     }
 
@@ -44,27 +76,27 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
 
         let response: RecipesPostResponse = { recipeId: null, error: 0, jwtToken: null }
 
-        const paramUserId = req.params.userId ?? req.body.userId
-
         try {
-            if (!isRecipesPostRequest(req.body) || !isObjectIdString(paramUserId)) {
+            if (!isRecipesPostRequest(req.body)) {
                 response.error = RecipesPostError.InvalidRequest
                 res.status(200).json(response)
                 return
             }
 
-            const { jwtToken } = req.body
+            const { userId, ingredients, description, jwtToken } = req.body
 
             const recipe: Recipe = {
-                userId: paramUserId,
-                ingredients: req.body.ingredients,
-
+                userId,
+                ingredients,
                 fdcId: 0,
-                description: req.body.description,
-                nutrients: [], // TODO Calculate total nutrients.
-                portions: req.body.portions,
+                description,
+                nutrients: getTotalNutrientsRecipe(ingredients), // TODO Calculate total nutrients.
+                portions: [{
+                    portionId: 0,
+                    portionName: "1 serving",
+                    gramAmount: 100
+                }],
             }
-
 
             if( token.isExpired(jwtToken))
             {
