@@ -10,11 +10,14 @@ function EditUserPrefModal({user, open, close}) {
             <div className="row pt-5 justify-content-start">
                 <div className="col-5 text-left">
                 {makeLabel("firstNameEdit", "First Name")}
+
                 {makeInputDiv("text", "firstNameEdit", "" , user.firstName ,"First name","First Name" )}
+
                 </div>
 
                 <div className="col-5 text-left">
                 {makeLabel("lastNameEdit", "Last Name")}
+
                 {makeInputDiv("text", "lastNameEdit", "", user.lastName,"Last name", "Last Name" )}
                 </div>
             </div>
@@ -22,7 +25,7 @@ function EditUserPrefModal({user, open, close}) {
                 <div className="col-sm-3 .offset-col-1 text-left">
                     {makeLabel("weightEdit", "Weight")}
                     <div className="input-group-prepend"> 
-                        {makeInputDiv("text", "editWeightInput", "", "0", "weight", "weight")}
+                        {makeInputDiv("text", "editWeightInput", "form-control", "0", "weight", "weight")}
                         {makeSpan("input-group-text", "lbs")}
                     </div>
                 </div>

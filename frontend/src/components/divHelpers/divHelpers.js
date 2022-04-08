@@ -51,19 +51,15 @@ function makePTag(className, text) {
 }
 function makeInputDiv(type, id, className, defaultValue, name, placeholder,onChangeFunc) {
   return (
-    <div className={className}>
       <input
-        className="form-control"
+        className={className}
         type={type}
         id={id}
         name={name}
         defaultValue={defaultValue}
         placeholder={placeholder}
         onChange={(d)=>onChangeFunc(d.target.value)}
-        
       />
-      <div className="invalid-feedback">{name} cannot be blank</div>
-    </div>
   );
 }
 
