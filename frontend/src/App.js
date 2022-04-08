@@ -12,21 +12,13 @@ import {
   Switch,
 } from "react-router-dom";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-function User(){
-  let firstName = "";
-  let lastName = "";
-  let userID = "";
-  let token;
-  return {firstName, lastName, userID, token};
-}
+
 function App() {
-  let user = new User();
-  user.firstName = "YHWH";
   return (
     <Router>
       <Switch>
         <Route path="/" exact>
-          <LoginPage user={user} />
+          <LoginPage />
         </Route>
         <Route path="/signup" exact>
           <SignupPage />
@@ -38,7 +30,7 @@ function App() {
           <ResetPasswordPage />
         </Route>
         <Route path="/userPage" exact>
-          <UserPage user ={user}/>
+          <UserPage />
         </Route>
         <Route path="/emailVerify" exact>
           <EmailVerifyPage />
