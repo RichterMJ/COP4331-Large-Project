@@ -11,14 +11,14 @@ function EditUserPrefModal({user, open, close}) {
                 <div className="col-5 text-left">
                 {makeLabel("firstNameEdit", "First Name")}
 
-                {makeInputDiv("text", "firstNameEdit", "" , user.firstName ,"First name","First Name" )}
+                {makeInputDiv("text", "firstNameEdit", "form-control" , user.firstName ,"First name","First Name" , '')}
 
                 </div>
 
                 <div className="col-5 text-left">
                 {makeLabel("lastNameEdit", "Last Name")}
 
-                {makeInputDiv("text", "lastNameEdit", "", user.lastName,"Last name", "Last Name" )}
+                {makeInputDiv("text", "lastNameEdit", "form-control", user.lastName,"Last name", "Last Name" ,"")}
                 </div>
             </div>
             <div className="row pt-3 justify-content-start">

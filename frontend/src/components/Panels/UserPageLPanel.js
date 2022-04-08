@@ -24,6 +24,7 @@ function leftPanelLogoHeader(){
 }
 
 function LeftPanel({user}){
+    console.log(user);
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [editUserPrefOpen, setEditUserPrefOpen] = useState(false);
     const [tableContent, setContent] = useState("");

@@ -55,8 +55,8 @@ function Login() {
     } else if(res.error == 0){
       storage.storeToken(res) // store the token into localStorage
       const user = {
-        firstName: res.firstName,
-        lastName: res.lastName,
+        firstName: res.firstname,
+        lastName: res.lastname,
         userId: res.userId,
       };
       localStorage.setItem("user_data", JSON.stringify(user));
