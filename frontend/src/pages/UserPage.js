@@ -3,12 +3,15 @@ import LeftPanel from "../components/Panels/UserPageLPanel";
 import RightPanel from "../components/Panels/UserPageRPanel";
 import "./mainPageStyle.css"
 
-function UserPage(props) {
+function UserPage() {
+    const _ud = localStorage.getItem('user_data');
+    const user = JSON.parse(_ud);
+
     return(
         <div id="content">
             <div id="panels">
-        <LeftPanel user ={props.user}/>
-        <RightPanel user = {props.user}/>
+        <LeftPanel user={user}/>
+        <RightPanel user={user}/>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
 
-function EditUserPrefModal({firstName, lastName, open, close}) {
+function EditUserPrefModal({user, open, close}) {
 
     function makeEditInputs(){
         return (
@@ -10,12 +10,12 @@ function EditUserPrefModal({firstName, lastName, open, close}) {
             <div className="row pt-5 justify-content-start">
                 <div className="col-5 text-left">
                 {makeLabel("firstNameEdit", "First Name")}
-                {makeInputDiv("text", "firstNameEdit", "" , firstName ,"First name","First Name" )}
+                {makeInputDiv("text", "firstNameEdit", "" , user.firstName ,"First name","First Name" )}
                 </div>
 
                 <div className="col-5 text-left">
                 {makeLabel("lastNameEdit", "Last Name")}
-                {makeInputDiv("text", "lastNameEdit", "", lastName,"Last name", "Last Name" )}
+                {makeInputDiv("text", "lastNameEdit", "", user.lastName,"Last name", "Last Name" )}
                 </div>
             </div>
             <div className="row pt-3 justify-content-start">
