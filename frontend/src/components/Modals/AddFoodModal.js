@@ -4,7 +4,7 @@ import { RiCloseLine } from "react-icons/ri";
 import postJSON from "../RESTHelpers/PostHelpers";
 const storage = require("../tokenStorage.js");
 
-function AddFoodModal({open, close, tc, setTC}){
+function AddFoodModal({user, open, close, tc, setTC}){
     const [foodQuery, setFoodQuery] = useState("");
     const [selectedFood, setSelectedFood] = useState("");
     const [queryStart, setQueryStart] = useState(0);
