@@ -14,7 +14,20 @@ function emailValidator(email)
   }
   return "";
 }
-
+// this function receive string 
+// then check blank and format only real positive number
+// return empty string for valid and message error string for invalid
+function weightValidator(weight)
+{
+  const regrex = /^[0-9]*\.?[0-9]+$/;
+  if (weight != ""){
+    return "weight is required";
+  } 
+  if (!regrex.test(weight)){
+    return "invalid weight";
+  }
+  return "";
+}
 // this function receive string 
 // then check blank and format at least 8 character, one letter and one number
 // return empty string for valid and message error string for invalid
@@ -58,4 +71,4 @@ function makeErrorMessage(error){
 function addInvalidStyle(isError){
   return isError ? "is-invalid" : "";
 }
-export {emailValidator, passwordValidator, blankValidator, makeErrorMessage, addInvalidStyle};
+export {emailValidator, passwordValidator, blankValidator, makeErrorMessage, addInvalidStyle, weightValidator};

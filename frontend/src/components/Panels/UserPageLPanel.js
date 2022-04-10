@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers.js";
 import AddFoodModal from "../Modals/AddFoodModal";
-import EditUserPrefModal from "../Modals/EditUserPrefModal.js";
+import MyAccountModal from "../Modals/MyAccountModal.js";
 
 
 function addFoodEvent(toggleAFM){
@@ -10,7 +10,7 @@ function addFoodEvent(toggleAFM){
 
 function makeRecipeEvent(){
 }
-function editUserPrefEvent(toggleEUP){
+function myAccountEvent(toggleEUP){
     toggleEUP();
 }
 
@@ -26,13 +26,13 @@ function leftPanelLogoHeader(){
 function LeftPanel({user}){
     console.log(user);
     const [addFoodOpen, setAddFoodOpen] = useState(false);
-    const [editUserPrefOpen, setEditUserPrefOpen] = useState(false);
+    const [myAccountOpen, setMyAccountOpen] = useState(false);
     const [tableContent, setContent] = useState("");
 
     //Makes it so table content in add food is set to blank once opened
     const toggleTC = (content) => setContent(content);
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
-    const toggleEUP = () => setEditUserPrefOpen(!editUserPrefOpen);
+    const toggleMA = () => setMyAccountOpen(!myAccountOpen);
  
     return(
         <div id="leftPanel">
@@ -41,11 +41,11 @@ function LeftPanel({user}){
                             "Add Food","addFoodButton")}
           {makeActionButton("button", "leftPanelButton",() => makeRecipeEvent(),
                             "Make Recipe","makeRecipeButton")}
-          {makeActionButton("button", "leftPanelButton",() => editUserPrefEvent(toggleEUP),
-                            "Edit User Preferences","EditUserPrefButton")}
+          {makeActionButton("button", "leftPanelButton",() => myAccountEvent(toggleMA),
+                            "My Account","myAccountButton")}
           <main>
             {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
-            {<EditUserPrefModal user={user} open={editUserPrefOpen} close={toggleEUP} />}
+            {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
           </main>
         </div>
     )

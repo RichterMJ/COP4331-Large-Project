@@ -63,11 +63,11 @@ function ResetPassword() {
   function makeResetPasswordInputs(){
     return (
       <div className="d-flex flex-column">
-              {makeInputDiv("email", "resetEmail", `w-50 mt-2 form-control ${addInvalidStyle(formError.emailError)}`, "", "resetEmail", "Email Reset", setEmail)}
+              {makeInputDiv("email", "resetEmail", `w-50 mt-2 form-control ${addInvalidStyle(formError.emailError)}`, email, "resetEmail", "Email Reset", setEmail)}
               {makeErrorMessage(formError.emailError)}
-              {makeInputDiv("password", "resetPassword",`w-50 mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, "", "resetPassword", "Password", setPasswordReset)}
+              {makeInputDiv("password", "resetPassword",`w-50 mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, passwordReset, "resetPassword", "Password", setPasswordReset)}
               {makeErrorMessage(formError.passwordError)}
-              {makeInputDiv("password", "confirmResetPassword", `w-50 mt-2 form-control ${addInvalidStyle(formError.confirmPasswordError)}`, "", "confirmResetPassword", "Confirm Password", setConfirmPasswordReset)}
+              {makeInputDiv("password", "confirmResetPassword", `w-50 mt-2 form-control ${addInvalidStyle(formError.confirmPasswordError)}`, confirmPasswordReset, "confirmResetPassword", "Confirm Password", setConfirmPasswordReset)}
               {makeErrorMessage(formError.confirmPasswordError)}
             
       </div>

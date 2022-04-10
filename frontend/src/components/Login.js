@@ -13,7 +13,6 @@ function Login() {
   // Here are the various states for the login
 
   const [errorMessage, setMessage] = useState("");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState({
@@ -58,13 +57,13 @@ function Login() {
         firstName: res.firstname,
         lastName: res.lastname,
         userId: res.userId,
+        weight: 0
       };
       localStorage.setItem("user_data", JSON.stringify(user));
       setMessage("");
       window.location.href = "/userPage";
     }
   }
-
   const doLogin = async (event) => {
 
     if (!isValidLoginInputs(email, password)){
@@ -77,16 +76,15 @@ function Login() {
       console.log(res);
     
       handleLoginRes(res);
-
   };
 
   
   function LoginForm(){
     return (
       <div className="d-flex flex-column ">
-            {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.emailError)}`,"","email", "email",setEmail)}
+            {makeInputDiv("email", "loginEmailInput",`mt-2 form-control ${addInvalidStyle(formError.emailError)}`,email,"email", "email",setEmail)}
             {makeErrorMessage(formError.emailError)}
-            {makeInputDiv("password", "loginPasswordInput",`mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, "","password", "password",setPassword)}
+            {makeInputDiv("password", "loginPasswordInput",`mt-2 form-control ${addInvalidStyle(formError.passwordError)}`, password,"password", "password",setPassword)}
             {makeErrorMessage(formError.passwordError)}
             {makeActionButton(
               "button",
