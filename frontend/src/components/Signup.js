@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import VerifyModal from "./Modals/VerifyModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
-import {matchingPasswords, isBlank} from "./Validators/LoginValidators";
+import {isBlank, validWeight, validEmail, validPassword, matchingPasswords} from "./Validators/SignupValidators";
+import {makeErrorMessage} from "./Validators/InputValidator";
 import postJSON from "./RESTHelpers/PostHelpers";
 
 function Signup() {
@@ -12,25 +13,25 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
 
-  const [fnErrorClass, setFNErrorClass] = useState("");
-  const [lnErrorClass, setLNErrorClass] = useState("");
-  const [weightErrorClass, setWeightErrorClass] = useState("");
-  const [emailErrorClass, setEmailErrorClass] = useState("");
-  const [pwErrorClass, setPWErrorClass] = useState("");
-  const [repeatErrorClass, setRepeatErrorClass] = useState("");
+  const [formClassError, setFormClassError] = useState({
+    fnErrorClass: "",
+    lnErrorClass: "",
+    weightErrorClass: "",
+    emailErrorClass: "",
+    pwErrorClass: "",
+    repeatErrorClass: ""
+  })
+
+  const [formError, setFormError] = useState({
+    fnError: "",
+    lnError: "",
+    weightError: "",
+    emailError: "",
+    pwError: "",
+    repeatError: ""
+  });
 
   const [isOpen, setIsOpen] = useState(false);
-
-  /*function isProperSignup(...fields) {
-    //Note that weight is the last index in fields
-    for (let i = 0; i < 4; i++) if (fields[i].length <= 0) errors.push(i);
-
-    if (fields[3] != fields[4]) errors.push(4);
-
-    if (isNaN(fields[5]) || fields[5].length == 0) errors.push(5);
-
-    return errors.length == 0;
-  }*/
 
   function makeSignupJSON(){
     const signupData = {
@@ -51,6 +52,28 @@ function Signup() {
     }
 
     return JSON.stringify(sendEmailData);
+  }
+
+  function makeFormErrorJSON(){
+    return {
+      fnError: formError.fnError,
+      lnError: formError.lnError,
+      weightError: formError.weightError,
+      emailError: formError.emailError,
+      pwError: formError.pwError,
+      repeatError: formError.repeatError
+    };
+  }
+
+  function makeFormClassErrorJSON(){
+    return {
+      fnErrorClass: formClassError.fnErrorClass,
+      lnErrorClass: formClassError.lnErrorClass,
+      weightErrorClass: formClassError.weightErrorClass,
+      emailErrorClass: formClassError.emailErrorClass,
+      pwErrorClass: formClassError.pwErrorClass,
+      repeatErrorClass: formClassError.repeatErrorClass
+    };
   }
 
   async function handleSignupRes(res){
@@ -79,14 +102,22 @@ function Signup() {
     return new Array(firstName, lastName, weight, email, password, passwordRepeat);
   }
 
-  function setClassErrorArray(){
-    return new Array(setFNErrorClass, setLNErrorClass, setWeightErrorClass, setEmailErrorClass, setPWErrorClass, setRepeatErrorClass);  
+  function hasError(){
+    let textErrors = makeFormErrorJSON();
+    let classErrors = makeFormClassErrorJSON();
+
+    //Single | makes it so it reaches all functions even if one would typically return set of statements
+
+    return    isBlank(fieldsArray(), classErrors, setFormClassError, textErrors, setFormError)
+            | !matchingPasswords(password, passwordRepeat, classErrors, setFormClassError, textErrors, setFormError)
+            | !validWeight(weight, classErrors, setFormClassError, textErrors, setFormError) 
+            | !validEmail(email, classErrors, setFormClassError, textErrors, setFormError) 
+            | !validPassword(password, classErrors, setFormClassError, textErrors, setFormError);
   }
 
   const doSignup = async (event) => {
 
-    console.log(firstName);
-    if(!matchingPasswords(password, passwordRepeat, setPWErrorClass, setRepeatErrorClass) || isBlank(fieldsArray(), setClassErrorArray()))
+    if(hasError())
       return;
 
     const signupJSON = makeSignupJSON();
@@ -125,7 +156,8 @@ function Signup() {
     return (
             <div className="fNameBox">
                 {makeLabel("signupFName", "First Name")}
-                {makeInput("text", "fName", " " + fnErrorClass, (txt) => setFirstName(txt.target.value))}
+                {makeInput("text", "fName", " " + formClassError.fnErrorClass, (txt) => setFirstName(txt.target.value))}
+                {makeErrorMessage(formError.fnError)}
             </div>
             )
   }
@@ -134,7 +166,10 @@ function Signup() {
     return (
             <div className="lNameBox">
               {makeLabel("signupLName", "Last Name", "lNameLabel")}
-              {makeInput("text", "lName", "lNameInput " + lnErrorClass, (txt) => setLastName(txt.target.value))}
+              {makeInput("text", "lName", "lNameInput " + formClassError.lnErrorClass, (txt) => setLastName(txt.target.value))}
+              <div className = "lnError">
+                {makeErrorMessage(formError.lnError)}
+              </div>
             </div>
           )
   }
@@ -144,10 +179,11 @@ function Signup() {
             <div className="weightBox">
                 {makeLabel("signupWeight", "Weight", "weightLabel")}
                 <div className="input-group">
-                  {makeInput("text", "weight", "weightInput " + weightErrorClass, (txt) => setWeight(txt.target.value))}
+                  {makeInput("text", "weight", "weightInput " + formClassError.weightErrorClass, (txt) => setWeight(txt.target.value))}
                   <div className="input-group-append">
                     {makeSpan("input-group-text", "lbs")}
                   </div>
+                  {makeErrorMessage(formError.weightError)}
                 </div>
             </div>
           )
@@ -157,7 +193,8 @@ function Signup() {
     return (
           <div className="longBox">
             {makeLabel("signupEmail", "Email")}
-            {makeInput("email", "email", emailErrorClass, (txt) => setEmail(txt.target.value))}
+            {makeInput("email", "email", formClassError.emailErrorClass, (txt) => setEmail(txt.target.value))}
+            {makeErrorMessage(formError.emailError)}
           </div>
     )
   }
@@ -166,7 +203,8 @@ function Signup() {
     return (
             <div className="longBox">
               {makeLabel("signupPassword", "Password")}
-              {makeInput("password", "password", pwErrorClass, (txt) => setPassword(txt.target.value))}
+              {makeInput("password", "password", formClassError.pwErrorClass, (txt) => setPassword(txt.target.value))}
+              {makeErrorMessage(formError.pwError)}
             </div>
           )
   }
@@ -175,7 +213,8 @@ function Signup() {
     return (
               <div className="longBox">
                 {makeLabel("confirmPassword", "Repeat your password")}
-                {makeInput("password", "repeat", repeatErrorClass, (txt) => setPasswordRepeat(txt.target.value))}
+                {makeInput("password", "repeat", formClassError.repeatErrorClass, (txt) => setPasswordRepeat(txt.target.value))}
+                {makeErrorMessage(formError.repeatError)}
               </div>
           )
   }
