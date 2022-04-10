@@ -5,6 +5,7 @@ import SignupPage from "./pages/SignupPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UserPage from "./pages/UserPage";
 import EmailVerifyPage from "./pages/EmailVerifyPage";
+import InvalidPage from "./pages/InvalidPage";
 import {
   BrowserRouter as Router,
   Route,
@@ -34,6 +35,9 @@ function App() {
         </Route>
         <Route path="/emailVerify" exact>
           <EmailVerifyPage />
+        </Route>
+        <Route path="*">
+          <InvalidPage/>
         </Route>
         <Redirect to="/" />
       </Switch>

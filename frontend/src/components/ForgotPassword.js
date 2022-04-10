@@ -47,7 +47,7 @@ function ForgotPassword() {
   function makeEmailInput(){
     return(
       <div className="d-flex flex-column align-item-center justify-content-center">
-        {makeInputDiv("email", "forgotPasswordEmail", `form-control ${addInvalidStyle(inputError)}`, "","email","email", setUserEmail)}
+        {makeInputDiv("email", "forgotPasswordEmail", `form-control ${addInvalidStyle(inputError)}`, userEmail,"email","email", setUserEmail)}
         {makeErrorMessage(inputError)}
       </div>
     );
