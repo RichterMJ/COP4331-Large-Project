@@ -34,34 +34,48 @@ function MyAccountModal({user, open, close}) {
         return isEditing ? "" : "disable";
     }
 
-    function makeEditInputs(){
+    function firstNameInput(){
         return (
-            <div className="container">
-            <div className="row pt-5 justify-content-start">
-                <div className="col-5 text-left">
+            <div className="col-5 text-left">
                 {makeLabel("firstNameEdit", "First Name")}
             
                 {makeInputDiv("text", "firstNameEdit", `firstNameEditInput ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
                 {makeErrorMessage(editFormError.firstNameError)}
-                </div>
-
-                <div className="col-5 text-left">
+            </div>
+        );
+    }
+    function lastNameInput(){
+        return (
+            <div className="col-5 text-left">
                 {makeLabel("lastNameEdit", "Last Name")}
 
                 {makeInputDiv("text", "lastNameEdit", `lastNameEditInput ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
                 {makeErrorMessage(editFormError.lastNameError)}
-                </div>
-            </div>
-            <div className="row pt-3 justify-content-start">
-                <div className="col-5  text-left">
+             </div>
+        );
+    }
+    function weightInput(){
+        return (
+            <div className="col-5  text-left">
                     {makeLabel("weightEdit", "Weight")}
                     <div className="input-group-prepend"> 
                         {makeInputDiv("text", "editWeightInput", `w-50 ${addInvalidStyle(editFormError.weightError)} ${toggleEdittingStyle()}`, userWeight, "weight", "weight",setUserWeight,`${toggleDisable()}`)}
                         {makeSpan("input-group-text", "lbs")}
                     </div>
                     {makeErrorMessage(editFormError.weightError)}
-                </div>
             </div>
+        )
+    }
+    function makeEditInputs(){
+        return (
+            <div className="container"> 
+                <div className="row pt-5 justify-content-start"> 
+                    {firstNameInput()}
+                    {lastNameInput()}
+                </div>
+                <div className="row pt-3 justify-content-start">
+                    {weightInput()}
+                </div>
             </div>
         );
     }
@@ -140,7 +154,7 @@ function MyAccountModal({user, open, close}) {
         <div className="buttonDivs fixed-bottom d-flex justify-content-around">
         {makeActionButton("button", "btn btn-danger mt-3 mb-5", () => doLogout(), "Log out", "logoutButton")}
         {!isEditing && makeActionButton("button", "btn btn-primary mt-3 mb-5", () => editProfile(), "Edit Profile", "editProfileButton")}
-        {isEditing && makeActionButton("button","btn btn-success mt-3 mb-5", () => saveChanges(), "Save Changes",  "editUserPredButton")}
+        {isEditing && makeActionButton("button","btn btn-success mt-3 mb-5", () => saveChanges(), "Save Changes",  "saveChangesButton")}
         {isEditing && makeActionButton("button","btn btn-warning mt-3 mb-5", () => cancelEdit(), "Cancel",  "cancelEditButton")}
         </div>
         );
