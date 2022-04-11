@@ -49,7 +49,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
           setTC("This search provided no results");
         } else {
           //Appends the new items to the table
-          setTC(<div>{currentFoods} <FoodList foods={foods}/> </div>);
+          setTC(<div>{currentFoods} <FoodList foods={foods}/></div>);
           setQueryStart(queryStart + 1);
           storage.storeToken();
         }
@@ -159,11 +159,17 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
     };
 
     const scrollReference = useRef();
+
+    function loadingAnimation(){
+        return (
+            <div className = "d-flex justify-content-center"><CircleSpinner size={30} color="#686769" loading={isLoading} /></div>
+        )
+    }
     function LoadTable(){
         return (
-            isLoading 
+            (isLoading && tc.length == 0)
             ? 
-            <div className = "d-flex justify-content-center"><CircleSpinner size={30} color="#686769" loading={isLoading} /></div>
+            loadingAnimation()
             :
             FoodSearchTable()
         );
@@ -173,6 +179,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
         <>
             {FoodSearchComponents()}
             {LoadTable()}
+            {(isLoading && tc.length != 0) && loadingAnimation()}
         </>
     )
 }

@@ -31,8 +31,8 @@ function AddFoodModal({user, open, close, tc, setTC}){
 
     function AddFoodButton(){
       return (
-              <div className="">
-                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body", () => addFood(), "Add")}
+              <div className="fixed-bottom pd-3">
+                {makeButton("addFoodButton", "btn btn-success btn-block btn-lg text-body mb-4", () => addFood(), "Add")}
               </div>
             )
     }
