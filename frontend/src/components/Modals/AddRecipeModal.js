@@ -10,8 +10,10 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedPortion, setSelectedPortion] = useState({});
-    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
     const [recipeFoodToAdd, setRecipeFoodToAdd] = useState({});
+    const [inputError, setInputError] = useState({});
+    const [errorMessage, setMessage] = useState("");
     //const [clickSearch, setClickSearch] = useState(false);
     
    
@@ -27,13 +29,23 @@ function AddRecipeModal({user, open, close, tc, setTC}){
                     {makePortionSelections()}
                     {makeQuantityInput()}
                     {makeActionButton("button", "btn btn-primary", ()=>{addFoodToFoodList()},"Add To Recipe", "addFoodToRecipeBtn")}
+                    {makeErrorMessage(inputError)}
                 </div>
             </div>
         );
     }
-    
+    function isValidRecipeFoodInputs(){
+        if (selectedFood <= 0 || Object.keys(selectedPortion) == 0){
+            setInputError("Invalid input");
+            return false;
+        }
+        return true;
+    }
     function addFoodToFoodList(){
-        
+        // check input before adding 
+        if(isValidRecipeFoodInputs())
+            return;
+
         const newRecipeFood = {
             food: selectedFood,
             amountUsed: {
@@ -110,6 +122,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
                 <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
+                {makeErrorMessage(errorMessage)}
               </div>
             </div>
         </div>
