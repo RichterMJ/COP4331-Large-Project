@@ -16,11 +16,11 @@
     "react-icons": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
+    "react-spinners-kit": "^1.9.1",
     "react-test-render": "^1.1.2",
     "stream": "^0.0.2",
     "web-vitals": "^2.1.0"
   },
- 
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -46,8 +46,8 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/dom": "^8.12.0",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "react-test-render": "^1.1.2"
   }
