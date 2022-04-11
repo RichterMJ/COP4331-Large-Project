@@ -11,9 +11,38 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedPortion, setSelectedPortion] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+    const [inputError, setInputError] = useState("");
+    const [errorMessage, setMessage] = useState("");
     //const [clickSearch, setClickSearch] = useState(false);
 
-   
+
+    function addFoodToFoodList(){
+        
+        if (!isValidRecipeFoodInputs()){
+            return;
+        }
+        
+        const newRecipeFood = {
+            food: selectedFood,
+            amountUsed: {
+                portion: selectedPortion,
+                quantity: selectedFoodQuantity
+            }
+        }; // build a recipe object as declare in global-types.ts in backend
+        const newFoodList = [...selectedFoodsList]; // copy to newList
+        newFoodList.push(newRecipeFood);
+        console.log(newFoodList)
+        setSelectedFoodsList(newFoodList);
+    }
+    function isValidRecipeFoodInputs(){
+        console.log(selectedFoodQuantity);
+        if (selectedFoodQuantity <= 0 || Object.keys(selectedPortion) == 0){
+            setInputError("Invalid input");
+            return false;
+        }
+        console.log("hello")
+        return true;
+    }
     function makeRecipeFoodsToAdd(){
         
         return(
@@ -22,30 +51,35 @@ function AddRecipeModal({user, open, close, tc, setTC}){
                 {displaySelectedFoodList()}
                 </div>
                 <div className="selectedFoodDetails col-4">
-                    {displaySelectedFood}
-                    {makePortionSelections}
+                    {displaySelectedFood()}
+                    {makePortionSelections()}
                     {makeQuantityInput()}
+                    {makeActionButton("button", "btn btn-primary", ()=>{addFoodToFoodList()},"Add To Recipe", "addFoodToRecipeBtn")}
+                    {makeErrorMessage(inputError)}
                 </div>
             </div>
         );
     }
     function deleteSelectedFood(foodIndex){
-        setSelectedFoodsList(selectedFood.splice(foodIndex,1));
+        const newFoodList = [...selectedFoodsList]; // copy to newList
+        newFoodList.splice(foodIndex,1);
+        setSelectedFoodsList(newFoodList);
     }
-    function makeSelectedFoodBubble(foodDescription, foodIndex){
+    function SelectedFoodBubble({recipeFood, foodIndex}){
+        const recipeFoodDetails = `${recipeFood.amountUsed.quantity} ${recipeFood.food.description} (${recipeFood.amountUsed.portion.portionName ?? recipeFood.amountUsed.portion.gramAmount})`;
         return(
             <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded">
-                {foodDescription} 
-                foodDescription
+                {recipeFoodDetails} 
                 {makeButton("", "deleteSeletedFoodBtn",() => {deleteSelectedFood(foodIndex)}, <RiCloseLine/>)}
             </div>
         );
     }
     function displaySelectedFoodList(){
+        console.log(selectedFoodsList);
         return (
             <div className="selectedFoodList">
-                {selectedFoodsList.map((food,foodIndex) =>{
-                    return makeSelectedFoodBubble(food, foodIndex);
+                {selectedFoodsList.map((recipeFood,index) =>{
+                    return <SelectedFoodBubble key={index} recipeFood={recipeFood} foodIndex={index}/>
                 })}
             </div>
         );
@@ -62,9 +96,9 @@ function AddRecipeModal({user, open, close, tc, setTC}){
             <div>
                 <label htmlFor="portionsToSelect">Choose a portion:</label>
 
-                <select id="portionsToSelect" >
-                {Object.keys(selectedFood).length !=0 && selectedFood.portions.map(portion =>{
-                    return <option key={portion.portionId} value={portion}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
+                <select id="portionsToSelect" onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
+                {Object.keys(selectedFood).length !=0 && selectedFood.portions.map((portion, index) =>{
+                    return <option key={index} value={index}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
                 })}
                 </select>
             </div>
@@ -75,6 +109,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
             <div>
                     {makeLabel("quantityFoodInput", "Enter quantity","")}
                     {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
+                    
             </div>
         );
     }
