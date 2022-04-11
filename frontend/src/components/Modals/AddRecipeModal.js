@@ -49,7 +49,10 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     }
     function makeRecipeDescriptionInput(){
         return (
-            makeInputDiv("text", "recipeDescriptionInput" ,"form-control", recipeDescription, "recipeDescription", "Recipe Description", setRecipeDescription)
+            <div className="recipeDescriptionDiv ">
+                {makeLabel("recipeDescriptionInput", "Description", "")}
+                {makeInputDiv("text", "recipeDescriptionInput" ,"form-control", recipeDescription, "recipeDescription", "Recipe Description", setRecipeDescription)}
+            </div>
         );
     }
     function makeRecipeFoodsToAdd(){
@@ -88,6 +91,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         console.log(selectedFoodsList);
         return (
             <div className="selectedFoodList">
+                <h3>Food Added</h3>
                 {selectedFoodsList.map((recipeFood,index) =>{
                     return <SelectedFoodBubble key={index} recipeFood={recipeFood} foodIndex={index}/>
                 })}
@@ -96,9 +100,10 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     }
     function displaySelectedFood(){
         return (
-            <div>
-                {selectedFood.description}
-            </div>
+            <>
+                <h4>Food Selected</h4>
+                <p className="font-weight-bold">{selectedFood.description}</p>
+            </>
         );
     }
     function makePortionSelections(){
