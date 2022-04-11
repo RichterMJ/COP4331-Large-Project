@@ -205,6 +205,13 @@
   width: 700px;
   height: 550px;
 }
+.addRecipeModal{
+  min-width:1000px;
+  min-height: 500px;
+  width:auto;
+  height:auto;
+  max-width: 1000px;
+}
 #foodSearch{
   width: 80%;
   float: left;
