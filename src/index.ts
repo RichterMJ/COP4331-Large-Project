@@ -37,6 +37,8 @@ app.use((_, res, next) => {
     next()
 })
 
+setApp(app, dbClient)
+
 if(process.env.NODE_ENV === 'production'){
     // set static folder
     app.use(express.static('frontend/build'))
@@ -45,8 +47,6 @@ if(process.env.NODE_ENV === 'production'){
         res.sendFile(resolve(__dirname, 'frontend', 'build', 'index.html'))
     })
 }
-
-setApp(app, dbClient)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}.`)
