@@ -11,23 +11,37 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedPortion, setSelectedPortion] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+    const [recipeFoodToAdd, setRecipeFoodToAdd] = useState({});
     //const [clickSearch, setClickSearch] = useState(false);
-
+    
    
     function makeRecipeFoodsToAdd(){
-        
         return(
             <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
                 <div className="selectedFoodsList col-8">
                 {displaySelectedFoodList()}
                 </div>
                 <div className="selectedFoodDetails col-4">
-                    {displaySelectedFood}
-                    {makePortionSelections}
+                    
+                    {displaySelectedFood()}
+                    {makePortionSelections()}
                     {makeQuantityInput()}
+                    {makeActionButton("button", "btn btn-primary", ()=>{addFoodToFoodList()},"Add To Recipe", "addFoodToRecipeBtn")}
                 </div>
             </div>
         );
+    }
+    
+    function addFoodToFoodList(){
+        
+        const newRecipeFood = {
+            food: selectedFood,
+            amountUsed: {
+                portion: selectedPortion,
+                quantity: selectedFoodQuantity
+            }
+        }; // build a recipe object as declare in global-types.ts in backend
+        setSelectedFoodsList(selectedFood.push(newRecipeFood));
     }
     function deleteSelectedFood(foodIndex){
         setSelectedFoodsList(selectedFood.splice(foodIndex,1));
@@ -51,6 +65,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         );
     }
     function displaySelectedFood(){
+        console.log(selectedFood)
         return (
             <div>
                 {selectedFood.description}

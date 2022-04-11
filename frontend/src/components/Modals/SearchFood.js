@@ -105,7 +105,6 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
       }
   
       const searchJSON = makeNameSearchJSON();
-      console.log(searchJSON);
       try {
         setIsLoading(true);
         let res = await postJSON(searchJSON, "api/food/searchByName");
