@@ -1,2 +1,0 @@
-To view the swagger documentation in Visual Studio Code, use this extension:
-https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer
