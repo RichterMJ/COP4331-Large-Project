@@ -3,16 +3,19 @@ import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from ".
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
+import postJSON from "../RESTHelpers/PostHelpers";
 const storage = require("../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC}){
-    const [queryStart, setQueryStart] = useState(0);
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedPortion, setSelectedPortion] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+    const [recipeDescription, setRecipeDescription] = useState("");
     const [inputError, setInputError] = useState("");
     const [errorMessage, setMessage] = useState("");
+    const [queryStart, setQueryStart] = useState(0);
+    
     //const [clickSearch, setClickSearch] = useState(false);
 
 
@@ -33,6 +36,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         newFoodList.push(newRecipeFood);
         console.log(newFoodList)
         setSelectedFoodsList(newFoodList);
+        setInputError("");
     }
     function isValidRecipeFoodInputs(){
         console.log(selectedFoodQuantity);
@@ -43,11 +47,17 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         console.log("hello")
         return true;
     }
+    function makeRecipeDescriptionInput(){
+        return (
+            makeInputDiv("text", "recipeDescriptionInput" ,"form-control", recipeDescription, "recipeDescription", "Recipe Description", setRecipeDescription)
+        );
+    }
     function makeRecipeFoodsToAdd(){
         
         return(
             <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
                 <div className="selectedFoodsList col-8">
+                {makeRecipeDescriptionInput()}
                 {displaySelectedFoodList()}
                 </div>
                 <div className="selectedFoodDetails col-4">
@@ -96,7 +106,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
             <div>
                 <label htmlFor="portionsToSelect">Choose a portion:</label>
 
-                <select id="portionsToSelect" onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
+                <select id="portionsToSelect"  onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
                 {Object.keys(selectedFood).length !=0 && selectedFood.portions.map((portion, index) =>{
                     return <option key={index} value={index}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
                 })}
@@ -117,8 +127,35 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         setTC("");
         setQueryStart(0);
     }
-    function addRecipe(){
-        return null;
+    function prepareAddRecipeJSON(){
+        const recipeJSON ={
+            userId: user.userId,
+            ingredients: selectedFoodsList,
+            description: recipeDescription,
+            jwtToken: storage.retrieveToken()
+        }
+        return JSON.stringify(recipeJSON);
+    }
+    function handleAddRecipeRes(res){
+        if (res.error!=0){
+            setMessage("Error occured.")
+            return;
+        }
+        console.log(res);
+        storage.storeToken(res);
+        setMessage("Recipe Added");
+        setSelectedFoodsList([]);
+        setRecipeDescription("");
+        setTimeout(()=>{setMessage("")},3000); // set message back to normal after 3s
+    }
+    async function addRecipe(){
+        if (recipeDescription == "" || Object.keys(selectedFoodsList).length == 0){
+            setMessage("Error. Please add ingredients and decription");
+            return  // we abort when description is not added and recipe is empty
+        }
+        const recipeJSON = prepareAddRecipeJSON();
+        let res = await postJSON(recipeJSON, "api/users/data/recipes");
+        handleAddRecipeRes(res);
     }
     return (
         open ?
