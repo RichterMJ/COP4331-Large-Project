@@ -9,25 +9,72 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     const [queryStart, setQueryStart] = useState(0);
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
+    const [selectedPortion, setSelectedPortion] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
     //const [clickSearch, setClickSearch] = useState(false);
 
-    
+   
     function makeRecipeFoodsToAdd(){
+        
         return(
             <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
                 <div className="selectedFoodsList col-8">
-                hello
+                {displaySelectedFoodList()}
                 </div>
                 <div className="selectedFoodDetails col-4">
-                    <div>
-                        {selectedFood.description}
-                    </div>
-                    <div>
-                    
-                    {makeInputDiv("number", "quanityFoodInput", "w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
-                    </div>
+                    {displaySelectedFood}
+                    {makePortionSelections}
+                    {makeQuantityInput()}
                 </div>
+            </div>
+        );
+    }
+    function deleteSelectedFood(foodIndex){
+        setSelectedFoodsList(selectedFood.splice(foodIndex,1));
+    }
+    function makeSelectedFoodBubble(foodDescription, foodIndex){
+        return(
+            <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded">
+                {foodDescription} 
+                foodDescription
+                {makeButton("", "deleteSeletedFoodBtn",() => {deleteSelectedFood(foodIndex)}, <RiCloseLine/>)}
+            </div>
+        );
+    }
+    function displaySelectedFoodList(){
+        return (
+            <div className="selectedFoodList">
+                {selectedFoodsList.map((food,foodIndex) =>{
+                    return makeSelectedFoodBubble(food, foodIndex);
+                })}
+            </div>
+        );
+    }
+    function displaySelectedFood(){
+        return (
+            <div>
+                {selectedFood.description}
+            </div>
+        );
+    }
+    function makePortionSelections(){
+        return (
+            <div>
+                <label htmlFor="portionsToSelect">Choose a portion:</label>
+
+                <select id="portionsToSelect" >
+                {Object.keys(selectedFood).length !=0 && selectedFood.portions.map(portion =>{
+                    return <option key={portion.portionId} value={portion}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
+                })}
+                </select>
+            </div>
+        );
+    }
+    function makeQuantityInput(){
+        return (
+            <div>
+                    {makeLabel("quantityFoodInput", "Enter quantity","")}
+                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
             </div>
         );
     }

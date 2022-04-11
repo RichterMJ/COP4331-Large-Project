@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {makeButton} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
 
@@ -7,14 +7,14 @@ import SearchFood from "./SearchFood";
 
 function AddFoodModal({user, open, close, tc, setTC}){
    
-    const [selectedFood, setSelectedFood] = useState("");
+    const [selectedFood, setSelectedFood] = useState({});
     const [queryStart, setQueryStart] = useState(0);
 
     function resetTable(){
       setTC("");
       setQueryStart(0);
     }
-
+   
     function addFood(){
       console.log(selectedFood);
     }

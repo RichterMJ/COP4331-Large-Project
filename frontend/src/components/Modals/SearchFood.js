@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import postJSON from "../RESTHelpers/PostHelpers";
 import {makeButton} from "../divHelpers/divHelpers";
-import {CircleSpinner} from "react-spinners-kit"
+import {CircleSpinner} from "react-spinners-kit";
+
 
 const storage = require("../tokenStorage.js");
 
@@ -51,7 +52,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
           //Appends the new items to the table
           setTC(<div>{currentFoods} <FoodList foods={foods}/></div>);
           setQueryStart(queryStart + 1);
-          storage.storeToken();
+          
         }
     }
 
@@ -67,6 +68,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
           if(res.error != 0)
             continue;
 
+        storage.storeToken(res);
           foodsToConvert.push(res);
         } catch (e) {
           console.log(e);
@@ -80,7 +82,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
 
     function FoodList(props){
       return(
-        props.foods.map(f=> <Food key={"test"} food={f.food.description} portions={portionsToString(f.food.portions)}/>)
+        props.foods.map(f=> <Food key={f.food.fdcId} food={f.food} portions={portionsToString(f.food.portions)}/>)
       )
     }
 
@@ -123,8 +125,8 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
 
     function Food(props){
       return (
-          <button className="foodItem" onClick={function(){setSelectedFood(props.food)}} key={props.key}>
-          {props.food}
+          <button className="foodItem" onClick={function(){setSelectedFood(props.food)}}>
+          {props.food.description}
           <br/>
           {"Portion: " + props.portions}
           <br/>
