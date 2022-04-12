@@ -33,11 +33,6 @@ export function setApp (app: Express, client: MongoClient) {
     app.put('/api/users/data/foodRecords', foodRecordsPut(app, client))
     app.delete('/api/users/data/foodRecords', foodRecordsDelete(app, client))
 
-    app.post('/api/users/:userId/data/foodRecords', foodRecordsPost(app, client))
-    app.get('/api/users/:userId/data/foodRecords', foodRecordsGet(app, client))
-    app.put('/api/users/:userId/data/foodRecords', foodRecordsPut(app, client))
-    app.delete('/api/users/:userId/data/foodRecords', foodRecordsDelete(app, client))
-
     app.post('/api/users/data/recipes', recipesPost(app, client))
     app.get('/api/users/data/recipes', recipesGet(app, client))
     app.put('/api/users/data/recipes', recipesPut(app, client))
