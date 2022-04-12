@@ -172,11 +172,11 @@ export enum FoodRecordGetError {
 
 export type FoodRecordGetRequest =
     {
-        userId?: ObjectIdString
+        userId: ObjectIdString
         foodRecordId: ObjectIdString
         jwtToken: any
     } | {
-        userId?: ObjectIdString
+        userId: ObjectIdString
         startDate: IsoDate
         endDate: IsoDate
         jwtToken: any
