@@ -90,7 +90,7 @@ export function recipesPost(app: Express, client: MongoClient): RequestHandler {
                 ingredients,
                 fdcId: 0,
                 description,
-                nutrients: getTotalNutrientsRecipe(ingredients), // TODO Calculate total nutrients.
+                nutrients: getTotalNutrientsRecipe(ingredients),
                 portions: [{
                     portionId: 0,
                     portionName: "1 serving",
@@ -168,10 +168,15 @@ export enum RecipesGetError {
 }
 
 export type RecipesGetRequest = {
-    recipeId: ObjectIdString,
+    userId: ObjectIdString
+    recipeId: ObjectIdString
     jwtToken: any
 } | {
-    description: string,
+    userId: ObjectIdString
+    description: string
+    jwtToken: any
+} | {
+    userId: ObjectIdString
     jwtToken: any
 }
 
@@ -194,16 +199,16 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
 
         try {
 
+            const userId = req.query.userId ?? req.body.userId
             const recipeId = req.query.recipeId ?? req.body.recipeId
             const description = req.query.description?? req.body.description
             const jwtToken = req.query.jwtToken ?? req.body.jwtToken
             
-            if( token.isExpired(jwtToken))
-            {
-                response.jwtToken = null;
+            if ( token.isExpired(jwtToken)) {
+                response.jwtToken = null
                 response.error = RecipesGetError.jwtError
-                res.status(200).json(response);
-                return;
+                res.status(200).json(response)
+                return
             } else { 
                 response.jwtToken = jwtToken;
             }
@@ -214,17 +219,19 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
             if (recipeId != null) {
 
                 // Search by id.
+                console.log('Search by id.')
 
-                if (!isObjectIdString(recipeId)) {
+                if (!isObjectIdString(recipeId) || !isObjectIdString(userId)) {
                     response.error = RecipesGetError.InvalidRequest
-                    response.jwtToken = null;
+                    response.jwtToken = null
                     response.recipes = []
                     res.status(200).json(response)
                     return
                 }
 
                 const queryResults = await db.collection('Recipes').find({
-                    '_id': new ObjectId(recipeId)
+                    '_id': new ObjectId(recipeId),
+                    userId
                 }).toArray()
 
                 // Trusty that the database is formatted correctly.
@@ -232,11 +239,12 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
 
                 res.status(200).json(response)
                 return
-            } else {
+            } else if (description != null) {
                 
                 // Search by name.
+                console.log('Search by name.')
 
-                if (typeof description !== 'string') {
+                if (typeof description !== 'string' || !isObjectIdString(userId)) {
                     response.error = RecipesGetError.InvalidRequest
                     response.jwtToken = null;
                     response.recipes = []
@@ -255,6 +263,11 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                         }
                     },
                     {
+                        $match: {
+                            'userId': userId
+                        }
+                    },
+                    {
                         $limit: 10
                     }
                 ]).toArray()
@@ -262,6 +275,28 @@ export function recipesGet(app: Express, client: MongoClient): RequestHandler {
                 // Trusty that the database output is formatted correctly.
                 response.recipes = (queryResults as unknown as Recipe[]).map(extractRecipe)
 
+            } else {
+                
+                // Search for ALL.
+                console.log('Search for all.')
+
+                if (!isObjectIdString(userId)) {
+                    response.error = RecipesGetError.InvalidRequest
+                    response.jwtToken = null;
+                    response.recipes = []
+                    res.status(200).json(response)
+                    return
+                }
+
+                const queryResults = await db.collection('Recipes').find({
+                    userId
+                }).toArray()
+
+                // Trusty that the database is formatted correctly.
+                response.recipes = (queryResults as unknown as Recipe[]).map(extractRecipe)
+
+                res.status(200).json(response)
+                return
             }
         } catch (e) {
             console.log(e)
