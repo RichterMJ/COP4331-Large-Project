@@ -30,7 +30,7 @@ function EmailVerify(){
               console.log('An error has occured');
             } else {
               setMessage('Success!');
-              window.setTimeout(() => {window.location.href = "/"}, 1500);
+              window.setTimeout(() => {window.location.href = "/login"}, 1500);
             }
           } catch (e) {
             console.log(e.toString());
