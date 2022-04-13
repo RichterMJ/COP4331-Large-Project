@@ -67,10 +67,9 @@ export function edit(app: Express, client: MongoClient): RequestHandler {
             const db = client.db()
             const queryResults = await db
                 .collection('Users')
-                .updateOne({ '_id': new ObjectId(userId) }, {
-                    $set: { 'firstName': firstName,
-                        'lastName': lastName,
-                        'email': email,
+                .updateOne({ '_id': new ObjectId(userId), 'email': email }, {
+                    $set: { 'firstname': firstName,
+                        'lastname': lastName,
                         'password': password,
                         'weight': weight}
                 } )
