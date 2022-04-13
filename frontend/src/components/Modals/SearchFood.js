@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import postJSON from "../RESTHelpers/PostHelpers";
+import JSONRequest from "../RESTHelpers/JSONRequest";
 import {makeButton} from "../divHelpers/divHelpers";
 import {CircleSpinner} from "react-spinners-kit";
 
@@ -62,7 +62,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
         const searchIDJSON = makeIDSearchJSON(food.fdcId);
 
         try {
-          let res = await postJSON(searchIDJSON, "api/food/searchById");
+          let res = await JSONRequest("POST", searchIDJSON, "api/food/searchById");
 
           //If there is a problem with one of the items skip it
           if(res.error != 0)
@@ -108,7 +108,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
       console.log(searchJSON);
       try {
         setIsLoading(true);
-        let res = await postJSON(searchJSON, "api/food/searchByName");
+        let res = await JSONRequest("POST", searchJSON, "api/food/searchByName");
         console.log(res);
         await convertWithID(res, flag);
         setIsLoading(false);

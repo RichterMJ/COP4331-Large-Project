@@ -16,7 +16,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
     }
    
     function addFood(){
-      console.log(selectedFood);
+      
     }
     
 

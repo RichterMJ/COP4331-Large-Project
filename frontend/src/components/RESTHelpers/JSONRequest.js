@@ -1,19 +1,18 @@
 import buildPath from "../path";
 
-async function postJSON(json,url) {
+async function JSONRequest(method, json,url) {
     try {
         const response = await fetch(buildPath(url), {
-            method: "POST",
+            method: method,
             body: json,
             headers: {"Content-Type": "application/json"},
         });
     
         return JSON.parse(await response.text());
         
-        // console.log(res); print out api response too see the data
     } catch (e) {
         console.log(e.toString());
         return;
     }
 }
-export default postJSON;
+export default JSONRequest;

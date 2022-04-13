@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef} from "react";
 import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
-import postJSON from "./RESTHelpers/PostHelpers"
+import JSONRequest from "./RESTHelpers/JSONRequest"
 
 let storage = require('./tokenStorage.js');
 
@@ -72,7 +72,7 @@ function Login() {
    
     const loginJSON = makeLoginJSON(email,password);
   
-      const res = await postJSON(loginJSON,"api/users/login");
+      const res = await JSONRequest("POST", loginJSON,"api/users/login");
       console.log(res);
     
       handleLoginRes(res);

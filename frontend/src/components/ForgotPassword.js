@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResponseModal from "./Modals/ResponseModal";
 import buildPath from "./path";
-import postJSON from "./RESTHelpers/PostHelpers"
+import JSONRequest from "./RESTHelpers/JSONRequest"
 import { blankValidator, addInvalidStyle, makeErrorMessage, emailValidator} from "./Validators/InputValidator";
 import { makePTag,makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 
@@ -40,7 +40,7 @@ function ForgotPassword() {
 
     const emailJSON = prepareJSON();
     
-    let res = await postJSON(emailJSON,"api/users/forgotPassword/forgotPasswordEmail");
+    let res = await JSONRequest("POST", emailJSON,"api/users/forgotPassword/forgotPasswordEmail");
     handleForgotPasswordRes(res);
 
   };

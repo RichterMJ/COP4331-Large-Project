@@ -3,7 +3,7 @@ import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from ".
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
-import postJSON from "../RESTHelpers/PostHelpers";
+import JSONRequest from "../RESTHelpers/JSONRequest";
 const storage = require("../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC}){
@@ -159,7 +159,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
             return  // we abort when description is not added and recipe is empty
         }
         const recipeJSON = prepareAddRecipeJSON();
-        let res = await postJSON(recipeJSON, "api/users/data/recipes");
+        let res = await JSONRequest("PUT", recipeJSON, "api/users/data/recipes");
         handleAddRecipeRes(res);
     }
     return (
