@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
-import postJSON from "../RESTHelpers/PostHelpers";
+import JSONRequest from "../RESTHelpers/JSONRequest";
 
 
 function MyAccountModal({user, open, close}) {
@@ -112,7 +112,7 @@ function MyAccountModal({user, open, close}) {
         /// API function ready, waiting backend to add another API endpoint for this:
         // 
         // const profileChangesJSON = prepareEditProfileJSON();
-        // let res = await postJSON(profileChangesJSON, "/api/users/editUser");
+        // let res = await JSONRequest(profileChangesJSON, "/api/users/editUser");
         // handleEditRes(res);
         //
 

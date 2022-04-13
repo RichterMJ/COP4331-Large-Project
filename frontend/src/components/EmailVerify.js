@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import buildPath from "./path";
 import {makeButton, makeH2} from "./divHelpers/divHelpers";
+import JSONRequest from "./RESTHelpers/JSONRequest"
 
 function EmailVerify(){
 
@@ -16,18 +17,11 @@ function EmailVerify(){
         const verifyJSON = JSON.stringify(verifyData);
 
         try {
-            const response = await fetch(buildPath("api/users/emailVerification/verifyEmail"), {
-              method: "POST",
-              body: verifyJSON,
-              headers: { "Content-Type": "application/json" },
-            });
             
-            let res = JSON.parse(await response.text());
+            let res =  await JSONRequest("POST", verifyJSON, "api/users/emailVerification/verifyEmail");
       
-            console.log(res);
-
             if (res.error != 0) {
-              console.log('An error has occured');
+              console.log(res.error);
             } else {
               setMessage('Success!');
               window.setTimeout(() => {window.location.href = "/"}, 1500);

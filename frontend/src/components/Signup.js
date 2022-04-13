@@ -3,7 +3,7 @@ import VerifyModal from "./Modals/VerifyModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 import {isBlank, validWeight, validEmail, validPassword, matchingPasswords} from "./Validators/SignupValidators";
 import {makeErrorMessage} from "./Validators/InputValidator";
-import postJSON from "./RESTHelpers/PostHelpers";
+import JSONRequest from "./RESTHelpers/JSONRequest";
 
 function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -83,7 +83,7 @@ function Signup() {
 
         try{
           //For when this method is complete
-          let emailRes = await postJSON(emailJSON, "api/users/emailVerification/sendVerificationEmail");
+          let emailRes = await JSONRequest("POST", emailJSON, "api/users/emailVerification/sendVerificationEmail");
           handleSendEmailResponse(emailRes);
         }catch(e){
           console.log(e);
@@ -123,7 +123,7 @@ function Signup() {
     const signupJSON = makeSignupJSON();
 
     try{
-        let res = await postJSON(signupJSON, "api/users/register");
+        let res = await JSONRequest("POST", signupJSON, "api/users/register");
         console.log(res);
         handleSignupRes(res);
     }catch(e){

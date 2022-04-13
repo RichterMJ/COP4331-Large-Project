@@ -5,7 +5,7 @@ import { blankValidator, makeErrorMessage, addInvalidStyle, emailValidator, pass
 import Modal from "./Modals/ResponseModal";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import ResponseModal from "./Modals/ResponseModal";
-import postJSON from "./RESTHelpers/PostHelpers"
+import JSONRequest from "./RESTHelpers/JSONRequest"
 
 function ResetPassword() {
   const search = useLocation().search;
@@ -54,7 +54,7 @@ function ResetPassword() {
 
     const resetPasswordJSON = prepareResetPasswordJSON();
     
-    let res = await postJSON(resetPasswordJSON,"api/users/forgotPassword/forgotPasswordReset");
+    let res = await JSONRequest("POST", resetPasswordJSON,"api/users/forgotPassword/forgotPasswordReset");
     handleResetPasswordRes(res);
     
   };
