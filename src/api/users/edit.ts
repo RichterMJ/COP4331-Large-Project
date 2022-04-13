@@ -16,6 +16,7 @@ export type EditRequest = {
     firstName: string
     lastName: string
     email: string
+    oldPassword: string
     password: string
     weight: number
     jwtToken: any
@@ -35,6 +36,7 @@ export function edit(app: Express, client: MongoClient): RequestHandler {
             && 'firstName' in obj && typeof obj.firstName === 'string'
             && 'lastName' in obj && typeof obj.lastName === 'string'
             && 'email' in obj && typeof obj.email === 'string'
+            && 'oldPassword' in obj && typeof obj.oldPassword == 'string'
             && 'password' in obj && typeof obj.password === 'string'
             && 'weight' in obj && typeof obj.weight === 'number'
             && 'jwtToken' in obj && obj.jwtToken != null
@@ -52,7 +54,7 @@ export function edit(app: Express, client: MongoClient): RequestHandler {
                 return
             }
 
-            const { userId, firstName, lastName, email, password, weight, jwtToken } = req.body
+            const { userId, firstName, lastName, email, password, oldPassword, weight, jwtToken } = req.body
 
             if( token.isExpired(jwtToken))
             {
@@ -67,7 +69,7 @@ export function edit(app: Express, client: MongoClient): RequestHandler {
             const db = client.db()
             const queryResults = await db
                 .collection('Users')
-                .updateOne({ '_id': new ObjectId(userId), 'email': email }, {
+                .updateOne({ '_id': new ObjectId(userId), 'email': email, 'password': oldPassword }, {
                     $set: { 'firstname': firstName,
                         'lastname': lastName,
                         'password': password,
