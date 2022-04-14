@@ -1,2 +1,0 @@
-- name: Heroku Auto Deployment
-  uses: ElayGelbart/Heroku-Auto-Deployment@v1.0.7

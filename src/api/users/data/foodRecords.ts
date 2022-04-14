@@ -82,7 +82,6 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
 
     return async (req: Request, res: Response) => {
         let response: FoodRecordPostResponse = { foodRecordId: null, error: 0, jwtToken: null }
-
         try {
             if (!isFoodRecordPostRequest(req.body)) {
                 response.error = FoodRecordPostError.InvalidRequest
