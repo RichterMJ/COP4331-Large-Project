@@ -1,0 +1,10 @@
+To view the swagger documentation in Visual Studio Code, use this extension:
+https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi
+
+
+Alternatively, this extension also work:
+https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer
+
+
+SwaggerHub Link:
+https://app.swaggerhub.com/apis/kevinacahalan/giitfit/1.0.0

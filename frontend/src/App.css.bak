@@ -1,0 +1,189 @@
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  font-family: "Courier New", monospace;
+}
+#LoginHeader {
+  background-color: white;
+  width: 100vw;
+  display: flex;
+}
+.headerText {
+  color: black;
+  align-self: center;
+}
+#mainLogo {
+  height: 175px;
+}
+#loginButton {
+  color: rgb(199, 247, 187);
+  background-color: rgb(60, 179, 113);
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.firstRow {
+  margin-top: 20px;
+  display: flex;
+}
+
+.fNameBox {
+  margin-left: 50px;
+}
+
+.lNameBox {
+  margin-right: 125px;
+}
+
+.weightBox{
+  margin-left: -50px;
+}
+
+.longBox {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 10px;
+}
+
+.signupButton {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 50px;
+}
+
+.fNameInput{
+  min-width: 325px;
+  max-width: 325px;
+}
+
+.lNameInput{
+  min-width: 325px;
+  max-width: 325px;
+  margin-left: 50px;
+}
+
+.weightInput{
+  max-width: 85px;
+  margin-left: 50px;
+}
+
+.lNameLabel{
+  margin-left: 50px;
+}
+
+.weightLabel{
+  margin-left: 50px;
+<<<<<<< HEAD
+}
+
+.darkBG {
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 200vw;
+  height: 200vh;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.theModal {
+  width: 300px;
+  height: 175px;
+  background: white;
+  color: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+.heading {
+  margin: 0;
+  padding: 10px;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+}
+
+.modalContent {
+  padding: 10px;
+  font-size: 20px;
+  color: black;
+  text-align: center;
+}
+
+.modalActions {
+  position: absolute;
+  bottom: 2px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.actionsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.closeBtn {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 18px;
+  color: #2c3e50;
+  background: white;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-self: flex-end;
+  margin-top: -7px;
+  margin-right: -7px;
+}
+
+.closeBtn:hover {
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  transform: translate(-4px, 4px);
+}
+
+.okayBtn {
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 11px 28px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border: none;
+  color: #fff;
+  background: rgb(5, 32, 230);
+  transition: all 0.25s ease;
+}
+
+.okayBtn:hover {
+  box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+  transform: translateY(-1px);
+  background: rgb(32, 32, 223)
+}

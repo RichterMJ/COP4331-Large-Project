@@ -1,0 +1,518 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: GITFIT API
+  description: The GitFit API
+servers:
+  - url: https://git-fit-cop4331.herokuapp.com/api
+tags:
+  - name: Account Stuff
+    description: Some account stuff
+  - name: Food Record Stuff
+    description: Some food record stuff
+paths:
+  /users/emailVerification/sendVerificationEmail:
+    post:
+      tags:
+        - Account Stuff
+      summary: Verify email address
+      operationId: sendVerificationEmail
+      description: Send verification email or something
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendVerificationEmailRequest'
+        description: eh, something, or something
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sendVerificationEmailResponse'
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+  /users/emailVerification/verifyEmail:
+    post:
+      tags:
+        - Account Stuff
+      summary: Verify email address
+      operationId: verifyEmail
+      description: Verify email or something
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/verifyEmailRequest'
+        description: eh, something
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/verifyEmailResponse'
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+  /users/login:
+    post:
+      tags:
+        - Account Stuff
+      summary: Login
+      operationId: iDoNotRememberLogin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginOkResponse'
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/loginRequest'
+      description: API endpoint for logging in
+  /users/register:
+    post:
+      tags:
+        - Account Stuff
+      summary: Creates new users
+      operationId: doSignup
+      description: Creates new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+        description: create user
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+  /users/data/foodRecords:
+    post:
+      tags:
+        - Food Record Stuff
+      summary: Login
+      operationId: iDoNotRememberFOODRECORDPOSTHING
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/foodRecordPostResponse'
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/foodRecordPostRequest'
+      description: From my understanding, which could be slighy off... This API endpoint is for adding a foodrecord to a user.
+    get:
+      tags:
+        - Food Record Stuff
+      summary: Basically a Search
+      operationId: foodRecordsGet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodRecordGetResponse'
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      parameters:
+        - name: userId
+          in: query
+          description: >-
+            userId for user that want to search for
+          required: true
+          schema:
+            type: string
+            format: string
+            example: "6248b3843e1b4c6ea572d56b"
+        - name: startDate
+          in: query
+          description: >-
+            Give this query peram in combination with endDate for when you want to seach for food record by date range
+          ## required: true     ## only required for when a foodRecordId is not given
+          schema:
+            type: string
+            format: string
+            example: "2020-01-01"
+        - name: endDate
+          in: query
+          description: >-
+            Give this query peram in combination with startDate for when you want to search for food records by date range
+          ## required: true     ## only required for when a foodRecordId is not given
+          schema:
+            type: string
+            format: string
+            example: "2022-12-12"
+        - name: foodRecordId
+          in: query
+          description: >- 
+            Give this query peram for when you want to search for a single foodRecord by ID
+          ## required: true     ## only required for when a date range is not given
+          schema:
+            type: string
+            format: string
+            ## example: "625328622953c7a458b35a43"
+        - name: jwtToken
+          in: query
+          description: >-
+            jwtToken, grab new one from login API endpoint
+          required: true
+          schema:
+            type: string
+        
+      # requestBody:
+      #   $ref: '#/components/requestBodies/foodRecordGetRequest'
+      description: >-
+        Seach for food records. This API endpoint could either be given a date range to search, or a specific ID. The data is given in either a BODY or in the URL as quary variables
+    put:
+      tags:
+        - Food Record Stuff
+      summary: Put food record or something
+      operationId: foodRecordsPut
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/foodRecordPutRequest'
+      description: >-
+        PUT food record
+        
+        Can only PUT foods that have been POST'ed and not DELETE'ed
+        
+        Errors:
+        
+    delete:
+      tags:
+        - Food Record Stuff
+      summary: Delete Food Record
+      operationId: foodRecordsDelete
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:   ## IGNORE SWAGGER!!!  THIS THING IS FINE, EVEN WORKS FINE
+        $ref: '#/components/requestBodies/foodRecordDeleteRequest'
+      description: >-
+      
+        Errors:
+        Return error 0 if a record was deleted.
+        Returns error 1 for inviald request.
+        Returns error 2 for server error.
+        Returns error 3 for when there is no food with given ID.
+        Returns error 4 for out of date jwt
+        
+        Can only DELETE foods that have been posted
+    
+      
+components:
+  schemas:
+    sendVerificationEmailRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 6248b3843e1b4c6ea572d56b
+        email:
+          type: string
+          example: ke131012@gmail.com
+    sendVerificationEmailResponse:
+      type: object
+      properties:
+        error:
+          type: integer
+    verifyEmailRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 6248b3843e1b4c6ea572d56b
+    verifyEmailResponse:
+      type: object
+      properties:
+        error:
+          type: integer
+    loginOkResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        hasVerifiedEmail:
+          type: boolean
+        error:
+          type: integer
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+    loginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: ke131012@gmail.com
+        password:
+          type: string
+          example: test
+      
+    Register:
+      type: object
+      required:
+        - firstname
+        - lastname
+        - weight
+        - email
+        - password
+      properties:
+        firstname:
+          type: string
+          example: test
+        lastname:
+          type: string
+          example: test
+        weight:
+          type: integer
+          example: '67'
+        email:
+          type: string
+          example: ke131012@gmail.com
+        password:
+          type: string
+          example: test
+    jwtTokenString:
+      type: string
+      example: >-
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjQ5NjM3MTcyLCJleHAiOjE2NDk2Mzg5NzJ9.Uz5oNeVBOtUNLmNsFDzuZZ5kJPYFP5L4o4YiPkIvhYI
+    jwtTokenHolder:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjQ5NjM1NjI4LCJleHAiOjE2NDk2Mzc0Mjh9.NIscQAsAxZrLQ78ra2FjZw7e-nayIjTJai7kb0GWKsY
+        error:
+          type: integer
+    foodRecordGetRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+        foodRecordId:
+          type: string
+          example: 62537542002bf9bd865cae3b
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenHolder'
+    FoodRecordGetResponse:
+      type: object
+      properties:
+        foodRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoodRecord'
+        error:
+          type: integer
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenHolder'
+    FoodRecord:
+      type: object
+      properties:
+        foodRecordId?:
+          type: string
+        userId:
+          type: string
+        food:
+          $ref: '#/components/schemas/Food'
+        amountConsumed:
+          $ref: '#/components/schemas/AmountConsumed'
+        creationTimestamp:
+          $ref: '#/components/schemas/AnyDate'
+        eatenTimestamp:
+          $ref: '#/components/schemas/AnyDate'
+    AnyDate:
+      type: string
+      example: "2021-05-05T08:08:08Z"
+    IsoDate:
+      type: string
+      example: "2021-05-05T08:08:08Z"
+    foodRecordPostResponse:
+      type: object
+      properties:
+        foodRecordId:
+          type: string
+          example: 62490ba8854e9ef145f02dfa
+        error:
+          type: string
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenHolder'
+    foodRecordPostRequest:
+      type: object
+      properties:
+        food:
+          $ref: '#/components/schemas/Food'
+        userId:
+          $ref: '#/components/schemas/ObjectIdString'
+        eatenTimestamp:
+          $ref: '#/components/schemas/IsoTimestamp'
+        amountConsumed:
+          $ref: '#/components/schemas/AmountConsumed'
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+    foodRecordPutRequest:
+      type: object
+      properties:
+        food:
+          $ref: '#/components/schemas/Food'
+        userId:
+          type: string
+          example: 6248b3843e1b4c6ea572d56b
+        eatenTimestamp:
+          $ref: '#/components/schemas/AnyDate'
+        amountConsumed:
+          $ref: '#/components/schemas/AmountConsumed'
+        totalNutrients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nutrient'
+        creationTimestamp:
+          $ref: '#/components/schemas/AnyDate'
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+        foodRecordId:
+          type: string
+          example: 62537542002bf9bd865cae3b
+        
+
+    foodRecordDeleteRequest:
+      type: object
+      properties:
+        foodRecordId:
+          type: string
+          example: 625370c8002bf9bd865cae3a
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+
+
+    ObjectIdString:
+      type: string
+      example: 6248b3843e1b4c6ea572d56b
+    IsoTimestamp:
+      type: string
+      example: '2021-05-05T08:08:08Z'
+    AmountConsumed:
+      type: object
+      properties:
+        portion:
+          $ref: '#/components/schemas/Portion'
+        quantity:
+          type: integer
+    Food:
+      type: object
+      properties:
+        fdcId:
+          type: integer
+        description:
+          type: string
+          example: food description
+        nutrients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nutrient'
+        portions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portion'
+    Nutrient:
+      type: object
+      properties:
+        nutrientId:
+          type: integer
+        nutrientName:
+          type: string
+          example: Some vitamin or something
+        unitName:
+          type: string
+          example: g
+        value:
+          type: integer
+          example: 100
+    Portion:
+      type: object
+      properties:
+        portionId:
+          type: integer
+          example: 100
+        portionName:
+          type: string
+          example: Some random name
+        gramAmount:
+          type: integer
+          example: '100'
+  requestBodies:
+    loginRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/loginRequest'
+      description: Login API endpoint request
+      required: true
+    foodRecordPostRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/foodRecordPostRequest'
+      description: API endpoint request body for post off food record
+      required: true
+    foodRecordPutRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/foodRecordPutRequest'
+      description: API request for foodRecord Put
+      required: true
+    foodRecordDeleteRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/foodRecordDeleteRequest'
+      description: API request for foodRecord Delete
+      required: true
+    # loginRequest:
+    #   type: object
+    #   required:
+    #     - email
+    #     - password
+    #   properties:
+    #     email:
+    #       type: string
+    #       example: ke131012@gmail.com
+    #     password:
+    #       type: string
+    #       example: test

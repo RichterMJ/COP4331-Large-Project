@@ -1,0 +1,127 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  font-family: "Courier New", monospace;
+}
+
+#content {
+    width:100vw;
+    height:100vh;
+}
+#panels {
+    width:100vw;
+    height:100vh;
+    display:flex;
+    flex-direction: row;
+}
+#topPanel {
+  display:flex;
+  flex-direction: row;
+  background-color:white;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+#timeHeader {
+  font-size:30px;
+}
+.directionButton {
+  margin-top:10px;
+  font-size: 30px;
+}
+#mainInfoBox {
+  padding-right: 150px;
+  padding-left: 150px;
+}
+.dayFood {
+  display:flex;
+  justify-content: space-between;
+  gap:40px;
+  font-size: 20px;
+}
+.removeFoodButton {
+  color:red;
+  justify-self:right;
+}
+.editFoodButton {
+  font-size:17px;
+  color:green;
+  justify-self: right;
+}
+.buttons {
+  display:flex;
+  gap:10px;
+}
+#bottomSubPanel {
+  margin-top:45px;
+  max-height: 430px;
+  overflow-x: hidden;
+}
+.subPanelHeading{
+  margin-top:45px;
+  margin-bottom:30px;
+  font-size:30px;
+  text-align:center;
+}
+#rightPanel {
+  width: 80vw;
+  display:flex;
+  background-color:white;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  }
+#bottomSubPanel {
+  overflow-y: auto;
+  width:480px;
+}
+#leftPanel {
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+}
+#logoHeader {
+  display:flex;
+  flex-direction: row;
+  margin-bottom: 50px;
+}
+.leftPanelButton{
+  background-color: indianred;
+  color:white;
+  height:50px;
+  text-align: center;
+  text-justify: center;
+  padding-top:4px;
+  margin-bottom:50px;
+  border-radius: 5px;
+}
+.nutrientCatHeading{
+  font-size: 30px;
+  margin-bottom:20px;
+}
+.nutrientBar{
+  width:80px;
+  height:10px;
+  background-color:indianred;
+}
+.nutrientBars{
+  display:flex;
+  width: 480px;
+  flex-wrap:wrap;
+}
+.nutrientElement{
+  width:240px;
+  display:flex;
+  flex-direction: column;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+.nutrientBarProg{
+  width:20px;
+  height:10px;
+  background-color:lightgreen;
+
+}
