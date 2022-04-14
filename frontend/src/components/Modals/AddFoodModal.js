@@ -4,6 +4,7 @@ import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
 import JSONRequest from "../RESTHelpers/JSONRequest";
 
+const storage = require("../tokenStorage.js");
 
 function AddFoodModal({user, open, close, tc, setTC}){
    
@@ -18,25 +19,42 @@ function AddFoodModal({user, open, close, tc, setTC}){
       setQueryStart(0);
     }
    
-    /*        && (!('foodRecordId' in obj) || isObjectIdString(obj.foodRecordId))
-    && 'userId' in obj && isObjectIdString(obj.userId)
-    && 'food' in obj && isFood(obj.food)
-    && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
-    && 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp)
-    && 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp)
-    && 'totalNutrients' in obj && Array.isArray(obj.totalNutrients) && obj.totalNutrients.every(isNutrient)*/
+    /*
+    function isFoodRecordPostRequest(obj: any): obj is FoodRecordPostRequest {
+      return obj != null && typeof obj === 'object'
+          && 'food' in obj && isFood(obj.food)
+          && 'userId' in obj && isObjectIdString(obj.userId)
+          && 'eatenTimestamp' in obj && isIsoTimestamp(obj.eatenTimestamp)
+          && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
+          && 'jwtToken' in obj && obj.jwtToken != null
+    }*/
 
+    //{ food, userId, eatenTimestamp, amountConsumed, jwtToken }
     function makeFoodRecordJSON(){
       const foodData = {
-        userId: user.userId,
         food: selectedFood,
-        amountConsumed: 2
+        userId: user.userId,
+        eatenTimestamp: "1111-11-11T11:11:11.11Z",
+        amountConsumed: {portion: selectedPortion, quantity: Number(selectedFoodQuantity)},
+        jwtToken: storage.retrieveToken()
       }
+
+      return JSON.stringify(foodData);
     }
 
-    function addFood(){
+    async function addFood(){
+      const foodJSON = makeFoodRecordJSON();
+
+      console.log(foodJSON);
+      let res = await JSONRequest("POST", foodJSON, "api/users/data/foodRecords");
+      console.log(res.error);
+      resetPortionSelection();
+    }
+
+    function resetPortionSelection(){
       setSelectedFood({});
       setSelectedFoodQuantity(0);
+      setSelectedPortion({});
     }
 
 
