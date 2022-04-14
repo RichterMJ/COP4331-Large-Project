@@ -9,7 +9,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
    
     const [selectedFood, setSelectedFood] = useState({});
     const [queryStart, setQueryStart] = useState(0);
-    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
     const [selectedPortion, setSelectedPortion] = useState({});
 
 
@@ -35,34 +35,28 @@ function AddFoodModal({user, open, close, tc, setTC}){
     }
 
     function addFood(){
-      
+      setSelectedFood({});
+      setSelectedFoodQuantity(0);
     }
 
 
     function makeRecipeFoodsToAdd(){
         return(
-            <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
-                <div className="selectedFoodDetails col-4 addFood">
-                    {displaySelectedFood()}
-                    {makePortionSelections()}
-                    {makeQuantityInput()}
+            <div className="portionSelection fixed-bottom pd-3">
+                {makePortionSelections()}
+                <div className="selectQuantity">
+                  {makeQuantityInput()}
                 </div>
             </div>
         );
     }
 
-    function displaySelectedFood(){
-        return (
-            <>
-                <h4>Food Selected</h4>
-                <p className="font-weight-bold">{selectedFood.description}</p>
-            </>
-        );
-    }
     function makePortionSelections(){
         return (
             <div>
-                <label htmlFor="portionsToSelect">Choose a portion:</label>
+                <div>
+                  <label htmlFor="portionsToSelect">Choose a portion:</label>
+                </div>
 
                 <select id="portionsToSelect"  onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
                 {Object.keys(selectedFood).length !=0 && selectedFood.portions.map((portion, index) =>{
@@ -75,9 +69,10 @@ function AddFoodModal({user, open, close, tc, setTC}){
     function makeQuantityInput(){
         return (
             <div>
-                    {makeLabel("quantityFoodInput", "Enter quantity","")}
-                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
-                    
+                    {makeLabel("quantityFoodInput", "Enter quantity:","")}
+                    <div className="shortWidth">
+                      {makeInputDiv("number", "quantityFoodInput", "quantitySelect w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
+                    </div>                    
             </div>
         );
     }
