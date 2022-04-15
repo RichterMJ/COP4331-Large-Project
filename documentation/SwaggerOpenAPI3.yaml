@@ -99,12 +99,38 @@ paths:
           description: URL Not Found
         '500':
           description: Server Error
+  /users/data/recipes:
+      post:
+        tags:
+          - Recipe Stuff
+        summary: Login
+        operationId: recipesPost
+        responses:
+          '200':
+            description: OK
+          '404':
+            description: URL Not Found
+          '500':
+            description: Server Error
+        requestBody:
+          $ref: '#/components/requestBodies/recipesPostRequest'
+        description: >-
+          Add recipe to use, MAYBE?
+          
+          Errors:
+          Add recipe to use, MAYBE?
+          Returns error 0 if recipe was successfully posted
+          Returns error 1 for invaild request
+          Returns error 2 for server crash
+          Returns error 3 for invaild or out of date jwt
+
+  
   /users/data/foodRecords:
     post:
       tags:
         - Food Record Stuff
       summary: Login
-      operationId: iDoNotRememberFOODRECORDPOSTHING
+      operationId: foodRecordsPost
       responses:
         '200':
           description: OK
@@ -233,6 +259,52 @@ paths:
       
 components:
   schemas:
+#################### --  Random Stuff -- ######################
+    jwtTokenString:
+      type: string
+      example: >-
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQyMTQ0LCJleHAiOjE2NTAwNDM5NDR9.57jsPUhvVzeDFlKAiDskJ_REKiRMcfUFoikKaL5BbFg
+    jwtTokenHolder:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQyMTQ0LCJleHAiOjE2NTAwNDM5NDR9.57jsPUhvVzeDFlKAiDskJ_REKiRMcfUFoikKaL5BbFg
+        error:
+          type: integer
+    AnyDate:
+      type: string
+      example: "2021-05-05T08:08:08Z"
+    IsoDate:
+      type: string
+      example: "2021-05-05T08:08:08Z"
+      
+############## --  Login, Register, and email schemas  -- ##############
+    Register:
+      type: object
+      required:
+        - firstname
+        - lastname
+        - weight
+        - email
+        - password
+      properties:
+        firstname:
+          type: string
+          example: test
+        lastname:
+          type: string
+          example: test
+        weight:
+          type: integer
+          example: '67'
+        email:
+          type: string
+          example: ke131012@gmail.com
+        password:
+          type: string
+          example: test
     sendVerificationEmailRequest:
       type: object
       properties:
@@ -282,44 +354,25 @@ components:
         password:
           type: string
           example: test
-      
-    Register:
-      type: object
-      required:
-        - firstname
-        - lastname
-        - weight
-        - email
-        - password
-      properties:
-        firstname:
-          type: string
-          example: test
-        lastname:
-          type: string
-          example: test
-        weight:
-          type: integer
-          example: '67'
-        email:
-          type: string
-          example: ke131012@gmail.com
-        password:
-          type: string
-          example: test
-    jwtTokenString:
-      type: string
-      example: >-
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjQ5NjM3MTcyLCJleHAiOjE2NDk2Mzg5NzJ9.Uz5oNeVBOtUNLmNsFDzuZZ5kJPYFP5L4o4YiPkIvhYI
-    jwtTokenHolder:
+   
+## -- Recipe Stuff -- ##
+    recipesPostRequest:
       type: object
       properties:
-        accessToken:
+        userId:
+          $ref: '#/components/schemas/ObjectIdString'
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeFood'
+        description:
           type: string
           example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjQ5NjM1NjI4LCJleHAiOjE2NDk2Mzc0Mjh9.NIscQAsAxZrLQ78ra2FjZw7e-nayIjTJai7kb0GWKsY
-        error:
-          type: integer
+            This is a description for a recipe 
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+
+## -- Food Record CRUD -- ##
     foodRecordGetRequest:
       type: object
       properties:
@@ -356,12 +409,6 @@ components:
           $ref: '#/components/schemas/AnyDate'
         eatenTimestamp:
           $ref: '#/components/schemas/AnyDate'
-    AnyDate:
-      type: string
-      example: "2021-05-05T08:08:08Z"
-    IsoDate:
-      type: string
-      example: "2021-05-05T08:08:08Z"
     foodRecordPostResponse:
       type: object
       properties:
@@ -408,8 +455,6 @@ components:
         foodRecordId:
           type: string
           example: 62537542002bf9bd865cae3b
-        
-
     foodRecordDeleteRequest:
       type: object
       properties:
@@ -419,7 +464,7 @@ components:
         jwtToken:
           $ref: '#/components/schemas/jwtTokenString'
 
-
+####################### -- General definitions -- ######################
     ObjectIdString:
       type: string
       example: 6248b3843e1b4c6ea572d56b
@@ -475,6 +520,16 @@ components:
         gramAmount:
           type: integer
           example: '100'
+    RecipeFood:
+      type: object
+      properties:
+        food:
+          $ref: '#/components/schemas/Food'
+        amountUsed:
+          $ref: '#/components/schemas/AmountConsumed'
+          
+######################## -- Request Boides -- ########################
+## -- Food Record Stuff -- ##
   requestBodies:
     loginRequest:
       content:
@@ -495,15 +550,40 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/foodRecordPutRequest'
-      description: API request for foodRecord Put
+      description: API request for recipesPost Put
       required: true
     foodRecordDeleteRequest:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/foodRecordDeleteRequest'
-      description: API request for foodRecord Delete
+      description: API request for recipesPost Delete
       required: true
+      
+## -- RECIPE STUFF -- ##
+    recipesPostRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/recipesPostRequest'
+      description: API endpoint recipes post
+      required: true
+    # recipesPutRequest:
+    #   content:
+    #     application/json:
+    #       schema:
+    #         $ref: '#/components/schemas/recipesPutRequest'
+    #   description: API request for recipes Put
+    #   required: true
+    # recipesDeleteRequest:
+    #   content:
+    #     application/json:
+    #       schema:
+    #         $ref: '#/components/schemas/recipesDeleteRequest'
+    #   description: API request for recipes Delete
+    #   required: true
+      
+      
     # loginRequest:
     #   type: object
     #   required:
