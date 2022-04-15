@@ -68,7 +68,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
           if(res.error != 0)
             continue;
 
-        storage.storeToken(res);
+          storage.storeToken(res);
           foodsToConvert.push(res);
         } catch (e) {
           console.log(e);
@@ -82,16 +82,8 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
 
     function FoodList(props){
       return(
-        props.foods.map(f=> <Food key={f.food.fdcId} food={f.food} portions={portionsToString(f.food.portions)}/>)
+        props.foods.map(f=> <Food key={f.food.fdcId} food={f.food}/>)
       )
-    }
-
-    function portionsToString(portions){
-      let res = "";
-      for(let portion of portions){
-        res += portion.portionName;
-      }
-      return res;
     }
 
     //These will be added to separate files
@@ -126,10 +118,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
     function Food(props){
       return (
           <button className="foodItem" onClick={function(){setSelectedFood(props.food)}}>
-          {props.food.description}
-          <br/>
-          {"Portion: " + props.portions}
-          <br/>
+            {props.food.description}
           </button>
       )
     }
