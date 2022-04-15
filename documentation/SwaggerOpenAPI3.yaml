@@ -100,36 +100,57 @@ paths:
         '500':
           description: Server Error
   /users/data/recipes:
-      post:
-        tags:
-          - Recipe Stuff
-        summary: Login
-        operationId: recipesPost
-        responses:
-          '200':
-            description: OK
-          '404':
-            description: URL Not Found
-          '500':
-            description: Server Error
-        requestBody:
-          $ref: '#/components/requestBodies/recipesPostRequest'
-        description: >-
-          Add recipe to use, MAYBE?
+    post:
+      tags:
+        - Recipe Stuff
+      summary: Recipe post
+      operationId: recipesPost
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/recipesPostRequest'
+      description: >-
+        Add recipe to use, MAYBE?
+        
+        Errors:
+        Add recipe to use, MAYBE?
+        Returns error 0 if recipe was successfully posted
+        Returns error 1 for invaild request
+        Returns error 2 for server crash
+        Returns error 3 for invaild or out of date jwt
+    put:
+      tags:
+        - Recipe Stuff
+      summary: Put a recipe
+      operationId: recipesPut
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/recipesPutRequest'
+      description: >-
+        PUT recipe
+        
+        Although I have not tested, it seems only foods that have been POST'ed and not DELETE'ed and be PUT
+        
+        Errors:
           
-          Errors:
-          Add recipe to use, MAYBE?
-          Returns error 0 if recipe was successfully posted
-          Returns error 1 for invaild request
-          Returns error 2 for server crash
-          Returns error 3 for invaild or out of date jwt
 
   
   /users/data/foodRecords:
     post:
       tags:
         - Food Record Stuff
-      summary: Login
+      summary: Food record post
       operationId: foodRecordsPost
       responses:
         '200':
@@ -148,7 +169,7 @@ paths:
     get:
       tags:
         - Food Record Stuff
-      summary: Basically a Search
+      summary: Basically a Search for finding food records for a given userid
       operationId: foodRecordsGet
       responses:
         '200':
@@ -213,7 +234,7 @@ paths:
     put:
       tags:
         - Food Record Stuff
-      summary: Put food record or something
+      summary: Put food record
       operationId: foodRecordsPut
       responses:
         '200':
@@ -263,14 +284,14 @@ components:
     jwtTokenString:
       type: string
       example: >-
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQyMTQ0LCJleHAiOjE2NTAwNDM5NDR9.57jsPUhvVzeDFlKAiDskJ_REKiRMcfUFoikKaL5BbFg
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQzNDY1LCJleHAiOjE2NTAwNDUyNjV9.WJ0R6MSRRHb0CUjA5Pk-5PMupGUT375EGB_5bflL0_s
     jwtTokenHolder:
       type: object
       properties:
         accessToken:
           type: string
           example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQyMTQ0LCJleHAiOjE2NTAwNDM5NDR9.57jsPUhvVzeDFlKAiDskJ_REKiRMcfUFoikKaL5BbFg
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQzNDY1LCJleHAiOjE2NTAwNDUyNjV9.WJ0R6MSRRHb0CUjA5Pk-5PMupGUT375EGB_5bflL0_s
         error:
           type: integer
     AnyDate:
@@ -371,6 +392,14 @@ components:
             This is a description for a recipe 
         jwtToken:
           $ref: '#/components/schemas/jwtTokenString'
+    recipesPutRequest:
+      type: object
+      properties:
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+
 
 ## -- Food Record CRUD -- ##
     foodRecordGetRequest:
@@ -439,7 +468,7 @@ components:
           $ref: '#/components/schemas/Food'
         userId:
           type: string
-          example: 6248b3843e1b4c6ea572d56b
+          example: "6248b3843e1b4c6ea572d56b"
         eatenTimestamp:
           $ref: '#/components/schemas/AnyDate'
         amountConsumed:
@@ -454,13 +483,13 @@ components:
           $ref: '#/components/schemas/jwtTokenString'
         foodRecordId:
           type: string
-          example: 62537542002bf9bd865cae3b
+          example: "62537542002bf9bd865cae3b"
     foodRecordDeleteRequest:
       type: object
       properties:
         foodRecordId:
           type: string
-          example: 625370c8002bf9bd865cae3a
+          example: "625370c8002bf9bd865cae3a"
         jwtToken:
           $ref: '#/components/schemas/jwtTokenString'
 
@@ -527,6 +556,32 @@ components:
           $ref: '#/components/schemas/Food'
         amountUsed:
           $ref: '#/components/schemas/AmountConsumed'
+    Recipe:
+      type: object
+      properties:
+        fdcId:
+          type: integer
+        description:
+          type: string
+          example: food description
+        nutrients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nutrient'
+        portions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portion'
+        recipeId:
+          type: string
+          example: "6259aa68b22b93aa10a9fd34"
+        userId:
+          type: string
+          example: "6248b3843e1b4c6ea572d56b"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeFood'
           
 ######################## -- Request Boides -- ########################
 ## -- Food Record Stuff -- ##
@@ -568,13 +623,13 @@ components:
             $ref: '#/components/schemas/recipesPostRequest'
       description: API endpoint recipes post
       required: true
-    # recipesPutRequest:
-    #   content:
-    #     application/json:
-    #       schema:
-    #         $ref: '#/components/schemas/recipesPutRequest'
-    #   description: API request for recipes Put
-    #   required: true
+    recipesPutRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/recipesPutRequest'
+      description: API request for recipes Put
+      required: true
     # recipesDeleteRequest:
     #   content:
     #     application/json:
