@@ -11,6 +11,7 @@ import { verifyEmail } from './api/users/emailVerification/verifyEmail'
 import { forgotPasswordEmail } from './api/users/forgotPassword/forgotPasswordEmail'
 import { forgotPasswordReset } from './api/users/forgotPassword/forgotPasswordReset'
 import { foodAverage, FoodAverageError } from './api/food/foodAverage'
+import { rdi } from './api/food/rdi'
 
 /* Set up the routing. Logic should go under './api/'. */
 export function setApp (app: Express, client: MongoClient) {
@@ -27,6 +28,7 @@ export function setApp (app: Express, client: MongoClient) {
     app.post('/api/food/searchByName', searchFoodByName(app, client))
     app.post('/api/food/searchById', searchFoodById(app, client))
     app.post('/api/food/foodAverage', foodAverage(app, client))
+    app.get('/api/food/rdi', rdi(app, client))
 
     app.post('/api/users/data/foodRecords', foodRecordsPost(app, client))
     app.get('/api/users/data/foodRecords', foodRecordsGet(app, client))
