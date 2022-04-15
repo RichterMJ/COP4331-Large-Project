@@ -19,17 +19,6 @@ function AddFoodModal({user, open, close, tc, setTC}){
       setQueryStart(0);
     }
    
-    /*
-    function isFoodRecordPostRequest(obj: any): obj is FoodRecordPostRequest {
-      return obj != null && typeof obj === 'object'
-          && 'food' in obj && isFood(obj.food)
-          && 'userId' in obj && isObjectIdString(obj.userId)
-          && 'eatenTimestamp' in obj && isIsoTimestamp(obj.eatenTimestamp)
-          && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
-          && 'jwtToken' in obj && obj.jwtToken != null
-    }*/
-
-    //{ food, userId, eatenTimestamp, amountConsumed, jwtToken }
     function makeFoodRecordJSON(){
       const foodData = {
         food: selectedFood,
@@ -84,6 +73,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
             </div>
         );
     }
+    
     function makeQuantityInput(){
         return (
             <div>
