@@ -6,24 +6,6 @@
  * In fact, we may have been able to use a library such as mongoose. Oh well.
  */
 
-let logXmlDepth = 0
-const doWeLogXml = false
-
-export function logXmlInline(name: string, data: any) {
-    console.log(`${'  '.repeat(logXmlDepth)}<${name}> ${data} </${name}>`)
-}
-
-export function logXml(name: string, fn: any) {
-    if (!doWeLogXml) {
-        return
-    }
-
-    console.log(`${'  '.repeat(logXmlDepth)}<${name}>`)
-    logXmlDepth += 1
-    fn()
-    logXmlDepth -= 1
-    console.log(`${'  '.repeat(logXmlDepth)}</${name}>`)
-}
 
 ////////////////////////////////////////
 // type ObjectIdString
@@ -139,13 +121,6 @@ export type Nutrient = {
 }
 
 export function isNutrient(obj: any): obj is Nutrient {
-    logXml('Nutrient', () => {
-        logXmlInline('nutrientId', 'nutrientId' in obj && typeof obj.nutrientId === 'number')
-        logXmlInline('nutrientName', 'nutrientName' in obj && typeof obj.nutrientName === 'string')
-        logXmlInline('unitName', 'unitName' in obj && typeof obj.unitName === 'string')
-        logXmlInline('value', 'value' in obj && typeof obj.value === 'number')
-    })
-
     return obj != null && typeof obj === 'object'
         && 'nutrientId' in obj && typeof obj.nutrientId === 'number'
         && 'nutrientName' in obj && typeof obj.nutrientName === 'string'
@@ -177,12 +152,6 @@ export type Food = {
 
 /* Programmatically ensure `obj` is of type `FoodRecordPostRequest`. */
 export function isFood(obj: any): obj is Food {
-    logXml('Food', () => {
-        logXmlInline('description', 'description' in obj && typeof obj.description === 'string')
-        logXmlInline('nutrients', 'nutrients' in obj && Array.isArray(obj.nutrients) && obj.nutrients.every(isNutrient))
-        logXmlInline('portions', 'portions' in obj && Array.isArray(obj.portions) && obj.portions.every(isPortion))
-    })
-
     return obj != null && typeof obj === 'object'
         && 'fdcId' in obj && typeof obj.fdcId === 'number'
         && 'description' in obj && typeof obj.description === 'string'
@@ -208,15 +177,6 @@ export type FoodRecord = {
 
 /* Programmatically ensure `obj` is of type `FoodRecordPostRequest`. */
 export function isFoodRecord(obj: any): obj is FoodRecord {
-    logXml('FoodRecord', () => {
-        logXmlInline('userId', 'userId' in obj && isObjectIdString(obj.userId))
-        logXmlInline('food', 'food' in obj && isFood(obj.food))
-        logXmlInline('amountConsumed', 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed))
-        logXmlInline('creationTimestamp', 'creationTimestamp' in obj && isAnyDate(obj.creationTimestamp))
-        logXmlInline('eatenTimestamp', 'eatenTimestamp' in obj && isAnyDate(obj.eatenTimestamp))
-        logXmlInline('totalNutrients', 'totalNutrients' in obj && Array.isArray(obj.totalNutrients) && obj.totalNutrients.every(isNutrient))
-    })
-    
     return obj != null && typeof obj === 'object'
         && (!('foodRecordId' in obj) || isObjectIdString(obj.foodRecordId))
         && 'userId' in obj && isObjectIdString(obj.userId)
