@@ -123,6 +123,57 @@ paths:
         Returns error 1 for invaild request
         Returns error 2 for server crash
         Returns error 3 for invaild or out of date jwt
+    get:
+      tags:
+        - Recipe Stuff
+      summary: A searching for finding food records for given userId
+      operationId: recipesGet
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      parameters:
+        - name: userId
+          in: query
+          description: >-
+            userId for user that want to search for
+          required: true
+          schema:
+            type: string
+            format: string
+            example: "6248b3843e1b4c6ea572d56b"
+        - name: recipeId
+          in: query
+          description: >- 
+            Search for a single recipe by ID
+          ## required: true
+          schema:
+            type: string
+            format: string
+            ## example: "SOMETHING"
+        - name: description
+          in: query
+          description: >- 
+            Search for recipes by decription for given userId, THIS SEEMS TO MAYBE NOT BE WORKING CORRECTLY
+          ## required: true
+          schema:
+            type: string
+            format: string
+            ## example: "SOMETHING"
+        - name: jwtToken
+          in: query
+          description: >-
+            jwtToken, grab new one from login API endpoint
+          required: true
+          schema:
+            $ref: '#/components/schemas/jwtTokenString'
+      # requestBody:
+      #   $ref: '#/components/requestBodies/recipesGetRequest'
+      description: >-
+        I am not feel like typing this RN FIXME
     put:
       tags:
         - Recipe Stuff
@@ -143,8 +194,96 @@ paths:
         Although I have not tested, it seems only foods that have been POST'ed and not DELETE'ed and be PUT
         
         Errors:
-          
-
+  /food/foodAverage:
+    post:
+      tags:
+        - Food Tools
+      summary: Food average post
+      operationId: foodAverage
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/foodAveragePostRequest'
+      description: >-
+        Get adverage food something for date range
+        
+        Errors:
+        Add recipe to use, MAYBE?
+        Returns error 0 if recipe was successfully posted
+        Returns error 1 for invaild request
+        Returns error 2 for server crash
+        Returns error 3 on invalid date range
+        Returns error 4 for invaild or out of date jwt
+  /food/searchByName:
+    post:
+      tags:
+        - Food Tools
+      summary: Search for food by name
+      operationId: searchFoodByName
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/searchFoodByNamePostRequest'
+      description: >-
+        A search thing for foods by name
+        
+        Errors:
+        Add recipe to use, MAYBE?
+        Returns error 0 if recipe was successfully posted
+        Returns error 1 for invaild request
+        Returns error 2 for server crash
+        Returns error 3 for invaild or out of date jwt
+  /food/searchById:
+    post:
+      tags:
+        - Food Tools
+      summary: Search for food by name
+      operationId: searchFoodById
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      requestBody:
+        $ref: '#/components/requestBodies/searchFoodByIdPostRequest'
+      description: >-
+        A search thing for foods by Id
+        
+        Errors:
+        Add recipe to use, MAYBE?
+        Returns error 0 if recipe was successfully posted
+        Returns error 1 for invaild request
+        Returns error 2 for server crash
+        Returns error 3 for invaild or out of date jwt
+  /food/rdi:
+    get:
+      tags:
+        - Food Tools
+      summary: rdi something, NOT SURE
+      operationId: rdi
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: URL Not Found
+        '500':
+          description: Server Error
+      description: >-
+        Some rdi thing
+        
+        Errors:
   
   /users/data/foodRecords:
     post:
@@ -284,24 +423,24 @@ components:
     jwtTokenString:
       type: string
       example: >-
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQzNDY1LCJleHAiOjE2NTAwNDUyNjV9.WJ0R6MSRRHb0CUjA5Pk-5PMupGUT375EGB_5bflL0_s
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDc1MDQ1LCJleHAiOjE2NTAwNzY4NDV9.ov8mZwyAAaudgUCi0XESX_ET3sdNA-q9ncnjaVI-JZ8
     jwtTokenHolder:
       type: object
       properties:
         accessToken:
           type: string
           example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDQzNDY1LCJleHAiOjE2NTAwNDUyNjV9.WJ0R6MSRRHb0CUjA5Pk-5PMupGUT375EGB_5bflL0_s
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ4YjM4NDNlMWI0YzZlYTU3MmQ1NmIiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0IiwiaWF0IjoxNjUwMDc1MDQ1LCJleHAiOjE2NTAwNzY4NDV9.ov8mZwyAAaudgUCi0XESX_ET3sdNA-q9ncnjaVI-JZ8
         error:
           type: integer
     AnyDate:
       type: string
-      example: "2021-05-05T08:08:08Z"
+      example: "2021-05-05T08:08:08Z" ## maybe should be something like "2020-01-01"
     IsoDate:
       type: string
-      example: "2021-05-05T08:08:08Z"
+      example: "2021-05-05T08:08:08Z" ## maybe should be something like "2020-01-01"
       
-############## --  Login, Register, and email schemas  -- ##############
+## --  Login, Register, and email schemas  -- ##
     Register:
       type: object
       required:
@@ -400,6 +539,47 @@ components:
         jwtToken:
           $ref: '#/components/schemas/jwtTokenString'
 
+## -- Food Stuff -- ##
+    foodAveragePostRequest:
+      type: object
+      properties:
+        startDate:
+          type: string
+          example: "2020-01-01"
+        endDate:
+          type: string
+          example: "2022-09-09"
+        userId:
+          type: string
+          example: "6248b3843e1b4c6ea572d56b"
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+    searchFoodByNamePostRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          example: "chicken"
+        pageSize:
+          type: integer
+          example: 10
+        start:
+          type: integer
+          example: 0
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+    searchFoodByIdPostRequest:
+      type: object
+      properties:
+        fdcId:
+          type: integer
+          example: "170790"
+        jwtToken:
+          $ref: '#/components/schemas/jwtTokenString'
+          
+        
+        
+
 
 ## -- Food Record CRUD -- ##
     foodRecordGetRequest:
@@ -493,7 +673,7 @@ components:
         jwtToken:
           $ref: '#/components/schemas/jwtTokenString'
 
-####################### -- General definitions -- ######################
+## -- General definitions -- ##
     ObjectIdString:
       type: string
       example: 6248b3843e1b4c6ea572d56b
@@ -528,6 +708,7 @@ components:
       properties:
         nutrientId:
           type: integer
+          example: 1098
         nutrientName:
           type: string
           example: Some vitamin or something
@@ -637,17 +818,26 @@ components:
     #         $ref: '#/components/schemas/recipesDeleteRequest'
     #   description: API request for recipes Delete
     #   required: true
-      
-      
-    # loginRequest:
-    #   type: object
-    #   required:
-    #     - email
-    #     - password
-    #   properties:
-    #     email:
-    #       type: string
-    #       example: ke131012@gmail.com
-    #     password:
-    #       type: string
-    #       example: test
+
+## -- Food Stuff -- ##
+    foodAveragePostRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/foodAveragePostRequest'
+      description: API endpoint food average post
+      required: true
+    searchFoodByNamePostRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/searchFoodByNamePostRequest'
+      description: API endpoint for searching food by name
+      required: true
+    searchFoodByIdPostRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/searchFoodByIdPostRequest'
+      description: API endpoint for searching food by Id
+      required: true
