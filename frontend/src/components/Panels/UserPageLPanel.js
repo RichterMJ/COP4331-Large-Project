@@ -3,10 +3,13 @@ import {makeActionButton} from "../divHelpers/divHelpers.js";
 import AddFoodModal from "../Modals/AddFoodModal";
 import MyAccountModal from "../Modals/MyAccountModal.js";
 import AddRecipeModal from "../Modals/AddRecipeModal.js";
-
+import RecipeModal from "../Modals/RecipeModal.js";
 
 function addFoodEvent(toggleAFM){
     toggleAFM();
+}
+function displayRecipe(toggleDR){
+    toggleDR();
 }
 
 function makeRecipeEvent(toggleMR){
@@ -31,6 +34,7 @@ function LeftPanel({user}){
     const [myAccountOpen, setMyAccountOpen] = useState(false);
     const [addRecipeOpen, setAddRecipeOpen] = useState(false);
     const [tableContent, setContent] = useState("");
+    const [recipeOpen, setRecipeOpen]= useState(false);
 
 
     //Makes it so table content in add food is set to blank once opened
@@ -38,6 +42,7 @@ function LeftPanel({user}){
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
     const toggleMA = () => setMyAccountOpen(!myAccountOpen);
     const toggleMR = () => setAddRecipeOpen(!addRecipeOpen);
+    const toggleDR = () => setRecipeOpen(!recipeOpen);
 
  
     return(
@@ -49,10 +54,13 @@ function LeftPanel({user}){
                             "Make Recipe","makeRecipeButton")}
           {makeActionButton("button", "leftPanelButton",() => myAccountEvent(toggleMA),
                             "My Account","myAccountButton")}
+            {makeActionButton("button", "leftPanelButton",() => displayRecipe(toggleDR),
+                            "Recipe","recipeButton")}
           <main>
             {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
-            {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
             {<AddRecipeModal user={user} open={addRecipeOpen} close={toggleMR} tc={tableContent} setTC={toggleTC} />}
+            {<RecipeModal user={user} open={recipeOpen} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
+            {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
           </main>
         </div>
     )
