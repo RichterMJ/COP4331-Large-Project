@@ -1,11 +1,11 @@
+import React, { PureComponent } from 'react';
 import buildPath from "../path";
-
-async function JSONRequest(method, json,url) {
+async function GETRequest(url){
     try {
         const response = await fetch(buildPath(url), {
-            method: method,
-            body: json,
+            method: 'GET',
             headers: {"Content-Type": "application/json"},
+            mode: 'cors'
         });
     
         return JSON.parse(await response.text());
@@ -15,5 +15,4 @@ async function JSONRequest(method, json,url) {
         return;
     }
 }
-
-export default JSONRequest;
+export default GETRequest;

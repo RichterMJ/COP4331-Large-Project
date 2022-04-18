@@ -143,6 +143,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     }
     function handleAddRecipeRes(res){
         if (res.error!=0){
+            console.log(res);
             setMessage("Error occured.")
             return;
         }
@@ -159,7 +160,8 @@ function AddRecipeModal({user, open, close, tc, setTC}){
             return  // we abort when description is not added and recipe is empty
         }
         const recipeJSON = prepareAddRecipeJSON();
-        let res = await JSONRequest("PUT", recipeJSON, "api/users/data/recipes");
+        console.log(recipeJSON);
+        let res = await JSONRequest("POST", recipeJSON, "api/users/data/recipes");
         handleAddRecipeRes(res);
     }
     return (
