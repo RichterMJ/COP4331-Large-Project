@@ -6,7 +6,7 @@ import {CircleSpinner} from "react-spinners-kit";
 
 const storage = require("../tokenStorage.js");
 
-function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQueryStart}){
+function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable, queryStart, setQueryStart}){
     const [foodQuery, setFoodQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const pageSize = 10;
@@ -117,7 +117,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
 
     function Food(props){
       return (
-          <button className="foodItem" onClick={function(){setSelectedFood(props.food)}}>
+          <button className="foodItem" onClick={function(){setSelectedFood(props.food); setSelectedPortion(props.food.portions[0])}}>
             {props.food.description}
           </button>
       )
