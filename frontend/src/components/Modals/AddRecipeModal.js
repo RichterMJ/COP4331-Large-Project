@@ -13,6 +13,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     const [recipeDescription, setRecipeDescription] = useState("");
     const [errorMessage, setMessage] = useState("");
     const [queryStart, setQueryStart] = useState(0);
+    console.log("add recipe modal detected")
     
     //const [clickSearch, setClickSearch] = useState(false);
     function makeRecipeDescriptionInput(){
@@ -25,21 +26,15 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     }
 
     function makeRecipeFoodsToAdd(){
+        console.log("hello123")
         return(
             <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
                 <div className="selectedFoodsList col-8">
                 {makeRecipeDescriptionInput()}
-                <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} />
-                {/* {makeRecipeDescriptionInput()}
-                {displaySelectedFoodList()} */}
+                    <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} setSelectedFood={setSelectedFood}/>
                 </div>
                 <div className="selectedFoodDetails col-4">
-                <AddFoodToRecipeFoodList setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
-                {/* {displaySelectedFood()}
-                   {makePortionSelections()}
-                  {makeQuantityInput()}
-                   {makeActionButton("button", "btn btn-primary", ()=>{addFoodToFoodList()},"Add To Recipe", "addFoodToRecipeBtn")}
-                   {makeErrorMessage(inputError)} */}
+                    <AddFoodToRecipeFoodList setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
                 </div>
             </div>
         );
@@ -106,7 +101,8 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
         : null
     );
 }
-function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList}){
+function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSelectedFood}){
+    console.log("hello123233")
     function deleteSelectedFood(foodIndex){
         const newFoodList = [...selectedFoodsList]; // copy to newList
         newFoodList.splice(foodIndex,1);
@@ -115,7 +111,7 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList}){
     function SelectedFoodBubble({recipeFood, foodIndex}){
         const recipeFoodDetails = `${recipeFood.amountUsed.quantity} ${recipeFood.food.description} (${recipeFood.amountUsed.portion.portionName ?? recipeFood.amountUsed.portion.gramAmount})`;
         return(
-            <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded">
+            <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded" onClick={()=>{setSelectedFood(recipeFood.food)}}>
                 {recipeFoodDetails} 
                 {makeButton("", "deleteSeletedFoodBtn",() => {deleteSelectedFood(foodIndex)}, <RiCloseLine/>)}
             </div>
@@ -123,10 +119,12 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList}){
     }
     function displaySelectedFoodList(){
         console.log(selectedFoodsList);
+        console.log("hello")
         return (
             <div className="selectedFoodList">
-                <h3>Food Added</h3>
+                <h3>Ingredients</h3>
                 {selectedFoodsList.map((recipeFood,index) =>{
+                    console.log("12321321321")
                     return <SelectedFoodBubble key={index} recipeFood={recipeFood} foodIndex={index}/>
                 })}
             </div>

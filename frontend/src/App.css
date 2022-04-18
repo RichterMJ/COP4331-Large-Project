@@ -89,6 +89,10 @@
 .weightLabel {
   margin-left: 50px;
 }
+.selectedFoodBuble:hover{
+  cursor: pointer;
+  background-color: bisque;
+}
 
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
