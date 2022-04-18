@@ -29,7 +29,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         }
         getRecipes();
         console.log("hello")
-    },[triggerRender])
+    },[open, triggerRender])
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])

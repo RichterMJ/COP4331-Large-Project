@@ -25,15 +25,28 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
         }
         return JSON.stringify(editRecipeJSON);
     }
+    function isValidEditInputs(){
+        if (editRecipeName == "" || Object.keys(selectedFoodsList).length ==0){
+            setMessage("Error. Recipe has no Name or Ingredients");
+            setTimeout(() => setMessage(""), 3000);
+
+            return false;
+        }
+        return true;
+    }
     async function editRecipe(){
+
+        if (!isValidEditInputs()){
+            return; // empty list detected 
+        }
         // call api to edit
         const editRecipeJSON = prepareEditRecipeJSON();
         let res = await JSONRequest("PUT", editRecipeJSON, "api/users/data/recipes");
         console.log(res);
         if (res.error == 0){
             storage.storeToken();
-            setMessage("Edit successfull");
-            setTimeout(setMessage(""), 3000);
+            setMessage("Edit successful");
+            setTimeout(() => setMessage(""), 3000);
         }
     }
     function resetTable(){
@@ -78,7 +91,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
             <div className="centered addRecipeModal theModal container">
               <div className="modalContent ">
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
-                <h1>Edit {recipe.description}</h1>
+                <h1>Edit Recipe</h1>
                 {makeButton("", "closeBtn",() => {close();  resetTable()}, <RiCloseLine/>)}
                 {displayRecipeEdit()}
                 {displaySearchFood()}
