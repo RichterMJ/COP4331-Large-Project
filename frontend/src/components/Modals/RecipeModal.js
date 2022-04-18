@@ -7,7 +7,8 @@ import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage } from "../Validators/InputValidator";
-import AddRecipeModal from "./AddRecipeModal"
+import {AddRecipeModal} from "./AddRecipeModal"
+import EditRecipeModal from "./EditRecipeModal";
 
 let storage = require('../tokenStorage');
 
@@ -18,6 +19,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
     const [errorMessage, setMessage] = useState("");
     const [triggerRender, setTriggerRender] = useState(true);
     const [addRecipeOpen, setAddRecipeOpen]  = useState(false);
+    const [editRecipeOpen, setEditRecipeOpen] = useState(false);
+    const [selectedEditRecipe, setSelectedEditRecipe] = useState({});
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
@@ -112,7 +115,10 @@ function RecipeModal({ user, open, close, tc, setTC}){
     }
     function editRecipe(recipe){
         // switch to diffrent modal
-        return null;
+        setSelectedEditRecipe(recipe);
+        setEditRecipeOpen(true);
+        console.log("set Edit modal is true")
+        close();
     }
     function prepareDeleteRecipeJSON(recipe){
         const deleteRecipeJSON = {
@@ -178,6 +184,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         </div>
         : (
             <main>
+            {<EditRecipeModal recipe={selectedEditRecipe} open={editRecipeOpen} backToRecipe={close} close={()=>{setEditRecipeOpen(!editRecipeOpen)}} tc={tc} setTC={setTC}/>}
             {<AddRecipeModal user={user} open={addRecipeOpen} backToRecipe={close} close={toggleAddRecipeOpen} tc={tc} setTC={setTC} />}
             </main>
         )
