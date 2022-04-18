@@ -6,6 +6,7 @@ import {RiCloseLine} from "react-icons/ri";
 import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
+import { makeErrorMessage } from "../Validators/InputValidator";
 
 let storage = require('../tokenStorage');
 
@@ -13,17 +14,17 @@ function RecipeModal({ user, open, close, tc, setTC}){
     const [searchQuery, setSearchQuery] = useState("");
     const [recipeList, setRecipeList] = useState([]);
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
-    
+    const [errorMessage, setMessage] = useState("");
+    const [triggerRender, setTriggerRender] = useState(true);
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
             console.log(res.recipes);
-            console.log("hello")
             setRecipeList(res.recipes);
         }
         getRecipes();
-        console.log('dasd');
-    },[])
+        console.log("hello")
+    },[triggerRender])
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])
@@ -44,6 +45,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
     }
     function RecipeDiv({recipe, index}){
         return (
+            <>
             <div className="recipeDiv row">
                 <div className="RecipeName col-8">
                     {recipe.description}
@@ -53,18 +55,19 @@ function RecipeModal({ user, open, close, tc, setTC}){
                     {makeButton("deleteRecipeBtn", "btn", ()=>{deleteRecipe(recipe)}, <MdDeleteOutline key={index}/>)}
                     {makeButton("RecipeDetailBtn", "btn", ()=>{displayRecipeDetail(recipe, index)}, <AiOutlineInfoCircle key={index}/>)}
                 </div>
-                {viewDetailOpen[index] && <RecipeDetail key={index} recipe={recipe} index={index}/>}
             </div>
+            {viewDetailOpen[index] && <RecipeDetail key={index} recipe={recipe} index={index}/>}
+            </>
         );
     }
     function RecipeDetail({recipe, index}){
         
         return(
-            <div className="recipeDetail position-relative">
-                {makeButton("recipeDetailClosingBtn", "btn position-absolute top-0 end-0", ()=>{toggleViewOpenDetails(index)}, <RiCloseLine/>)}
+            <div className="recipeDetail w-100 text-right">
+                {makeButton("recipeDetailClosingBtn", "btn", ()=>{toggleViewOpenDetails(index)}, <RiCloseLine key={index}/>)}
                 {recipe.ingredients.map(recipeFood =>{
                     return (
-                    <p>{`${recipeFood.amountUsed.quantity} ${recipeFood.description} (${recipeFood.amountUsed.portion.gramAmount}g)`}</p>
+                    <p className="text-left">{`${recipeFood.amountUsed.quantity} ${recipeFood.food.description} (${recipeFood.amountUsed.portion.gramAmount}g)`}</p>
                     );
                 })}
             </div>
@@ -106,9 +109,27 @@ function RecipeModal({ user, open, close, tc, setTC}){
         // switch to diffrent modal
         return null;
     }
-    function deleteRecipe(recipe){
+    function prepareDeleteRecipeJSON(recipe){
+        const deleteRecipeJSON = {
+            recipeId: recipe.recipeId,
+            jwtToken: storage.retrieveToken()
+        }
+        return JSON.stringify(deleteRecipeJSON);
+    }
+    async function deleteRecipe(recipe){
         // api call to delete recipe
-        return null;
+        const deleteRecipeJSON = prepareDeleteRecipeJSON(recipe);
+        let res = await JSONRequest("DELETE", deleteRecipeJSON, "api/users/data/recipes");
+        console.log(res)
+        if (res.error ==0){
+            console.log(res);
+            storage.storeToken(res);
+            setTriggerRender(!triggerRender);
+            setMessage("Recipe deleted");
+            setTimeout(setMessage(""), 3000);
+        } else {
+            setMessage("Error occured.");
+        }
     }
     function displayRecipeDetail(recipe, index){
         toggleViewOpenDetails(index);
@@ -121,6 +142,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
             console.log(res);
             storage.storeToken(res);
             return res;
+        } else {
+            setMessage("Error occured.");
         }
         return null;
     }
@@ -140,6 +163,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
                 <h1>Recipes</h1>
                 {makeButton("", "closeBtn",() => {close()}, <RiCloseLine/>)}
                 {makeSearchRecipeBar()}
+                {makeErrorMessage(errorMessage)}
                 {makeRecipeList()}
               </div>
             </div>
