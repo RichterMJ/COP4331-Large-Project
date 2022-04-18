@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
-import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
-import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
+import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../../divHelpers/divHelpers";
+import {addInvalidStyle, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
-import SearchFood from "./SearchFood";
-import JSONRequest from "../RESTHelpers/JSONRequest";
-const storage = require("../tokenStorage.js");
+import SearchFood from "../SearchFood";
+import JSONRequest from "../../RESTHelpers/JSONRequest";
+const storage = require("../../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);

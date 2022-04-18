@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react";
-import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
-import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
+import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../../divHelpers/divHelpers";
+import {addInvalidStyle, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
-import SearchFood from "./SearchFood";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import SearchFood from "../SearchFood";
+import JSONRequest from "../../RESTHelpers/JSONRequest";
 import { AddFoodToRecipeFoodList, SelectedRecipeFoodList } from "./AddRecipeModal";
-import RecipeModal from "./RecipeModal";
-const storage = require("../tokenStorage.js");
+import RecipeModal from "../RecipeModal";
+const storage = require("../../tokenStorage.js");
  
 function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     const [errorMessage, setMessage] = useState("");
@@ -16,9 +16,25 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     const [selectedFood, setSelectedFood] = useState({});
     const [addMoreFoodOpen, setAddMoreFoodOpen] = useState(false);
     const [queryStart, setQueryStart] = useState(0);
-    function editRecipe(){
+
+    function prepareEditRecipeJSON(){
+        const newRecipe = {...recipe, description: editRecipeName, descriptions: selectedFoodsList};
+        const editRecipeJSON ={
+            recipe: newRecipe,
+            jwtToken: storage.retrieveToken()
+        }
+        return JSON.stringify(editRecipeJSON);
+    }
+    async function editRecipe(){
         // call api to edit
-        return null;
+        const editRecipeJSON = prepareEditRecipeJSON();
+        let res = await JSONRequest("PUT", editRecipeJSON, "api/users/data/recipes");
+        console.log(res);
+        if (res.error == 0){
+            storage.storeToken();
+            setMessage("Edit successfull");
+            setTimeout(setMessage(""), 3000);
+        }
     }
     function resetTable(){
         setTC("");

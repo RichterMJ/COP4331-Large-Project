@@ -7,8 +7,8 @@ import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage } from "../Validators/InputValidator";
-import {AddRecipeModal} from "./AddRecipeModal"
-import EditRecipeModal from "./EditRecipeModal";
+import {AddRecipeModal} from "./RecipeSubModals/AddRecipeModal";
+import EditRecipeModal from "./RecipeSubModals/EditRecipeModal";
 
 let storage = require('../tokenStorage');
 
