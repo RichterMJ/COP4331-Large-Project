@@ -2,11 +2,12 @@ import React, {useState, useEffect} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
+import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "./SearchFood";
 import JSONRequest from "../RESTHelpers/JSONRequest";
 const storage = require("../tokenStorage.js");
 
-function AddRecipeModal({user, open, close, tc, setTC}){
+function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedPortion, setSelectedPortion] = useState({});
@@ -164,11 +165,19 @@ function AddRecipeModal({user, open, close, tc, setTC}){
         let res = await JSONRequest("POST", recipeJSON, "api/users/data/recipes");
         handleAddRecipeRes(res);
     }
+    function makeAddRecipeButtons(){
+        return (
+            <div className="">
+
+            </div>
+        );
+    }
     return (
         open ?
         <div className="darkBG">
             <div className="centered addRecipeModal theModal ">
               <div className="modalContent">
+                {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Add Recipe</h1>
                 {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
                 <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />

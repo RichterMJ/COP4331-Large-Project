@@ -7,6 +7,7 @@ import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage } from "../Validators/InputValidator";
+import AddRecipeModal from "./AddRecipeModal"
 
 let storage = require('../tokenStorage');
 
@@ -16,6 +17,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
     const [errorMessage, setMessage] = useState("");
     const [triggerRender, setTriggerRender] = useState(true);
+    const [addRecipeOpen, setAddRecipeOpen]  = useState(false);
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
@@ -105,6 +107,9 @@ function RecipeModal({ user, open, close, tc, setTC}){
             </div>
         )
     }
+    function toggleAddRecipeOpen(){
+        setAddRecipeOpen(!addRecipeOpen);
+    }
     function editRecipe(recipe){
         // switch to diffrent modal
         return null;
@@ -129,6 +134,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
             setTimeout(setMessage(""), 3000);
         } else {
             setMessage("Error occured.");
+            setTimeout(setMessage(""), 3000);
         }
     }
     function displayRecipeDetail(recipe, index){
@@ -144,6 +150,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
             return res;
         } else {
             setMessage("Error occured.");
+            setTimeout(setMessage(""), 3000);
         }
         return null;
     }
@@ -152,8 +159,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
     }
     function addNewRecipe(){
         // switch to different modal 
-
-        return null;
+        toggleAddRecipeOpen();
+        close();
     }
     return (
         open ?
@@ -167,8 +174,13 @@ function RecipeModal({ user, open, close, tc, setTC}){
                 {makeRecipeList()}
               </div>
             </div>
+            
         </div>
-        : null
+        : (
+            <main>
+            {<AddRecipeModal user={user} open={addRecipeOpen} backToRecipe={close} close={toggleAddRecipeOpen} tc={tc} setTC={setTC} />}
+            </main>
+        )
     );
 }
 
