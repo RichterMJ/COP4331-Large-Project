@@ -9,7 +9,6 @@ const storage = require("../tokenStorage.js");
 function AddFoodModal({user, open, close, tc, setTC}){
    
     const [selectedFood, setSelectedFood] = useState({});
-    const [queryStart, setQueryStart] = useState(0);
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
     const [selectedPortion, setSelectedPortion] = useState({});
 
@@ -108,7 +107,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
             <div className="centered largeModal theModal">
               <div className="modalContent">
                 <ModalHeader/>
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart}/>
+                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable}/>
                 {makeRecipeFoodsToAdd()}
                 <AddFoodButton/>
               </div>

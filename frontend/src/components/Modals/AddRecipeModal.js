@@ -14,7 +14,6 @@ function AddRecipeModal({user, open, close, tc, setTC}){
     const [recipeDescription, setRecipeDescription] = useState("");
     const [inputError, setInputError] = useState("");
     const [errorMessage, setMessage] = useState("");
-    const [queryStart, setQueryStart] = useState(0);
     
     //const [clickSearch, setClickSearch] = useState(false);
 
@@ -169,7 +168,7 @@ function AddRecipeModal({user, open, close, tc, setTC}){
               <div className="modalContent">
                 <h1>Add Recipe</h1>
                 {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />
+                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable}/>
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
                 {makeErrorMessage(errorMessage)}
