@@ -36,6 +36,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
       console.log(foodJSON);
       let res = await JSONRequest("POST", foodJSON, "api/users/data/foodRecords");
       console.log(res.error);
+      console.log(res.foodRecordId);
       resetPortionSelection();
     }
 
