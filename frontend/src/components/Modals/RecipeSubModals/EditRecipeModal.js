@@ -5,8 +5,7 @@ import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
 import JSONRequest from "../../RESTHelpers/JSONRequest";
-import { AddFoodToRecipeFoodList, SelectedRecipeFoodList } from "./AddRecipeModal";
-import RecipeModal from "../RecipeModal";
+import { SelectedRecipeFoodList} from "./SubComponents";
 const storage = require("../../tokenStorage.js");
  
 function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
@@ -72,7 +71,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
                 </div>
                 <div className="editRecipeDescriptionInput col-4">
                     {makeEditRecipeNameInput()}
-                    <AddFoodToRecipeFoodList setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
+                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
                     {makeActionButton("button", "btn-success mt-2", ()=>{addMoreFood()},"Add New Ingredient", "addNewIngredientBtn")}
                 </div>
                 
