@@ -6,7 +6,7 @@ import {CircleSpinner} from "react-spinners-kit";
 
 const storage = require("../tokenStorage.js");
 
-function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable, foo, yee}){
+function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}){
     const [foodQuery, setFoodQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [queryStart, setQueryStart] = useState(0);
