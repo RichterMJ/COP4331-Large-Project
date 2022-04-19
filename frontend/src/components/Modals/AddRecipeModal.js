@@ -3,7 +3,7 @@ import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from ".
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../RESTHelpers/JSONRequest";
 const storage = require("../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC}){

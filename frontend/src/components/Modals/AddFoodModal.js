@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {makeButton, makeLabel, makeInputDiv} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../RESTHelpers/JSONRequest";
 
 const storage = require("../tokenStorage.js");
 

@@ -3,7 +3,7 @@ import VerifyModal from "./Modals/VerifyModal";
 import {makeButton, makeLink, makeSpan} from "./divHelpers/divHelpers";
 import {isBlank, validWeight, validEmail, validPassword, matchingPasswords} from "./Validators/SignupValidators";
 import {makeErrorMessage} from "./Validators/InputValidator";
-import JSONRequest from "./RESTHelpers/JSONRequest";
+import {JSONRequest} from "./RESTHelpers/JSONRequest";
 
 function Signup() {
   const [firstName, setFirstName] = useState("");
