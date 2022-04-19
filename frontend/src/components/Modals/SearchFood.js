@@ -6,11 +6,13 @@ import {CircleSpinner} from "react-spinners-kit";
 
 const storage = require("../tokenStorage.js");
 
-function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQueryStart}){
+function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}){
     const [foodQuery, setFoodQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [queryStart, setQueryStart] = useState(0);
+
+    let startFlag = false;
     const pageSize = 10;
-    
 
     function makeTextInput (id,name,placeholder, onChange){
         return(<input
@@ -25,10 +27,11 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
     }
 
     function makeNameSearchJSON(){
+      console.log(foodQuery);
       const searchInfo = {
         query: foodQuery,
         pageSize: pageSize,
-        start: queryStart,
+        start: (startFlag) ? 0 : queryStart,
         jwtToken: storage.retrieveToken()
       } 
 
@@ -51,8 +54,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
         } else {
           //Appends the new items to the table
           setTC(<div>{currentFoods} <FoodList foods={foods}/></div>);
-          setQueryStart(queryStart + 1);
-          
+          setQueryStart((startFlag) ? 1 : queryStart + 1)
         }
     }
 
@@ -90,12 +92,13 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
     async function search(scroll){
 
       let flag = tc;
+      startFlag = false;
       //Reset table when new search
       if(!scroll){
         resetTable();
         flag = "";
       }
-  
+
       const searchJSON = makeNameSearchJSON();
       console.log(searchJSON);
       try {
@@ -110,14 +113,14 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
       }
     }
 
-    // function resetTable(){
-    //   setTC("");
-    //   setQueryStart(0);
-    // }
+    function resetTable(){
+       setTC("");
+       startFlag = true;
+    }
 
     function Food(props){
       return (
-          <button className="foodItem" onClick={function(){setSelectedFood(props.food)}}>
+          <button className="foodItem" onClick={function(){setSelectedFood(props.food); setSelectedPortion(props.food.portions[0])}}>
             {props.food.description}
           </button>
       )
@@ -143,7 +146,7 @@ function SearchFood({ tc, setTC,setSelectedFood, resetTable, queryStart, setQuer
     const onScroll = () => {
       if (scrollReference.current) {
         const { scrollTop, scrollHeight, clientHeight } = scrollReference.current;
-        if (scrollTop + clientHeight === scrollHeight) {
+        if (scrollTop + clientHeight >= scrollHeight) {
           search(true);
         }
       }
