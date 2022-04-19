@@ -62,6 +62,15 @@ function blankValidator(...fields){
 function makeErrorMessage(error){
   if (error){
     return <p className="text-danger mb-0">{error}</p>;
+  } 
+  return;
+}
+function displayRepsonseMessage(response){
+  if (response.message) {
+    if (response.type === 'success'){
+      return <p className="text-success mb-0">{response.message}</p>
+    }
+    return <p className="text-danger mb-0">{response.message}</p>
   }
   return;
 }
@@ -71,4 +80,4 @@ function makeErrorMessage(error){
 function addInvalidStyle(isError){
   return isError ? "is-invalid" : "";
 }
-export {emailValidator, passwordValidator, blankValidator, makeErrorMessage, addInvalidStyle, weightValidator};
+export {displayRepsonseMessage, emailValidator, passwordValidator, blankValidator, makeErrorMessage, addInvalidStyle, weightValidator};

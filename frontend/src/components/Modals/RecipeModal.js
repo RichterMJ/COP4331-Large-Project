@@ -6,7 +6,7 @@ import {RiCloseLine} from "react-icons/ri";
 import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
-import { makeErrorMessage } from "../Validators/InputValidator";
+import { makeErrorMessage, displayRepsonseMessage } from "../Validators/InputValidator";
 import {AddRecipeModal} from "./RecipeSubModals/AddRecipeModal";
 import EditRecipeModal from "./RecipeSubModals/EditRecipeModal";
 
@@ -16,7 +16,10 @@ function RecipeModal({ user, open, close, tc, setTC}){
     const [searchQuery, setSearchQuery] = useState("");
     const [recipeList, setRecipeList] = useState([]);
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
-    const [errorMessage, setMessage] = useState("");
+    const [responseMessage, setResponseMessage] = useState({
+        type: '',
+        message: ''
+    });
     const [triggerRender, setTriggerRender] = useState(true);
     const [addRecipeOpen, setAddRecipeOpen]  = useState(false);
     const [editRecipeOpen, setEditRecipeOpen] = useState(false);
@@ -85,7 +88,6 @@ function RecipeModal({ user, open, close, tc, setTC}){
         setViewDetailOpen(updateViewDetailOpen);
     }
     function makeRecipeList(){
-        console.log("makeREcipe");
         console.log(recipeList);
         return (
             <div className="recipeListDiv container pt-4">
@@ -117,7 +119,6 @@ function RecipeModal({ user, open, close, tc, setTC}){
         // switch to diffrent modal
         setSelectedEditRecipe(recipe);
         setEditRecipeOpen(true);
-        console.log("set Edit modal is true")
         close();
     }
     function prepareDeleteRecipeJSON(recipe){
@@ -136,11 +137,11 @@ function RecipeModal({ user, open, close, tc, setTC}){
             console.log(res);
             storage.storeToken(res);
             setTriggerRender(!triggerRender);
-            setMessage("Recipe deleted");
-            setTimeout(setMessage(""), 3000);
+            setResponseMessage({...responseMessage, type:'success', message: 'successfully deleted'})
+            setTimeout(()=>setResponseMessage({...responseMessage, message:''}), 2000);
         } else {
-            setMessage("Error occured.");
-            setTimeout(setMessage(""), 3000);
+            setResponseMessage({...responseMessage, type:'error', message: 'Error occurred'})
+            setTimeout(()=>setResponseMessage({...responseMessage, message:''}), 2000);
         }
     }
     function displayRecipeDetail(recipe, index){
@@ -155,8 +156,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
             storage.storeToken(res);
             return res;
         } else {
-            setMessage("Error occured.");
-            setTimeout(setMessage(""), 3000);
+            setResponseMessage({...responseMessage, type:'error', message: 'Error occurred'})
+            setTimeout(()=>setResponseMessage({...responseMessage, message:''}), 2000);
         }
         return null;
     }
@@ -176,7 +177,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
                 <h1>Recipes</h1>
                 {makeButton("", "closeBtn",() => {close()}, <RiCloseLine/>)}
                 {makeSearchRecipeBar()}
-                {makeErrorMessage(errorMessage)}
+                {displayRepsonseMessage(responseMessage)}
                 {makeRecipeList()}
               </div>
             </div>

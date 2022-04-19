@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../../divHelpers/divHelpers";
-import {addInvalidStyle, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
+import {addInvalidStyle, displayRepsonseMessage, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
@@ -11,7 +11,10 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [recipeDescription, setRecipeDescription] = useState("");
-    const [errorMessage, setMessage] = useState("");
+    const [responseMessage, setResponseMessage] = useState({
+        type: '',
+        message: ''
+    });
     const [queryStart, setQueryStart] = useState(0);
     console.log("add recipe modal detected")
     
@@ -51,24 +54,27 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
             description: recipeDescription,
             jwtToken: storage.retrieveToken()
         }
+        console.log(recipeJSON);
         return JSON.stringify(recipeJSON);
     }
     function handleAddRecipeRes(res){
         if (res.error!=0){
             console.log(res);
-            setMessage("Error occured.")
+            setResponseMessage({...responseMessage, type: 'error', message: 'Error occured'});
+            setTimeout(()=>{setResponseMessage({...responseMessage, message:''})},2000); // set message back to normal after 3s
             return;
         }
         console.log(res);
         storage.storeToken(res);
-        setMessage("Recipe Added");
+        setResponseMessage({...responseMessage, type: 'success', message: 'Recipe Added'});
         setSelectedFoodsList([]);
         setRecipeDescription("");
-        setTimeout(()=>{setMessage("")},3000); // set message back to normal after 3s
+        setTimeout(()=>{setResponseMessage({...responseMessage, message:''})},2000); // set message back to normal after 3s
     }
     async function addRecipe(){
         if (recipeDescription == "" || Object.keys(selectedFoodsList).length == 0){
-            setMessage("Error. Please add ingredients and decription");
+            setResponseMessage({...responseMessage, type: 'error', message: 'Error. Please add ingredients and decription'});
+            setTimeout(()=>{setResponseMessage({...responseMessage, message:''})},2000);
             return  // we abort when description is not added and recipe is empty
         }
         const recipeJSON = prepareAddRecipeJSON();
@@ -94,7 +100,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
                 <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
-                {makeErrorMessage(errorMessage)}
+                {displayRepsonseMessage(responseMessage)}
               </div>
             </div>
         </div>
@@ -102,7 +108,6 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     );
 }
 function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSelectedFood}){
-    console.log("hello123233")
     function deleteSelectedFood(foodIndex){
         const newFoodList = [...selectedFoodsList]; // copy to newList
         newFoodList.splice(foodIndex,1);
@@ -118,8 +123,6 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSel
         );
     }
     function displaySelectedFoodList(){
-        console.log(selectedFoodsList);
-        console.log("hello")
         return (
             <div className="selectedFoodList">
                 <h3>Ingredients</h3>
@@ -137,10 +140,15 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSel
     );
 }
 function AddFoodToRecipeFoodList({setSelectedFoodsList, selectedFood,selectedFoodsList}){
-    const [selectedPortion, setSelectedPortion] = useState({});
+    const defaultPortion = {
+        portionId: 0,
+        portionName: '100g',
+        gramAmount: 100
+    }
+    const [selectedPortion, setSelectedPortion] = useState(defaultPortion);
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
     const [inputError, setInputError] = useState("");
-    console.log(selectedFoodsList);
+    
     function addFoodToFoodList(){
         
         if (!isValidRecipeFoodInputs()){
@@ -150,7 +158,7 @@ function AddFoodToRecipeFoodList({setSelectedFoodsList, selectedFood,selectedFoo
             food: selectedFood,
             amountUsed: {
                 portion: selectedPortion,
-                quantity: selectedFoodQuantity
+                quantity: Number(selectedFoodQuantity)
             }
         }; // build a recipe object as declare in global-types.ts in backend
         const newFoodList = [...selectedFoodsList]; // copy to newList
@@ -172,8 +180,10 @@ function AddFoodToRecipeFoodList({setSelectedFoodsList, selectedFood,selectedFoo
             <div>
                 <label htmlFor="portionsToSelect">Choose a portion:</label>
 
-                <select id="portionsToSelect"  onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
+                <select id="portionsToSelect" onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
                 {Object.keys(selectedFood).length !=0 && selectedFood.portions.map((portion, index) =>{
+                    if (!index) {console.log(portion)}
+                    console.log(portion);
                     return <option key={index} value={index}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
                 })}
                 </select>
@@ -194,6 +204,7 @@ function AddFoodToRecipeFoodList({setSelectedFoodsList, selectedFood,selectedFoo
         console.log(Object.keys(selectedPortion).length)
         if (selectedFoodQuantity <= 0 || Object.keys(selectedPortion).length == 0){
             setInputError("Invalid input");
+            setTimeout(()=>setInputError(""),3000);
             return false;
         }
         setInputError("")

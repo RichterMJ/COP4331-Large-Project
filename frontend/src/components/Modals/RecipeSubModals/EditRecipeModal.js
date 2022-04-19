@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../../divHelpers/divHelpers";
-import {addInvalidStyle, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
+import {addInvalidStyle, displayRepsonseMessage, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
@@ -10,7 +10,10 @@ import RecipeModal from "../RecipeModal";
 const storage = require("../../tokenStorage.js");
  
 function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
-    const [errorMessage, setMessage] = useState("");
+    const [responseMessage, setResponseMessage] = useState({
+        type: '',
+        message: ''
+    });
     const [editRecipeName, setEditRecipeName] = useState(recipe.description);
     const [selectedFoodsList, setSelectedFoodsList] = useState(recipe.ingredients);
     const [selectedFood, setSelectedFood] = useState({});
@@ -27,8 +30,8 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function isValidEditInputs(){
         if (editRecipeName == "" || Object.keys(selectedFoodsList).length ==0){
-            setMessage("Error. Recipe has no Name or Ingredients");
-            setTimeout(() => setMessage(""), 3000);
+            setResponseMessage({...responseMessage, type: 'error', message: 'Error. Recipe has no Name or Ingredients'})
+            setTimeout(() => setResponseMessage({...responseMessage, message: ''}), 2000);
 
             return false;
         }
@@ -44,9 +47,9 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
         let res = await JSONRequest("PUT", editRecipeJSON, "api/users/data/recipes");
         console.log(res);
         if (res.error == 0){
-            storage.storeToken();
-            setMessage("Edit successful");
-            setTimeout(() => setMessage(""), 3000);
+            storage.storeToken(res);
+            setResponseMessage({...responseMessage, type: 'success', message: 'Successfully Edited'})
+            setTimeout(() => setResponseMessage({...responseMessage, message: ''}), 2000);
         }
     }
     function resetTable(){
@@ -96,7 +99,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
                 {displayRecipeEdit()}
                 {displaySearchFood()}
                 {makeActionButton("button", "btn btn-success", () => editRecipe(), "Edit Recipe", "editRecipeBtn" )}
-                {makeErrorMessage(errorMessage)}
+                {displayRepsonseMessage(responseMessage)}
               </div>
             </div>
         </div>
