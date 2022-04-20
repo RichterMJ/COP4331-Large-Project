@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import buildPath from "./path";
 import {makeButton, makeH2} from "./divHelpers/divHelpers";
-import JSONRequest from "./RESTHelpers/JSONRequest"
+import {JSONRequest} from "./RESTHelpers/JSONRequest"
 
 function EmailVerify(){
 

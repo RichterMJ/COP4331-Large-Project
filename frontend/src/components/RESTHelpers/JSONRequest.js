@@ -15,5 +15,19 @@ async function JSONRequest(method, json,url) {
         return;
     }
 }
+async function JSONGETRequest(url){
+    try {
+        const response = await fetch(buildPath(url), {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        });
 
-export default JSONRequest;
+        return JSON.parse(await response.text());
+
+    } catch (e) {
+        console.log(e.toString());
+        return;
+    }
+
+}
+export {JSONRequest, JSONGETRequest};

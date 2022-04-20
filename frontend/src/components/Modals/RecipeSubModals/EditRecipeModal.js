@@ -4,7 +4,7 @@ import {addInvalidStyle, displayRepsonseMessage, makeErrorMessage, weightValidat
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
-import JSONRequest from "../../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 import { SelectedRecipeFoodList, AddSelectedFoodToRecipe} from "./SubComponents";
 const storage = require("../../tokenStorage.js");
  

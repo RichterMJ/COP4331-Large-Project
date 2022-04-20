@@ -1,10 +1,14 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent,useState } from "react";
 import LeftPanel from "../components/Panels/UserPageLPanel";
 import RightPanel from "../components/Panels/UserPageRPanel";
 import InvalidPage from "./InvalidPage";
 import "./mainPageStyle.css"
 
 function UserPage() {
+    let curDate = new Date();
+    const [date,setDate] = useState(curDate);
+    console.log(date.toLocaleDateString());
+
     const _ud = localStorage.getItem('user_data');
     const user = JSON.parse(_ud);
     if (user === null){
@@ -13,8 +17,8 @@ function UserPage() {
     return(
         <div id="content">
             <div id="panels">
-        <LeftPanel user={user}/>
-        <RightPanel user={user}/>
+              <LeftPanel user={user} date={date}/>
+              <RightPanel user={user} date={date}/>
             </div>
         </div>
     );

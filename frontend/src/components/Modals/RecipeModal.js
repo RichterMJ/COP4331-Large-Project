@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {makeButton, makeLabel, makeInputDiv, makeActionButton} from "../divHelpers/divHelpers";
-import GETRequest from "../RESTHelpers/GETRequest";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest, JSONGETRequest} from "../RESTHelpers/JSONRequest";
 import {RiCloseLine} from "react-icons/ri";
 import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
@@ -152,7 +151,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
     async function getAllRecipes(){
         // make api call
         let curToken = storage.retrieveToken();
-        let res = await GETRequest(`api/users/data/recipes?userId=${user.userId}&jwtToken=${curToken}`);
+        let res = await JSONGETRequest(`api/users/data/recipes?userId=${user.userId}&jwtToken=${curToken}`);
         if (res.error == 0){
             console.log(res);
             storage.storeToken(res);

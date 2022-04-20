@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResponseModal from "./Modals/ResponseModal";
 import buildPath from "./path";
-import JSONRequest from "./RESTHelpers/JSONRequest"
+import {JSONRequest} from "./RESTHelpers/JSONRequest"
 import { blankValidator, addInvalidStyle, makeErrorMessage, emailValidator} from "./Validators/InputValidator";
 import { makePTag,makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 

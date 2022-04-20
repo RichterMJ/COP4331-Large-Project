@@ -372,8 +372,21 @@ export function recipesPut(app: Express, client: MongoClient): RequestHandler {
             }
 
             const recipeId = req.body.recipe.recipeId
-            const update: Recipe = extractRecipe(req.body.recipe)
             const jwtToken = req.body.jwtToken
+
+            const update: Recipe = {
+                recipeId: req.body.recipe.recipeId,
+                userId: req.body.recipe.userId,
+                ingredients: req.body.recipe.ingredients,
+                fdcId: 0,
+                description: req.body.recipe.description,
+                nutrients: getTotalNutrientsRecipe(req.body.recipe.ingredients),
+                portions: [{
+                    portionId: 0,
+                    portionName: "1 serving",
+                    gramAmount: 100
+                }],
+            }
 
             if( token.isExpired(jwtToken))
             {
