@@ -6,7 +6,7 @@ import {JSONRequest} from "../RESTHelpers/JSONRequest";
 
 const storage = require("../tokenStorage.js");
 
-function AddFoodModal({user, open, close, tc, setTC}){
+function AddFoodModal({user, open, close, tc, setTC, date}){
    
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
@@ -22,7 +22,7 @@ function AddFoodModal({user, open, close, tc, setTC}){
       const foodData = {
         food: selectedFood,
         userId: user.userId,
-        eatenTimestamp: new Date().toISOString(),
+        eatenTimestamp: date.toISOString(),
         amountConsumed: {portion: selectedPortion, quantity: Number(selectedFoodQuantity)},
         jwtToken: storage.retrieveToken()
       }

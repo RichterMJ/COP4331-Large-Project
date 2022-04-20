@@ -6,7 +6,7 @@ function RightPanel({user,date}){
     return(
         <div id="rightPanel">
           <TopPanel userId={user.userID} date={date} />
-      <TopSubPanel date= {date} userId={user.userId}/>
+          <TopSubPanel date= {date} userId={user.userId}/>
           <BottomSubPanel/>
         </div>
     )

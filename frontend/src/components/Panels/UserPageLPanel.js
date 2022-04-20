@@ -25,7 +25,7 @@ function leftPanelLogoHeader(){
     )
 }
 
-function LeftPanel({user}){
+function LeftPanel({user, date}){
     console.log(user);
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [myAccountOpen, setMyAccountOpen] = useState(false);
@@ -50,7 +50,7 @@ function LeftPanel({user}){
           {makeActionButton("button", "leftPanelButton",() => myAccountEvent(toggleMA),
                             "My Account","myAccountButton")}
           <main>
-            {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
+            {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC} date={date}/>}
             {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
             {<AddRecipeModal user={user} open={addRecipeOpen} close={toggleMR} tc={tableContent} setTC={toggleTC} />}
           </main>

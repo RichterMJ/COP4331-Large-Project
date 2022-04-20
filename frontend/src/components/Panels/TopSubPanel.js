@@ -4,7 +4,11 @@ import {useState} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers";
 import {JSONRequest, JSONGETRequest} from "../RESTHelpers/JSONRequest";
 const storage = require("../tokenStorage.js");
-function removeFood(){}
+
+function removeFood(index){
+
+}
+
 function editFood(){}
 function makeFoodButtons(id){
 
