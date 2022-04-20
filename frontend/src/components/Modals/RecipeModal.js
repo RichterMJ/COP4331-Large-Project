@@ -8,7 +8,7 @@ import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage, displayRepsonseMessage } from "../Validators/InputValidator";
 import AddRecipeModal from "./RecipeSubModals/AddRecipeModal";
-import EditRecipeModal from "./RecipeSubModals/AddRecipeModal";
+import EditRecipeModal from "./RecipeSubModals/EditRecipeModal";
 
 let storage = require('../tokenStorage');
 
@@ -36,6 +36,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])
+    console.log(editRecipeOpen);
+    console.log(addRecipeOpen)
     function makeSearchRecipeBar(){
         return (
             <div className="recipeSearchBar row w-100 justify-content-start">

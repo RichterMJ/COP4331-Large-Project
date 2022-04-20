@@ -15,7 +15,6 @@ function AddFoodModal({user, open, close, tc, setTC}){
 
     function resetTable(){
       setTC("");
-      setQueryStart(0);
     }
    
     function makeFoodRecordJSON(){
