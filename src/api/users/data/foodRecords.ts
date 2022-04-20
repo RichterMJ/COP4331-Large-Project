@@ -75,7 +75,7 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
         return obj != null && typeof obj === 'object'
             && 'food' in obj && isFood(obj.food)
             && 'userId' in obj && isObjectIdString(obj.userId)
-            && 'eatenTimestamp' in obj && isIsoTimestamp(obj.eatenTimestamp)
+            && 'eatenTimestamp' in obj && isIsoDate(obj.eatenTimestamp)
             && 'amountConsumed' in obj && isAmountConsumed(obj.amountConsumed)
             && 'jwtToken' in obj && obj.jwtToken != null
     }
@@ -101,10 +101,17 @@ export function foodRecordsPost(app: Express, client: MongoClient): RequestHandl
                 response.jwtToken = jwtToken;
             }
 
+            // Hack to ensure that parsing via `new Date(..)` yields the correct date.
+            const startDate: string = eatenTimestamp + 'T23:59:59Z'
+
+            // Create `_startDate` as a date object, truncating time.
+            // Create `_endDate` as a date object one day ahead, truncating time.
+            const _startDate = new Date(new Date(startDate).toDateString())
+
             const foodRecord: FoodRecord = {
                 userId,
                 creationTimestamp: new Date(),
-                eatenTimestamp: new Date(eatenTimestamp),
+                eatenTimestamp: _startDate,
                 food,
                 amountConsumed,
                 totalNutrients: getTotalNutrients(food, amountConsumed),

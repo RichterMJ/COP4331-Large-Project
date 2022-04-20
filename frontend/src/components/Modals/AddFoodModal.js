@@ -3,6 +3,7 @@ import {makeButton, makeLabel, makeInputDiv} from "../divHelpers/divHelpers";
 import { RiCloseLine } from "react-icons/ri";
 import SearchFood from "./SearchFood";
 import {JSONRequest} from "../RESTHelpers/JSONRequest";
+import {getDateString} from "../divHelpers/monthGenerator";
 
 const storage = require("../tokenStorage.js");
 
@@ -22,7 +23,7 @@ function AddFoodModal({user, open, close, tc, setTC, date}){
       const foodData = {
         food: selectedFood,
         userId: user.userId,
-        eatenTimestamp: date.toISOString(),
+        eatenTimestamp: getDateString(date),
         amountConsumed: {portion: selectedPortion, quantity: Number(selectedFoodQuantity)},
         jwtToken: storage.retrieveToken()
       }
