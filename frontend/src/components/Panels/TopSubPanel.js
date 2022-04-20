@@ -45,21 +45,24 @@ function TopSubPanel(props){
     }
     
     function FoodElement(props){
-      let foodEl = props.food;
+      let foodEl = props.food.food;
+      let portion = props.food.amountConsumed.portion;
+      let quantity = props.food.amountConsumed.quantity;
+      console.log(portion);
       return(
     
         <div className = "dayFood" key={foodEl.id} >
           <div className ="foodName">
-            {foodEl.name}
+            {foodEl.description}
           </div>
           <div className ="foodAmount">
-            {foodEl.amount}
+            {portion.portionName}
           </div>
           <div className ="foodUnit">
-            {foodEl.unit}
+            {quantity}
           </div>
-          <div className ="foodCalories">
-            {foodEl.calories}
+          <div className ="foodGrams">
+            {portion.gramAmount}
           </div>
           {makeFoodButtons(foodEl.id, props.index)}
         </div>
