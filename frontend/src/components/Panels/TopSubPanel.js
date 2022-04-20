@@ -17,19 +17,17 @@ function TopSubPanel(props){
       return JSON.stringify(removeData);
     }
     
-    async function removeFood(index){
-      //For testing, this won't work anymore as it has already been deleted
-      //What this will do is get the foodrecordid of foods[index]
-      let temp = "625e0b4da53c56d46025d0d4";
-    
-      const deleteJSON = makeRemoveFoodJSON(temp);
+    async function removeFood(id, index){    
+      const deleteJSON = makeRemoveFoodJSON(id);
+
+      console.log(deleteJSON);
     
       let res = await JSONRequest("DELETE", deleteJSON, "api/users/data/foodRecords");
       
       console.log(res.error);
     
       foods.splice(index,1);
-      setDisplayedFoods(foods.slice(0));
+      setFoods(foods.slice(0));
     }
     
     function editFood(){}
@@ -38,8 +36,8 @@ function TopSubPanel(props){
     
         return(
             <div className= "buttons">
-              {makeActionButton("button","removeFoodButton",() => removeFood(index),"x",id)}
-              {makeActionButton("button","removeFoodButton",() => editFood(index),"&#9998;",id)}
+              {makeActionButton("button","removeFoodButton",() => removeFood(id, index),"x",id)}
+              {makeActionButton("button","removeFoodButton",() => editFood(id, index),"&#9998;",id)}
             </div>
         )
     }
@@ -64,7 +62,7 @@ function TopSubPanel(props){
           <div className ="foodGrams">
             {portion.gramAmount}
           </div>
-          {makeFoodButtons(foodEl.id, props.index)}
+          {makeFoodButtons(props.food.foodRecordId, props.index)}
         </div>
       )
     }
@@ -123,6 +121,7 @@ function TopSubPanel(props){
         getRecords();
     },[]);
 
+    console.log(foods);
     return(
       <div id = "topSubPanel">
         <FoodList foods ={foods}/>
