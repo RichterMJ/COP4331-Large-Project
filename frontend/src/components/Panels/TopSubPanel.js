@@ -1,6 +1,6 @@
 import React from "react";
 import {FoodSample} from "./PanelTestData";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers";
 import {JSONRequest, JSONGETRequest} from "../RESTHelpers/JSONRequest";
 const storage = require("../tokenStorage.js");
@@ -68,6 +68,7 @@ function TopSubPanel(props){
       return [];
     }
     console.log(res.foodRecords);
+    console.log("no error");
     return res.foodRecords
   }
   // this will get the latest version of the person's food day
@@ -91,9 +92,16 @@ function TopSubPanel(props){
   }
   const [fl,setFl] = useState(props.foodList);
   let curDate = props.date;
-  let initialFoods = getFoodDayList(curDate)
   const [foods,setFoods] = useState([]);
-  console.log(foods);
+  // gets initial food day data
+  useEffect(() =>{
+    const getRecords = async () =>{
+      let res = await getFoodDayList(curDate);
+      setFoods(res);
+    }
+      getRecords();
+  },[]);
+
   return(
     <div id = "topSubPanel">
       <FoodList foods ={foods}/>
