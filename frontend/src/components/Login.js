@@ -57,7 +57,8 @@ function Login() {
         firstName: res.firstname,
         lastName: res.lastname,
         userId: res.userId,
-        weight: 0
+        weight: res.weight,
+        email: res.email
       };
       localStorage.setItem("user_data", JSON.stringify(user));
       setMessage("");

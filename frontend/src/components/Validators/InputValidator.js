@@ -20,7 +20,7 @@ function emailValidator(email)
 function weightValidator(weight)
 {
   const regrex = /^[0-9]*\.?[0-9]+$/;
-  if (weight != ""){
+  if (weight == ""){
     return "weight is required";
   } 
   if (!regrex.test(weight)){

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
-import {addInvalidStyle, makeErrorMessage, weightValidator} from "../Validators/InputValidator";
+import {displayRepsonseMessage, addInvalidStyle, makeErrorMessage, passwordValidator, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
 import JSONRequest from "../RESTHelpers/JSONRequest";
 
@@ -13,18 +13,37 @@ function MyAccountModal({user, open, close}) {
     const [editFormError, setEditFormError] = useState({
         firstNameError: "",
         lastNameError: "",
-        weightError: ""
+        weightError: "",
+        oldPasswordError: "",
+        newPasswordError: "",
+        newPasswordConfirmedError: ""
     });
-    const [errorMessage, setMessage] = useState("");
+    const [responseMessage, setResponseMessage] = useState({
+        type: '',
+        message: ''
+    });
+    const [isEdittingPassword, setIsEditingtPassword] = useState(false);
+    const [oldUserPassword, setOldUserPassword] = useState("password");
+    const [newPassword, setNewPassword] = useState("");
+    const [newPasswordConfirmed, setNewPasswordConfirmed] = useState("");
+
     const storage = require("../tokenStorage.js");
 
-    function isValidEditInputs(firstName, lastName, weight){
+    function isValidEditInputs(editInputs){
         let errors = {};
-        errors.firstNameError = (!firstName) ? "Invalid First Name" : "";
-        errors.lastNameError = (!lastName) ? "Invalid Last Name" : "";
-        errors.weightError =  weightValidator(weight);
+        errors.firstNameError = (!editInputs.firstName) ? "Invalid First Name" : "";
+        errors.elastNameError = (!editInputs.lastName) ? "Invalid Last Name" : "";
+        errors.weightError = weightValidator(editInputs.weight);
+        errors.oldPasswordError = passwordValidator(editInputs.oldPassword, false);
+        errors.newPasswordError= passwordValidator(editInputs.newPassword, true);
+        if ((errors.newPasswordConfirmedError = passwordValidator(editInputs.newPasswordConfirmed, false)) == ""){
+            if( editInputs.newPassword != editInputs.newPasswordConfirmed){
+              errors.newPasswordConfirmedError = "Passwords not matching";
+            }
+        }
         setEditFormError(errors);
-        return (errors.firstNameError=="" && errors.lastNameError=="" && errors.weightError=="");
+        let isInvalid = Object.keys(errors).some(key=>{ return errors[key].length != 0});
+        return !isInvalid;
     }
     function toggleEdittingStyle()
     {
@@ -40,7 +59,7 @@ function MyAccountModal({user, open, close}) {
                 {makeLabel("firstNameEdit", "First Name")}
             
                 {makeInputDiv("text", "firstNameEdit", `firstNameEditInput ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
-                {makeErrorMessage(editFormError.firstNameError)}
+                {displayRepsonseMessage({type:'error', message:editFormError.firstNameError})}
             </div>
         );
     }
@@ -50,7 +69,7 @@ function MyAccountModal({user, open, close}) {
                 {makeLabel("lastNameEdit", "Last Name")}
 
                 {makeInputDiv("text", "lastNameEdit", `lastNameEditInput ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
-                {makeErrorMessage(editFormError.lastNameError)}
+                {displayRepsonseMessage({type:'error', message:editFormError.lastNameInput})}
              </div>
         );
     }
@@ -62,8 +81,44 @@ function MyAccountModal({user, open, close}) {
                         {makeInputDiv("text", "editWeightInput", `w-50 ${addInvalidStyle(editFormError.weightError)} ${toggleEdittingStyle()}`, userWeight, "weight", "weight",setUserWeight,`${toggleDisable()}`)}
                         {makeSpan("input-group-text", "lbs")}
                     </div>
-                    {makeErrorMessage(editFormError.weightError)}
+                    {displayRepsonseMessage({type:'error', message:editFormError.weightError})}
             </div>
+        )
+    }
+    function emailInput(){
+        return (
+            <div className="col-5 text-left">
+            {makeLabel("emailInput", "Email", "")}
+            {makeInputDiv("text","emailInput", "d-block", user.email, "emailEditInput", "email", "", "disabled")}
+            </div>
+        );
+    }
+    function makeNewPasswordInputs(){
+        return (
+            <div className="newPasswordInputs ">
+                {makeLabel('newPassword', 'New Password', "")}
+                {makeInputDiv("password", "newPassword", `form-control ${addInvalidStyle(editFormError.newPasswordError)}`, newPassword, "newPassword", "new password", setNewPassword)}
+                {displayRepsonseMessage({type:'error', message:editFormError.newPasswordError})}
+                {makeLabel('newPasswordConfirmed', 'Confirm Password', '')}
+                {makeInputDiv("password", "newPasswordConfirmed",`form-control ${addInvalidStyle(editFormError.newPasswordConfirmedError)}`, newPasswordConfirmed, "newPasswordConfirmed", "confirm password", setNewPasswordConfirmed)}
+                {displayRepsonseMessage({type:'error', message:editFormError.newPasswordConfirmedError})}
+            </div>
+        );
+    }
+    function passwordUpdate(){
+        return (
+            <div className="col-5 text-left">
+                {makeLabel('oldPasswordInput', !isEdittingPassword ? 'Password' : 'Old Password', '')}
+                {makeInputDiv("password", "oldPasswordInput", `form-control ${addInvalidStyle(editFormError.oldPasswordError)}`, oldUserPassword, "oldPasswordInput", "old password", setOldUserPassword, (isEdittingPassword) ? '' : 'disabled')}
+                {isEdittingPassword && makeNewPasswordInputs()}
+                {!isEdittingPassword && makeButton('editPasswordBtn', 'btn btn-primary mt-2', ()=>{setIsEditingtPassword(true); setOldUserPassword("")}, 'Update Password')}
+                {isEdittingPassword && makeButton('updatePasswordBtn', 'btn btn-success mt-2', ()=>{updatePassword()}, 'Save')}
+            </div>
+        );
+    }
+    function passwordEdit(){
+        return (
+            passwordUpdate()
         )
     }
     function makeEditInputs(){
@@ -73,11 +128,32 @@ function MyAccountModal({user, open, close}) {
                     {firstNameInput()}
                     {lastNameInput()}
                 </div>
+                <div className="userLoginEdit row pt-3 justify-content-start">
+                    {emailInput()}
+                    {passwordEdit()}
+                </div>
                 <div className="row pt-3 justify-content-start">
                     {weightInput()}
                 </div>
             </div>
         );
+    }
+    function updatePassword(){
+        // call API to update password
+        const editInputs = {
+            firstName: firstName,
+            lastName: lastName,
+            weight: userWeight,
+            oldPassword: oldUserPassword,
+            newPassword: newPassword,
+            newPasswordConfirmed: newPasswordConfirmed
+        }
+        if(!isValidEditInputs(editInputs)){
+            console.log("d12")
+            return
+        }
+        setIsEditingtPassword(false);
+        setOldUserPassword("password");
     }
     function prepareEditProfileJSON()
     {
@@ -91,21 +167,29 @@ function MyAccountModal({user, open, close}) {
     }
     function handleEditRes(res){
         if (res.error != 0) {
-            setMessage("Error occured!!!");
+            setResponseMessage({type: 'error', message:'Error occurred'})
           } else {
             storage.storeToken(res) // store the token into localStorage
             let _ud = localStorage.getItem("user_data");
             let ud = JSON.parse(_ud);
             let newData = {...ud, firstName: firstName, lastName: lastName, weight: userWeight}
             localStorage.setItem("user_data", JSON.stringify(newData));
-            setMessage("");
+            setResponseMessage({type: '', message:''});
             setIsEditting(false);
           }
     }
     
     const saveChanges = async (event )=> {
-        
-        if(!isValidEditInputs(firstName, lastName, userWeight))
+        console.log(firstName + lastName + userWeight)
+        const editInputs = {
+            firstName: firstName,
+            lastName: lastName,
+            weight: userWeight,
+            oldPassword: oldUserPassword,
+            newPassword: newPassword,
+            newPasswordConfirmed: newPasswordConfirmed
+        }
+        if(!isValidEditInputs(editInputs))
             return // stop when there is invalid inputs
         // call API to update user preferences
 
@@ -117,12 +201,7 @@ function MyAccountModal({user, open, close}) {
         //
 
         // here we harcoded to test on the frontend, backend would not be updated.
-        const res = {
-            error: 0,
-            jwtToken: "dadwdadwadwd12323"
-        }
-        
-        handleEditRes(res);
+        // handleEditRes(res);
     }
     function doLogout(){
         try{
@@ -162,13 +241,13 @@ function MyAccountModal({user, open, close}) {
     return (
         open ?
         <div className="darkBG">
-            <div className="centered mediumModal theModal ">
+            <div className="centered myAccountModal theModal ">
               <div className="modalContent">
                 <h1>My Account</h1>
                 {makeButton("", "closeBtn",() => {cancelEdit(); close()}, <RiCloseLine/>)}
                 {makeEditInputs()}
                 {makeProfileButtons()}
-                {makeErrorMessage(errorMessage)}
+                {displayRepsonseMessage(responseMessage)}
               </div>
             </div>
         </div>

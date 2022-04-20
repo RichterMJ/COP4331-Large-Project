@@ -116,6 +116,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         setAddRecipeOpen(!addRecipeOpen);
     }
     function editRecipe(recipe){
+        console.log("edit")
         // switch to diffrent modal
         setSelectedEditRecipe(recipe);
         setEditRecipeOpen(true);

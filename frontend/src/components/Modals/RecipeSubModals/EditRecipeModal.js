@@ -9,6 +9,7 @@ import { SelectedRecipeFoodList} from "./SubComponents";
 const storage = require("../../tokenStorage.js");
  
 function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
+    
     const [responseMessage, setResponseMessage] = useState({
         type: '',
         message: ''
@@ -96,6 +97,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
                 <h1>Edit Recipe</h1>
                 {makeButton("", "closeBtn",() => {close();  resetTable()}, <RiCloseLine/>)}
                 {displayRecipeEdit()}
+                {console.log("edit modal readch")}
                 {displaySearchFood()}
                 {makeActionButton("button", "btn btn-success", () => editRecipe(), "Edit Recipe", "editRecipeBtn" )}
                 {displayRepsonseMessage(responseMessage)}
