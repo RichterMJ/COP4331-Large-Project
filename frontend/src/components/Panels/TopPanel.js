@@ -26,14 +26,21 @@ function MainInfoBox(props){
                 Your Day
             </div>
             <div id = "timeSubHeader">
-              {props.date}
+              {getDateString(props.date)}
             </div>
         </div>
 )
 }
-function TopPanel(props){
-    const [date,setDate] = useState("March 22nd 2022");
+function getDateString(date){
+    // these are options for how the date gets displayed
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+    return new Intl.DateTimeFormat('en-US', options).format(date)
+
+    }
+
+function TopPanel(props){
+        let date = props.date;
     return(
         <div id = "topPanel">
           <LeftButton/>

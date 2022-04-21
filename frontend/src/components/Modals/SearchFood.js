@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../RESTHelpers/JSONRequest";
 import {makeButton} from "../divHelpers/divHelpers";
 import {CircleSpinner} from "react-spinners-kit";
 

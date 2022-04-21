@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef} from "react";
 import buildPath from "./path";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} from "./Validators/InputValidator";
-import JSONRequest from "./RESTHelpers/JSONRequest"
+import {JSONRequest} from "./RESTHelpers/JSONRequest"
 
 let storage = require('./tokenStorage.js');
 

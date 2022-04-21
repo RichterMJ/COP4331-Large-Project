@@ -24,7 +24,7 @@ function leftPanelLogoHeader(){
     )
 }
 
-function LeftPanel({user}){
+function LeftPanel({user, date}){
     console.log(user);
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [myAccountOpen, setMyAccountOpen] = useState(false);

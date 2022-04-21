@@ -5,7 +5,7 @@ import { blankValidator, makeErrorMessage, addInvalidStyle, emailValidator, pass
 import Modal from "./Modals/ResponseModal";
 import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink, makeSpan, makeH2 } from "./divHelpers/divHelpers";
 import ResponseModal from "./Modals/ResponseModal";
-import JSONRequest from "./RESTHelpers/JSONRequest"
+import {JSONRequest} from "./RESTHelpers/JSONRequest"
 
 function ResetPassword() {
   const search = useLocation().search;
