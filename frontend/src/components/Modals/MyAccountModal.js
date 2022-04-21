@@ -61,7 +61,7 @@ function MyAccountModal({user, open, close}) {
 
     function firstNameInput(){
         return (
-            <div className="">
+            <div className="firstNameInputDiv">
                 {makeLabel("firstNameEdit", "First Name")}
             
                 {makeInputDiv("text", "firstNameEdit", `firstNameEditInput ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
@@ -71,7 +71,7 @@ function MyAccountModal({user, open, close}) {
     }
     function lastNameInput(){
         return (
-            <div className="">
+            <div className="lastNameInputDiv">
                 {makeLabel("lastNameEdit", "Last Name")}
 
                 {makeInputDiv("text", "lastNameEdit", `lastNameEditInput ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
@@ -81,7 +81,7 @@ function MyAccountModal({user, open, close}) {
     }
     function weightInput(){
         return (
-            <div className="">
+            <div className="weightInputDiv">
                     {makeLabel("weightEdit", "Weight")}
                     <div className="input-group-prepend"> 
                         {makeInputDiv("text", "editWeightInput", `w-50 ${addInvalidStyle(editFormError.weightError)} ${toggleEdittingStyle()}`, userWeight, "weight", "weight",setUserWeight,`${toggleDisable()}`)}
@@ -93,7 +93,7 @@ function MyAccountModal({user, open, close}) {
     }
     function emailInput(){
         return (
-            <div className="">
+            <div className="emailInputDiv">
             {makeLabel("emailInput", "Email", "")}
             {makeInputDiv("text","emailInput", "d-block", user.email, "emailEditInput", "email", "", "disabled")}
             </div>
@@ -120,14 +120,14 @@ function MyAccountModal({user, open, close}) {
     }
     function passwordUpdate(){
         return (
-            <div className="">
+            <div className="updatePasswordInputss">
                 {makeLabel('oldPasswordInput', !isEdittingPassword ? 'Password' : 'Old Password', '')}
                 {makeInputDiv("password", "oldPasswordInput", `form-control ${addInvalidStyle(editFormError.oldPasswordError)}`, oldUserPassword, "oldPasswordInput", "old password", setOldUserPassword, (isEdittingPassword) ? '' : 'disabled')}
                 {isEdittingPassword && makeNewPasswordInputs()}
                 {!isEdittingPassword && makeButton('editPasswordBtn', 'btn btn-primary mt-2', ()=>{setIsEditingtPassword(true); setOldUserPassword("")}, 'Update Password')}
                 {isEdittingPassword && makeButton('updatePasswordBtn', 'btn btn-success mt-2', ()=>{updatePassword()}, 'Save')}
                 {isEdittingPassword && makeButton('cancelUpdatePasswordBtn', 'btn btn-warning mt-2 ml-2', ()=>{cancelUpdatePassword()},"Cancel")}
-            </div>
+            </>
         );
     }
     function passwordEdit(){
