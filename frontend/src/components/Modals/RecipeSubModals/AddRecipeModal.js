@@ -4,11 +4,12 @@ import {addInvalidStyle, displayRepsonseMessage, makeErrorMessage, weightValidat
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
-import JSONRequest from "../../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 import { AddSelectedFoodToRecipe, SelectedRecipeFoodList } from "./SubComponents";
 const storage = require("../../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
+    console.log(open)
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [recipeDescription, setRecipeDescription] = useState("");
@@ -16,8 +17,6 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
         type: '',
         message: ''
     });
-    const [queryStart, setQueryStart] = useState(0);
-    console.log("add recipe modal detected")
     
     //const [clickSearch, setClickSearch] = useState(false);
     function makeRecipeDescriptionInput(){
@@ -45,7 +44,6 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     
     function resetTable(){
         setTC("");
-        setQueryStart(0);
     }
     function prepareAddRecipeJSON(){
         const recipeJSON ={
@@ -97,7 +95,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Add Recipe</h1>
                 {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />
+                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} />
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
                 {displayRepsonseMessage(responseMessage)}

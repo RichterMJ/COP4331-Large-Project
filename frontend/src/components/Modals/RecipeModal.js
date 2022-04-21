@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from "react";
 import {makeButton, makeLabel, makeInputDiv, makeActionButton} from "../divHelpers/divHelpers";
-import GETRequest from "../RESTHelpers/GETRequest";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest, JSONGETRequest} from "../RESTHelpers/JSONRequest";
 import {RiCloseLine} from "react-icons/ri";
 import {FiEdit2} from "react-icons/fi";
 import {MdDeleteOutline} from "react-icons/md";
 import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage, displayRepsonseMessage } from "../Validators/InputValidator";
 import AddRecipeModal from "./RecipeSubModals/AddRecipeModal";
-import EditRecipeModal from "./RecipeSubModals/AddRecipeModal";
+import EditRecipeModal from "./RecipeSubModals/EditRecipeModal";
 
 let storage = require('../tokenStorage');
 
@@ -36,6 +35,8 @@ function RecipeModal({ user, open, close, tc, setTC}){
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])
+    console.log(editRecipeOpen);
+    console.log(addRecipeOpen)
     function makeSearchRecipeBar(){
         return (
             <div className="recipeSearchBar row w-100 justify-content-start">
@@ -151,7 +152,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
     async function getAllRecipes(){
         // make api call
         let curToken = storage.retrieveToken();
-        let res = await GETRequest(`api/users/data/recipes?userId=${user.userId}&jwtToken=${curToken}`);
+        let res = await JSONGETRequest(`api/users/data/recipes?userId=${user.userId}&jwtToken=${curToken}`);
         if (res.error == 0){
             console.log(res);
             storage.storeToken(res);

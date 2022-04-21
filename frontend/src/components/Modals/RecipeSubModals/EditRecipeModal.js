@@ -4,12 +4,12 @@ import {addInvalidStyle, displayRepsonseMessage, makeErrorMessage, weightValidat
 import { RiCloseLine } from "react-icons/ri";
 import {BiArrowBack} from "react-icons/bi"
 import SearchFood from "../SearchFood";
-import JSONRequest from "../../RESTHelpers/JSONRequest";
-import { SelectedRecipeFoodList} from "./SubComponents";
+import {JSONRequest} from "../../RESTHelpers/JSONRequest";
+import { SelectedRecipeFoodList, AddSelectedFoodToRecipe} from "./SubComponents";
 const storage = require("../../tokenStorage.js");
  
 function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
-    
+    console.log("edit12323")
     const [responseMessage, setResponseMessage] = useState({
         type: '',
         message: ''
@@ -18,7 +18,6 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     const [selectedFoodsList, setSelectedFoodsList] = useState(recipe.ingredients);
     const [selectedFood, setSelectedFood] = useState({});
     const [addMoreFoodOpen, setAddMoreFoodOpen] = useState(false);
-    const [queryStart, setQueryStart] = useState(0);
 
     function prepareEditRecipeJSON(){
         const newRecipe = {...recipe, description: editRecipeName, descriptions: selectedFoodsList};
@@ -54,7 +53,6 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function resetTable(){
         setTC("");
-        setQueryStart(0);
     }
     function makeEditRecipeNameInput(){
         return(
@@ -82,7 +80,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function displaySearchFood(){
         return (
-            addMoreFoodOpen && <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} queryStart={queryStart} setQueryStart={setQueryStart} />
+            addMoreFoodOpen && <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} />
         );
     }
     function addMoreFood(){
@@ -96,6 +94,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Edit Recipe</h1>
                 {makeButton("", "closeBtn",() => {close();  resetTable()}, <RiCloseLine/>)}
+                {console.log("reach edit")}
                 {displayRecipeEdit()}
                 {console.log("edit modal readch")}
                 {displaySearchFood()}

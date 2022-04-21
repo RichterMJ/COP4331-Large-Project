@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../../divHelpers/divHelpers";
 import {addInvalidStyle, makeErrorMessage, weightValidator} from "../../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
-import JSONRequest from "../../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 
 
 function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSelectedFood}){
