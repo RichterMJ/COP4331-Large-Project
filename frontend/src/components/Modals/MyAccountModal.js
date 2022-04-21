@@ -2,10 +2,13 @@ import React, {useState} from "react";
 import {makeActionButton, makeButton, makeInputDiv, makeLabel, makeSpan} from "../divHelpers/divHelpers";
 import {displayRepsonseMessage, addInvalidStyle, makeErrorMessage, passwordValidator, weightValidator} from "../Validators/InputValidator";
 import { RiCloseLine } from "react-icons/ri";
-import JSONRequest from "../RESTHelpers/JSONRequest";
+import {JSONRequest} from "../RESTHelpers/JSONRequest";
+
+
 
 
 function MyAccountModal({user, open, close}) {
+    
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [userWeight, setUserWeight] = useState(user.weight);
@@ -30,10 +33,17 @@ function MyAccountModal({user, open, close}) {
     const storage = require("../tokenStorage.js");
 
     function isValidEditInputs(editInputs){
-        let errors = {};
+        let errors = {...editFormError};
         errors.firstNameError = (!editInputs.firstName) ? "Invalid First Name" : "";
-        errors.elastNameError = (!editInputs.lastName) ? "Invalid Last Name" : "";
+        errors.lastNameError = (!editInputs.lastName) ? "Invalid Last Name" : "";
         errors.weightError = weightValidator(editInputs.weight);
+
+        setEditFormError(errors);
+        //let isInvalid = Object.keys(errors).some(key=>{ return errors[key].length != 0});
+        return (errors.firstNameError=="" && errors.lastNameError=="" && errors.weightError=="");
+    }
+    function isValidEditPassword(editInputs){
+        let errors = {...editFormError}
         errors.oldPasswordError = passwordValidator(editInputs.oldPassword, false);
         errors.newPasswordError= passwordValidator(editInputs.newPassword, true);
         if ((errors.newPasswordConfirmedError = passwordValidator(editInputs.newPasswordConfirmed, false)) == ""){
@@ -42,8 +52,7 @@ function MyAccountModal({user, open, close}) {
             }
         }
         setEditFormError(errors);
-        let isInvalid = Object.keys(errors).some(key=>{ return errors[key].length != 0});
-        return !isInvalid;
+        return (errors.oldPasswordError == "" && errors.newPasswordError =="" && errors.newPasswordConfirmedError=="")
     }
     function toggleEdittingStyle()
     {
@@ -105,6 +114,13 @@ function MyAccountModal({user, open, close}) {
             </div>
         );
     }
+    function cancelUpdatePassword(){
+        setIsEditingtPassword(false);
+        setOldUserPassword("password");
+        setNewPassword("");
+        setNewPasswordConfirmed("");
+        setEditFormError({})
+    }
     function passwordUpdate(){
         return (
             <div className="col-5 text-left">
@@ -113,6 +129,7 @@ function MyAccountModal({user, open, close}) {
                 {isEdittingPassword && makeNewPasswordInputs()}
                 {!isEdittingPassword && makeButton('editPasswordBtn', 'btn btn-primary mt-2', ()=>{setIsEditingtPassword(true); setOldUserPassword("")}, 'Update Password')}
                 {isEdittingPassword && makeButton('updatePasswordBtn', 'btn btn-success mt-2', ()=>{updatePassword()}, 'Save')}
+                {isEdittingPassword && makeButton('cancelUpdatePasswordBtn', 'btn btn-warning mt-2 ml-2', ()=>{cancelUpdatePassword()},"Cancel")}
             </div>
         );
     }
@@ -138,32 +155,47 @@ function MyAccountModal({user, open, close}) {
             </div>
         );
     }
-    function updatePassword(){
+    function prepareUpdatePasswordJSON(){
+        const updatePasswordJSON = {
+            userId: user.userId,
+            oldPassword: oldUserPassword,
+            newPassword: newPassword,
+            jwtToken: storage.retrieveToken()
+        }
+        return JSON.stringify(updatePasswordJSON)
+    }
+    function resetMessage(){
+        setResponseMessage({type: '', message:''})
+    }
+    function handleUpdatePasswordRes(res){
+        if (res.error == 0){
+            console.log(res);
+            storage.storeToken(res);
+                setIsEditingtPassword(false);
+                setOldUserPassword("password");
+            setResponseMessage({type: 'success', message:'password update successfully'})
+            setTimeout(()=>resetMessage(),2000);
+        } else if (res.error == 3){
+            setResponseMessage({type: 'error', message:'Incorrect password entered'})
+        }
+        else {
+            setResponseMessage({type: 'error', message:'Error occured'})
+        }
+    }
+    async function updatePassword(){
         // call API to update password
-        const editInputs = {
-            firstName: firstName,
-            lastName: lastName,
-            weight: userWeight,
+        const editPassInputs = {
             oldPassword: oldUserPassword,
             newPassword: newPassword,
             newPasswordConfirmed: newPasswordConfirmed
         }
-        if(!isValidEditInputs(editInputs)){
-            console.log("d12")
+        if(!isValidEditPassword(editPassInputs)){
             return
         }
-        setIsEditingtPassword(false);
-        setOldUserPassword("password");
-    }
-    function prepareEditProfileJSON()
-    {
-        const profileChanges ={
-            firstName: firstName,
-            lastName: lastName,
-            weight: userWeight,
-            jwtToken: storage.retrieveToken()
-        }
-        return JSON.stringify(profileChanges);
+        const updatePasswordJSON  = prepareUpdatePasswordJSON();
+        let res = await JSONRequest("POST", updatePasswordJSON, 'api/users/editPassword');
+        console.log(res)
+        handleUpdatePasswordRes(res);
     }
     function handleEditRes(res){
         if (res.error != 0) {
@@ -174,34 +206,35 @@ function MyAccountModal({user, open, close}) {
             let ud = JSON.parse(_ud);
             let newData = {...ud, firstName: firstName, lastName: lastName, weight: userWeight}
             localStorage.setItem("user_data", JSON.stringify(newData));
-            setResponseMessage({type: '', message:''});
+            setResponseMessage({type: 'success', message:'Edited successfully'})
+            setTimeout(()=>resetMessage(), 2000);
             setIsEditting(false);
           }
     }
-    
-    const saveChanges = async (event )=> {
-        console.log(firstName + lastName + userWeight)
+    function prepareEditUserJSON(){
+        const editUserJSON = {
+            userId: user.userId,
+            firstname: firstName,
+            lastname: lastName,
+            weight: Number(userWeight),
+            email: user.email,
+            jwtToken: storage.retrieveToken()
+        }
+        return JSON.stringify(editUserJSON)
+    }
+    async function saveChanges(){
         const editInputs = {
             firstName: firstName,
             lastName: lastName,
             weight: userWeight,
-            oldPassword: oldUserPassword,
-            newPassword: newPassword,
-            newPasswordConfirmed: newPasswordConfirmed
         }
         if(!isValidEditInputs(editInputs))
             return // stop when there is invalid inputs
-        // call API to update user preferences
 
-        /// API function ready, waiting backend to add another API endpoint for this:
-        // 
-        // const profileChangesJSON = prepareEditProfileJSON();
-        // let res = await JSONRequest(profileChangesJSON, "/api/users/editUser");
-        // handleEditRes(res);
-        //
-
-        // here we harcoded to test on the frontend, backend would not be updated.
-        // handleEditRes(res);
+        const editUserJSON = prepareEditUserJSON();
+        let res = await JSONRequest("POST", editUserJSON, "api/users/edit");
+        console.log(res)
+        handleEditRes(res);
     }
     function doLogout(){
         try{
