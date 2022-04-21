@@ -89,7 +89,13 @@
 .weightLabel {
   margin-left: 50px;
 }
-
+.selectedFoodBuble:hover{
+  cursor: pointer;
+  background-color: bisque;
+}
+.recipeDetail:hover{
+  cursor: pointer;
+}
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
   width: 200vw;
@@ -156,13 +162,28 @@
   font-weight: 1000;
   border-radius: 8px;
   border: none;
-  font-size: 25px;
+  font-size: 35px;
   background: none;
   transition: all 0.25s ease;
   position: absolute;
   right: 10px;
   top: 0px;
   align-self: flex-end;
+}
+.backBtn {
+  cursor: pointer;
+  font-weight: 1000;
+  border-radius: 8px;
+  border: none;
+  font-size: 40px;
+  background: none;
+  transition: all 0.25s ease;
+  position: absolute;
+  left: 10px;
+  top: 0px;
+}
+.backBtn:hover {
+  color: red;
 }
 
 .closeBtn:hover {
@@ -210,6 +231,12 @@
 .mediumModal{
   width: 700px;
   height: 550px;
+}
+.myAccountModal{
+  min-width: 700px;
+  min-height: 550px;
+  width: auto;
+  height: auto;
 }
 .addRecipeModal{
   min-width:1000px;

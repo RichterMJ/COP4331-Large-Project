@@ -53,6 +53,7 @@
         "nodemailer": "^6.7.2",
         "nodemailer-smtp-transport": "^2.7.4",
         "path": "^0.12.7",
-        "react-spinners-kit": "^1.9.1"
+        "react-spinners-kit": "^1.9.1",
+        "react-useanimations": "^2.0.8"
     }
 }

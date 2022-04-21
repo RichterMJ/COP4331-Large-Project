@@ -1753,6 +1753,11 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-web@^5.5.7:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.9.2.tgz#38db3f3f3655802c465d725a359fc9d303e31335"
+  integrity sha512-YnoJIKCdKIzno8G/kONOpADW6H/ORZV9puy3vWOhWmHtbDcpISFGVvvdKKa2jwAcsVqXK4xSi0po730kAPIfBw==
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz"
@@ -2177,6 +2182,13 @@ react-spinners-kit@^1.9.1:
     react "^16.12.0"
     react-dom "^16.12.0"
     styled-components "^4.4.1"
+
+react-useanimations@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/react-useanimations/-/react-useanimations-2.0.8.tgz#29ebfe4deda414b9dd2e6c8513d3d3972a2efa39"
+  integrity sha512-pjA5M8qA2NF3kvvu8yuBToOt79fdqXpx3Ba32ci8uG9zSv5XHz1d4OmDqqWARwaFWLIRS1Jan3HllpsqUWiKjw==
+  dependencies:
+    lottie-web "^5.5.7"
 
 react@^16.12.0:
   version "16.14.0"

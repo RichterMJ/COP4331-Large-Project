@@ -2,16 +2,15 @@ import React, {useState} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers.js";
 import AddFoodModal from "../Modals/AddFoodModal";
 import MyAccountModal from "../Modals/MyAccountModal.js";
-import AddRecipeModal from "../Modals/AddRecipeModal.js";
-
+import RecipeModal from "../Modals/RecipeModal.js";
 
 function addFoodEvent(toggleAFM){
     toggleAFM();
 }
-
-function makeRecipeEvent(toggleMR){
-    toggleMR();
+function displayRecipe(toggleDR){
+    toggleDR();
 }
+
 function myAccountEvent(toggleEUP){
     toggleEUP();
 }
@@ -29,15 +28,15 @@ function LeftPanel({user, date}){
     console.log(user);
     const [addFoodOpen, setAddFoodOpen] = useState(false);
     const [myAccountOpen, setMyAccountOpen] = useState(false);
-    const [addRecipeOpen, setAddRecipeOpen] = useState(false);
     const [tableContent, setContent] = useState("");
+    const [recipeOpen, setRecipeOpen]= useState(false);
 
 
     //Makes it so table content in add food is set to blank once opened
     const toggleTC = (content) => setContent(content);
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
     const toggleMA = () => setMyAccountOpen(!myAccountOpen);
-    const toggleMR = () => setAddRecipeOpen(!addRecipeOpen);
+    const toggleDR = () => setRecipeOpen(!recipeOpen);
 
  
     return(
@@ -45,14 +44,14 @@ function LeftPanel({user, date}){
           {leftPanelLogoHeader()}
           {makeActionButton("button", "leftPanelButton",() => addFoodEvent(toggleAFM),
                             "Add Food","addFoodButton")}
-          {makeActionButton("button", "leftPanelButton",() => makeRecipeEvent(toggleMR),
-                            "Make Recipe","makeRecipeButton")}
           {makeActionButton("button", "leftPanelButton",() => myAccountEvent(toggleMA),
                             "My Account","myAccountButton")}
+            {makeActionButton("button", "leftPanelButton",() => displayRecipe(toggleDR),
+                            "Recipe","recipeButton")}
           <main>
-            {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC} date={date}/>}
+            {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
+            {<RecipeModal user={user} open={recipeOpen} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
             {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
-            {<AddRecipeModal user={user} open={addRecipeOpen} close={toggleMR} tc={tableContent} setTC={toggleTC} />}
           </main>
         </div>
     )
