@@ -127,7 +127,7 @@ function MyAccountModal({user, open, close}) {
                 {!isEdittingPassword && makeButton('editPasswordBtn', 'btn btn-primary mt-2', ()=>{setIsEditingtPassword(true); setOldUserPassword("")}, 'Update Password')}
                 {isEdittingPassword && makeButton('updatePasswordBtn', 'btn btn-success mt-2', ()=>{updatePassword()}, 'Save')}
                 {isEdittingPassword && makeButton('cancelUpdatePasswordBtn', 'btn btn-warning mt-2 ml-2', ()=>{cancelUpdatePassword()},"Cancel")}
-            </>
+            </div>
         );
     }
     function passwordEdit(){
