@@ -4,9 +4,6 @@ import {displayRepsonseMessage, addInvalidStyle, makeErrorMessage, passwordValid
 import { RiCloseLine } from "react-icons/ri";
 import {JSONRequest} from "../RESTHelpers/JSONRequest";
 
-
-
-
 function MyAccountModal({user, open, close}) {
     
     const [firstName, setFirstName] = useState(user.firstName);
@@ -64,7 +61,7 @@ function MyAccountModal({user, open, close}) {
 
     function firstNameInput(){
         return (
-            <div className="col-5 text-left">
+            <div className="">
                 {makeLabel("firstNameEdit", "First Name")}
             
                 {makeInputDiv("text", "firstNameEdit", `firstNameEditInput ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
@@ -74,7 +71,7 @@ function MyAccountModal({user, open, close}) {
     }
     function lastNameInput(){
         return (
-            <div className="col-5 text-left">
+            <div className="">
                 {makeLabel("lastNameEdit", "Last Name")}
 
                 {makeInputDiv("text", "lastNameEdit", `lastNameEditInput ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
@@ -84,7 +81,7 @@ function MyAccountModal({user, open, close}) {
     }
     function weightInput(){
         return (
-            <div className="col-5  text-left">
+            <div className="">
                     {makeLabel("weightEdit", "Weight")}
                     <div className="input-group-prepend"> 
                         {makeInputDiv("text", "editWeightInput", `w-50 ${addInvalidStyle(editFormError.weightError)} ${toggleEdittingStyle()}`, userWeight, "weight", "weight",setUserWeight,`${toggleDisable()}`)}
@@ -96,7 +93,7 @@ function MyAccountModal({user, open, close}) {
     }
     function emailInput(){
         return (
-            <div className="col-5 text-left">
+            <div className="">
             {makeLabel("emailInput", "Email", "")}
             {makeInputDiv("text","emailInput", "d-block", user.email, "emailEditInput", "email", "", "disabled")}
             </div>
@@ -123,7 +120,7 @@ function MyAccountModal({user, open, close}) {
     }
     function passwordUpdate(){
         return (
-            <div className="col-5 text-left">
+            <div className="">
                 {makeLabel('oldPasswordInput', !isEdittingPassword ? 'Password' : 'Old Password', '')}
                 {makeInputDiv("password", "oldPasswordInput", `form-control ${addInvalidStyle(editFormError.oldPasswordError)}`, oldUserPassword, "oldPasswordInput", "old password", setOldUserPassword, (isEdittingPassword) ? '' : 'disabled')}
                 {isEdittingPassword && makeNewPasswordInputs()}
@@ -140,17 +137,17 @@ function MyAccountModal({user, open, close}) {
     }
     function makeEditInputs(){
         return (
-            <div className="container"> 
-                <div className="row pt-5 justify-content-start"> 
-                    {firstNameInput()}
-                    {lastNameInput()}
+            <div className="container "> 
+                <div className="row justify-content-around">
+                <div className= "row col-5 text-left leftEditInputs">
+                    {firstNameInput()} 
+                    {emailInput()} 
+                    {weightInput()}
                 </div>
-                <div className="userLoginEdit row pt-3 justify-content-start">
-                    {emailInput()}
+                <div className="row col-5 text-left rightEditInputs"> 
+                    {lastNameInput()}
                     {passwordEdit()}
                 </div>
-                <div className="row pt-3 justify-content-start">
-                    {weightInput()}
                 </div>
             </div>
         );
