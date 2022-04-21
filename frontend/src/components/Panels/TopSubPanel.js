@@ -109,12 +109,11 @@ function TopSubPanel(props){
     }
 
     const [fl,setFl] = useState(props.foodList);
-    let curDate = props.date;
     const [foods,setFoods] = useState([]);
     // gets initial food day data
     useEffect(() =>{
       const getRecords = async () =>{
-        let res = await getFoodDayList(curDate);
+        let res = await getFoodDayList(props.date);
         setFoods(res);
         console.log(res);
       }

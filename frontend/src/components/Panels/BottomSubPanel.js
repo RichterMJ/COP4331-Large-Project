@@ -86,7 +86,7 @@ function NutrientCategory (props){
     </div>
   )
 }
-function BottomSubPanel() {
+function BottomSubPanel(props) {
   const [fitPercentage,setFitPercentage] = useState("50%");
   const [nutrientCategories,setNutrientCategories] = useState([]);
 
