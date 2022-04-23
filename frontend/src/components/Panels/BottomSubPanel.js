@@ -95,7 +95,6 @@ function NutrientCategory (props){
     </div>
   )
 }
-
 function BottomSubPanel(props) {
   const [fitPercentage,setFitPercentage] = useState("50%");
   const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);

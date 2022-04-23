@@ -3,7 +3,7 @@ import TopPanel from "./TopPanel";
 import BottomSubPanel from "./BottomSubPanel"
 import {TopSubPanel}from "./TopSubPanel"
 import { JSONGETRequest } from "../RESTHelpers/JSONRequest";
-function RightPanel({user,date, triggerPageToRender}){
+function RightPanel({user,date, setDateFunc}){
   const [RDIChart, setRDIChart] = useState([]);
 
   useEffect(()=>{
@@ -16,7 +16,7 @@ function RightPanel({user,date, triggerPageToRender}){
   },[])
     return(
         <div id="rightPanel">
-          <TopPanel userId={user.userID} date={date} />
+          <TopPanel userId={user.userID} date={date} setDateFunc={setDateFunc} />
           <TopSubPanel date= {date} userId={user.userId}/>
           <BottomSubPanel date={date} userId={user.userId} RDINutrients={RDIChart}/>
         </div>

@@ -18,7 +18,7 @@ function UserPage() {
         <div id="content">
             <div id="panels">
               <LeftPanel user={user} date={date}/>
-              <RightPanel user={user} date={date}/>
+              <RightPanel user={user} date={date} setDateFunc={setDate}/>
             </div>
         </div>
     );
