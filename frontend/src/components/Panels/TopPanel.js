@@ -20,7 +20,7 @@ function LeftButton (props){
 
 function RightButton (props){
     return makeActionButton
-    ("button","directionButton",() => rightDayEvent(props.curDate,props.setDayFunc),">","rightButton");
+    ("button","rightButton directionButton",() => rightDayEvent(props.curDate,props.setDayFunc),">","rightButton");
 }
 
 function MainInfoBox(props){

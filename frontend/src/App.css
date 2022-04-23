@@ -330,3 +330,27 @@
 #portionsToSelect{
   margin-bottom: 25px;
 }
+
+#topPanel{
+  max-width: 500px;
+}
+
+.directionButton{
+  margin-left: 20px;
+  height: 75px;
+  color: black
+}
+
+.rightButton{
+  position: absolute;
+  margin-left: 465px;
+}
+
+#mainInfoBox{
+  position: center;
+}
+
+#timeSubHeader{
+  width: 300px;
+  margin-left: -25px;
+}
