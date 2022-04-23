@@ -95,12 +95,14 @@ function NutrientCategory (props){
     </div>
   )
 }
+
 function BottomSubPanel(props) {
   const [fitPercentage,setFitPercentage] = useState("50%");
   const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
   const [nutrientList, setNutrientList] = useState([]);
   const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
   console.log(nutrientList)
+
   useEffect(()=>{
     const getFoodAverageList = async () =>{
       let res = await getFoodAverage();
@@ -117,7 +119,18 @@ function BottomSubPanel(props) {
     }
     
   },[nutrientList])
-
+  function makeDefaultNutrientDisplay(){
+    let defaultCategorizedNutrient = {...categorizeNutrients(props.RDINutrients)}
+    for( let key in defaultCategorizedNutrient){
+      defaultCategorizedNutrient[key].nutrients.map((nutrient, index) =>{
+        defaultCategorizedNutrient[key].nutrients[index] = {...defaultCategorizedNutrient[key].nutrients[index], RDIValue: defaultCategorizedNutrient[key].nutrients[index].value, value: 0}
+      })
+    }
+    // Object.keys(defaultCategorizedNutrient).nutrients.map((nutrient, index) =>{
+    //   defaultCategorizedNutrient[key].nutrients[index] = {...defaultCategorizedNutrient[key].nutrients[index], RDIValue: defaultCategorizedNutrient[key].nutrients[index].value, value: 0}
+    // })
+    return defaultCategorizedNutrient;
+  }
   function prepareGetFoodAverageJSON(){
     const getFoodAverageJSON = {
       userId: props.userId,
@@ -144,9 +157,13 @@ function BottomSubPanel(props) {
     console.log("displayCat reached")
     console.log(catergorizedNutrients);
     console.log(categorizedRDINutrients);
-    
-    let finalCategorizedNutrient = addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    let finalCategorizedNutrient;
+    if (nutrientList.length != 0) 
+      finalCategorizedNutrient= addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    else
+      finalCategorizedNutrient = makeDefaultNutrientDisplay();
     console.log(finalCategorizedNutrient);
+    
     return (
       Object.keys(finalCategorizedNutrient).map((key, index) =>{
         return <NutrientCategory key={index} nutrientCat={finalCategorizedNutrient[key]}/>
@@ -157,7 +174,7 @@ function BottomSubPanel(props) {
     <div id= "BSP">
       <div id  = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
       <div id = "bottomSubPanel">
-          {nutrientList.length!=0 && displayNutrientCategories()}
+          {displayNutrientCategories()}
       </div>
     </div>
   )
