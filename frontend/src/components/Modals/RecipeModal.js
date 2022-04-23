@@ -15,14 +15,17 @@ function RecipeModal({ user, open, close, tc, setTC}){
     const [searchQuery, setSearchQuery] = useState("");
     const [recipeList, setRecipeList] = useState([]);
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
+
     const [responseMessage, setResponseMessage] = useState({
         type: '',
         message: ''
     });
+
     const [triggerRender, setTriggerRender] = useState(true);
     const [addRecipeOpen, setAddRecipeOpen]  = useState(false);
     const [editRecipeOpen, setEditRecipeOpen] = useState(false);
     const [selectedEditRecipe, setSelectedEditRecipe] = useState({});
+
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
@@ -32,11 +35,14 @@ function RecipeModal({ user, open, close, tc, setTC}){
         getRecipes();
         console.log("hello")
     },[open, triggerRender])
+
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])
+
     console.log(editRecipeOpen);
     console.log(addRecipeOpen)
+
     function makeSearchRecipeBar(){
         return (
             <div className="recipeSearchBar row w-100 justify-content-start">
@@ -52,6 +58,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
             </div>
         );
     }
+
     function RecipeDiv({recipe, index}){
         return (
             <>
@@ -60,6 +67,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
                     {recipe.description}
                 </div>
                 <div className="recipeButtons col-4">
+                    {makeButton("addToFoodList", "btn", ()=>{addToFoodList(recipe)}, "Add")}
                     {makeButton("editRecipeBtn", "btn", ()=>{editRecipe(recipe)}, <FiEdit2 key={index}/>)}
                     {makeButton("deleteRecipeBtn", "btn", ()=>{deleteRecipe(recipe)}, <MdDeleteOutline key={index}/>)}
                     {makeButton("RecipeDetailBtn", "btn", ()=>{displayRecipeDetail(recipe, index)}, <AiOutlineInfoCircle key={index}/>)}
@@ -69,6 +77,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
             </>
         );
     }
+
     function RecipeDetail({recipe, index}){
         
         return(
@@ -82,12 +91,14 @@ function RecipeModal({ user, open, close, tc, setTC}){
             </div>
         );
     }
+
     function toggleViewOpenDetails(index){
         let updateViewDetailOpen  = [...viewDetailOpen];
         updateViewDetailOpen[index] = !viewDetailOpen[index];
         console.log(updateViewDetailOpen);
         setViewDetailOpen(updateViewDetailOpen);
     }
+    
     function makeRecipeList(){
         console.log(recipeList);
         return (
@@ -113,9 +124,11 @@ function RecipeModal({ user, open, close, tc, setTC}){
             </div>
         )
     }
+
     function toggleAddRecipeOpen(){
         setAddRecipeOpen(!addRecipeOpen);
     }
+
     function editRecipe(recipe){
         console.log("edit")
         // switch to diffrent modal
@@ -123,6 +136,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         setEditRecipeOpen(true);
         close();
     }
+
     function prepareDeleteRecipeJSON(recipe){
         const deleteRecipeJSON = {
             recipeId: recipe.recipeId,
@@ -130,6 +144,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         }
         return JSON.stringify(deleteRecipeJSON);
     }
+
     async function deleteRecipe(recipe){
         // api call to delete recipe
         const deleteRecipeJSON = prepareDeleteRecipeJSON(recipe);
@@ -146,9 +161,11 @@ function RecipeModal({ user, open, close, tc, setTC}){
             setTimeout(()=>setResponseMessage({...responseMessage, message:''}), 2000);
         }
     }
+
     function displayRecipeDetail(recipe, index){
         toggleViewOpenDetails(index);
     }
+
     async function getAllRecipes(){
         // make api call
         let curToken = storage.retrieveToken();
