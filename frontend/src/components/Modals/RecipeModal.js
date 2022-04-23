@@ -26,7 +26,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
-            console.log(res.recipes);
+            console.log('recipes',res.recipes);
             setRecipeList(res.recipes);
         }
         getRecipes();

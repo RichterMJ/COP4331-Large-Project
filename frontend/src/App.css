@@ -342,8 +342,7 @@
 }
 
 .rightButton{
-  position: absolute;
-  margin-left: 465px;
+  margin-left: -100px;
 }
 
 #mainInfoBox{
