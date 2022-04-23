@@ -1,21 +1,26 @@
 import React,{useState} from "react";
 import {makeActionButton} from "../divHelpers/divHelpers.js";
 
-function leftDayEvent(){
+function leftDayEvent(curDate,setDayFunc){
+    let newDate = new Date(curDate);
+    newDate.setDate(curDate.getDate()-1);
+    setDayFunc(newDate);
 
 }
-function rightDayEvent(){
-
+function rightDayEvent(curDate,setDayFunc){
+    let newDate = new Date(curDate);
+    newDate.setDate(curDate.getDate()+1);
+    setDayFunc(newDate);
 }
-function LeftButton (){
+function LeftButton (props){
     return makeActionButton
-    ("button","directionButton",() => leftDayEvent(),"<","leftButton");
+    ("button","directionButton",() => leftDayEvent(props.curDate,props.setDayFunc),"<","leftButton");
 
 }
 
-function RightButton (){
+function RightButton (props){
     return makeActionButton
-    ("button","directionButton",() => rightDayEvent(),">","rightButton");
+    ("button","directionButton",() => rightDayEvent(props.curDate,props.setDayFunc),">","rightButton");
 }
 
 function MainInfoBox(props){
@@ -40,12 +45,11 @@ function getDateString(date){
     }
 
 function TopPanel(props){
-        let date = props.date;
     return(
         <div id = "topPanel">
-          <LeftButton/>
-          <MainInfoBox date={date}/>
-          <RightButton/>
+          <LeftButton curDate={props.date} setDayFunc={props.setDateFunc} />
+          <MainInfoBox date={props.date}/>
+          <RightButton curDate={props.date} setDayFunc={props.setDateFunc} />
         </div>
     )
 }
