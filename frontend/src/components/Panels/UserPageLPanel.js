@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+
 import {makeActionButton} from "../divHelpers/divHelpers.js";
 import AddFoodModal from "../Modals/AddFoodModal";
 import MyAccountModal from "../Modals/MyAccountModal.js";
@@ -31,7 +32,6 @@ function LeftPanel({user, date}){
     const [tableContent, setContent] = useState("");
     const [recipeOpen, setRecipeOpen]= useState(false);
 
-
     //Makes it so table content in add food is set to blank once opened
     const toggleTC = (content) => setContent(content);
     const toggleAFM = () => setAddFoodOpen(!addFoodOpen);
@@ -49,7 +49,7 @@ function LeftPanel({user, date}){
             {makeActionButton("button", "leftPanelButton",() => displayRecipe(toggleDR),
                             "Recipe","recipeButton")}
           <main>
-            {<AddFoodModal user={user} open={addFoodOpen} close={toggleAFM} tc={tableContent} setTC={toggleTC} date={date}/>}
+            {<AddFoodModal user={user} open={addFoodOpen} date={date} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
             {<RecipeModal user={user} open={recipeOpen} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
             {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
           </main>

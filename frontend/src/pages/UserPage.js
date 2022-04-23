@@ -8,7 +8,7 @@ function UserPage() {
     let curDate = new Date();
     const [date,setDate] = useState(curDate);
     console.log(date.toLocaleDateString());
-
+    console.log(date)
     const _ud = localStorage.getItem('user_data');
     const user = JSON.parse(_ud);
     if (user === null){

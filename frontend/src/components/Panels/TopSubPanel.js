@@ -8,7 +8,7 @@ import {getDateString} from "../divHelpers/monthGenerator";
 const storage = require("../tokenStorage.js");
 
 function TopSubPanel(props){
-
+  console.log(props.date)
     function makeRemoveFoodJSON(id){
       const removeData = {
         foodRecordId: id,
@@ -116,12 +116,14 @@ function TopSubPanel(props){
       const getRecords = async () =>{
         let res = await getFoodDayList(curDate);
         setFoods(res);
+        console.log("hello");
         console.log(res);
       }
-        getRecords();
+      getRecords();
     },[]);
 
     console.log(foods);
+
     return(
       <div id = "topSubPanel">
         <FoodList foods ={foods}/>

@@ -13,7 +13,7 @@ function AddFoodModal({user, open, close, tc, setTC, date}){
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
     const [selectedPortion, setSelectedPortion] = useState({});
 
-
+    console.log(date)
     function resetTable(){
       setTC("");
     }
@@ -35,6 +35,7 @@ function AddFoodModal({user, open, close, tc, setTC, date}){
 
       console.log(foodJSON);
       let res = await JSONRequest("POST", foodJSON, "api/users/data/foodRecords");
+      console.log(res);
       console.log(res.error);
       resetPortionSelection();
     }

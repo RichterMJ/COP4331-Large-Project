@@ -64,7 +64,7 @@ function MyAccountModal({user, open, close}) {
             <div className="firstNameInputDiv">
                 {makeLabel("firstNameEdit", "First Name")}
             
-                {makeInputDiv("text", "firstNameEdit", `firstNameEditInput ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
+                {makeInputDiv("text", "firstNameEdit", `firstNameEditInput d-block ${addInvalidStyle(editFormError.firstNameError)} ${toggleEdittingStyle()}`  , firstName ,"First name","First Name" , setFirstName, `${toggleDisable()}`)}
                 {displayRepsonseMessage({type:'error', message:editFormError.firstNameError})}
             </div>
         );
@@ -74,7 +74,7 @@ function MyAccountModal({user, open, close}) {
             <div className="lastNameInputDiv">
                 {makeLabel("lastNameEdit", "Last Name")}
 
-                {makeInputDiv("text", "lastNameEdit", `lastNameEditInput ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
+                {makeInputDiv("text", "lastNameEdit", `lastNameEditInput d-block ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
                 {displayRepsonseMessage({type:'error', message:editFormError.lastNameInput})}
              </div>
         );
@@ -101,7 +101,7 @@ function MyAccountModal({user, open, close}) {
     }
     function makeNewPasswordInputs(){
         return (
-            <div className="newPasswordInputs ">
+            <div className="newPasswordInputs">
                 {makeLabel('newPassword', 'New Password', "")}
                 {makeInputDiv("password", "newPassword", `form-control ${addInvalidStyle(editFormError.newPasswordError)}`, newPassword, "newPassword", "new password", setNewPassword)}
                 {displayRepsonseMessage({type:'error', message:editFormError.newPasswordError})}
@@ -120,7 +120,7 @@ function MyAccountModal({user, open, close}) {
     }
     function passwordUpdate(){
         return (
-            <div className="updatePasswordInputss">
+            <div className="updatePasswordInputs d-block">
                 {makeLabel('oldPasswordInput', !isEdittingPassword ? 'Password' : 'Old Password', '')}
                 {makeInputDiv("password", "oldPasswordInput", `form-control ${addInvalidStyle(editFormError.oldPasswordError)}`, oldUserPassword, "oldPasswordInput", "old password", setOldUserPassword, (isEdittingPassword) ? '' : 'disabled')}
                 {isEdittingPassword && makeNewPasswordInputs()}
@@ -139,15 +139,15 @@ function MyAccountModal({user, open, close}) {
         return (
             <div className="container "> 
                 <div className="row justify-content-around">
-                <div className= "row col-5 text-left leftEditInputs">
-                    {firstNameInput()} 
-                    {emailInput()} 
-                    {weightInput()}
-                </div>
-                <div className="row col-5 text-left rightEditInputs"> 
-                    {lastNameInput()}
-                    {passwordEdit()}
-                </div>
+                    <div className= "row col-5 text-left leftEditInputs">
+                        {firstNameInput()} 
+                        {emailInput()} 
+                        {weightInput()}
+                    </div>
+                    <div className="row col-5 text-left rightEditInputs"> 
+                        {lastNameInput()}
+                        {passwordEdit()}
+                    </div>
                 </div>
             </div>
         );

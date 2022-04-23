@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import TopPanel from "./TopPanel";
 import BottomSubPanel from "./BottomSubPanel"
 import {TopSubPanel}from "./TopSubPanel"
-function RightPanel({user,date}){
+import { JSONGETRequest } from "../RESTHelpers/JSONRequest";
+function RightPanel({user,date, triggerPageToRender}){
+  const [RDIChart, setRDIChart] = useState([]);
+
+  useEffect(()=>{
+    const getRDINutrients = async () =>{
+      let res = await JSONGETRequest("api/food/rdi");
+      console.log(res);
+      setRDIChart(res);
+    }
+    getRDINutrients();
+  },[])
     return(
         <div id="rightPanel">
           <TopPanel userId={user.userID} date={date} />
           <TopSubPanel date= {date} userId={user.userId}/>
-          <BottomSubPanel/>
+          <BottomSubPanel date={date} userId={user.userId} RDINutrients={RDIChart}/>
         </div>
     )
 }
