@@ -1,5 +1,4 @@
 function prepMonth(month){
-    console.log(month);
     if(month.toString().length==1){
       return "0"+month;
     }
