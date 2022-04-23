@@ -8,10 +8,11 @@ import {AiOutlineInfoCircle} from "react-icons/ai";
 import { makeErrorMessage, displayRepsonseMessage } from "../Validators/InputValidator";
 import AddRecipeModal from "./RecipeSubModals/AddRecipeModal";
 import EditRecipeModal from "./RecipeSubModals/EditRecipeModal";
+import {getDateString} from "../divHelpers/monthGenerator";
 
 let storage = require('../tokenStorage');
 
-function RecipeModal({ user, open, close, tc, setTC}){
+function RecipeModal({ user, open, date, close, tc, setTC}){
     const [searchQuery, setSearchQuery] = useState("");
     const [recipeList, setRecipeList] = useState([]);
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
@@ -98,7 +99,7 @@ function RecipeModal({ user, open, close, tc, setTC}){
         console.log(updateViewDetailOpen);
         setViewDetailOpen(updateViewDetailOpen);
     }
-    
+
     function makeRecipeList(){
         console.log(recipeList);
         return (
@@ -127,6 +128,34 @@ function RecipeModal({ user, open, close, tc, setTC}){
 
     function toggleAddRecipeOpen(){
         setAddRecipeOpen(!addRecipeOpen);
+    }
+
+    function addToFoodList(recipe){
+        for(let ingredient of recipe.ingredients)
+            addFood(ingredient);
+    }
+
+    function makeFoodRecordJSON(ingredient){
+        const amount = ingredient.amountUsed;
+
+        const foodData = {
+          food: ingredient.food,
+          userId: user.userId,
+          eatenTimestamp: getDateString(date),
+          amountConsumed: {portion: amount.portion, quantity: Number(amount.quantity)},
+          jwtToken: storage.retrieveToken()
+        }
+  
+        return JSON.stringify(foodData);
+    }
+  
+    async function addFood(ingredient){
+        const foodJSON = makeFoodRecordJSON(ingredient);
+
+        console.log(foodJSON);
+        let res = await JSONRequest("POST", foodJSON, "api/users/data/foodRecords");
+        console.log(res);
+        console.log(res.error);
     }
 
     function editRecipe(recipe){

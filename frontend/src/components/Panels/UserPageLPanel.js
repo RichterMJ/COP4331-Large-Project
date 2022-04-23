@@ -50,7 +50,7 @@ function LeftPanel({user, date}){
                             "Recipe","recipeButton")}
           <main>
             {<AddFoodModal user={user} open={addFoodOpen} date={date} close={toggleAFM} tc={tableContent} setTC={toggleTC}/>}
-            {<RecipeModal user={user} open={recipeOpen} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
+            {<RecipeModal user={user} open={recipeOpen} date={date} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
             {<MyAccountModal user={user} open={myAccountOpen} close={toggleMA} />}
           </main>
         </div>
