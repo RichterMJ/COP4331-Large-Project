@@ -18,9 +18,13 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     const [selectedFoodsList, setSelectedFoodsList] = useState(recipe.ingredients);
     const [selectedFood, setSelectedFood] = useState({});
     const [addMoreFoodOpen, setAddMoreFoodOpen] = useState(false);
+    const [editFoodIndex, setEditFoodIndex] = useState(-1);
+    const [selectedPortion, setSelectedPortion] = useState({})
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
 
     function prepareEditRecipeJSON(){
-        const newRecipe = {...recipe, description: editRecipeName, descriptions: selectedFoodsList};
+        const newRecipe = {...recipe, description: editRecipeName, ingredients: selectedFoodsList};
+        console.log(newRecipe)
         const editRecipeJSON ={
             recipe: newRecipe,
             jwtToken: storage.retrieveToken()
@@ -66,11 +70,11 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
         return (
             <div className="row">
                 <div className="recipeFoodList col-8 bg-light">
-                    <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} setSelectedFood={setSelectedFood}/>    
+                    <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} setSelectedFood={setSelectedFood} setEditFoodIndex={setEditFoodIndex}  setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity}/>    
                 </div>
                 <div className="editRecipeDescriptionInput col-4">
                     {makeEditRecipeNameInput()}
-                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
+                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} setEditFoodIndex={setEditFoodIndex} selectedFoodsList={selectedFoodsList} editFoodIndex={editFoodIndex}  selectedPortion={selectedPortion} selectedQuantity={selectedQuantity} setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity} />
                     {makeActionButton("button", "btn-success mt-2", ()=>{addMoreFood()},"Add New Ingredient", "addNewIngredientBtn")}
                 </div>
                 
@@ -80,10 +84,11 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function displaySearchFood(){
         return (
-            addMoreFoodOpen && <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} />
+            addMoreFoodOpen && <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
         );
     }
     function addMoreFood(){
+        setEditFoodIndex(-1);
         setAddMoreFoodOpen(true);
     }
     return (

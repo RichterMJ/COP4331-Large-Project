@@ -17,6 +17,9 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
         type: '',
         message: ''
     });
+    const [editFoodIndex, setEditFoodIndex] = useState(-1);
+    const [selectedPortion, setSelectedPortion] = useState({})
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
     
     //const [clickSearch, setClickSearch] = useState(false);
     function makeRecipeDescriptionInput(){
@@ -33,10 +36,10 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
             <div className="d-flex row pl-15 pr-15 ml-10 mr-10">
                 <div className="selectedFoodsList col-8">
                 {makeRecipeDescriptionInput()}
-                    <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} setSelectedFood={setSelectedFood}/>
+                <SelectedRecipeFoodList selectedFoodsList={selectedFoodsList} setSelectedFoodsList={setSelectedFoodsList} setSelectedFood={setSelectedFood} setEditFoodIndex={setEditFoodIndex} setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity}/>    
                 </div>
                 <div className="selectedFoodDetails col-4">
-                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} />
+                <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} selectedFoodsList={selectedFoodsList} setEditFoodIndex={setEditFoodIndex} editFoodIndex={editFoodIndex} selectedPortion={selectedPortion} selectedQuantity={selectedQuantity} setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity} />
                 </div>
             </div>
         );
@@ -95,7 +98,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Add Recipe</h1>
                 {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} resetTable={resetTable} />
+                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
                 {displayRepsonseMessage(responseMessage)}
