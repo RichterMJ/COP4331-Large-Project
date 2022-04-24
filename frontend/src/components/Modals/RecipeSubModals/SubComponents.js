@@ -5,7 +5,7 @@ import { RiCloseLine } from "react-icons/ri";
 import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 
 
-function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSelectedFood}){
+function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSelectedFood, setEditFoodIndex, setSelectedPortion, setSelectedQuantity}){
     function deleteSelectedFood(foodIndex){
         const newFoodList = [...selectedFoodsList]; // copy to newList
         newFoodList.splice(foodIndex,1);
@@ -14,18 +14,23 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSel
     function SelectedFoodBubble({recipeFood, foodIndex}){
         const recipeFoodDetails = `${recipeFood.amountUsed.quantity} ${recipeFood.food.description} (${recipeFood.amountUsed.portion.portionName ?? recipeFood.amountUsed.portion.gramAmount})`;
         return(
-            <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded" onClick={()=>{setSelectedFood(recipeFood.food)}}>
+            <div className="selectedFoodBuble w-auto h-auto pr-1 bg-gray rounded" onClick={()=>foodBubbleClickedHandler(recipeFood, foodIndex)}>
                 {recipeFoodDetails} 
                 {makeButton("", "deleteSeletedFoodBtn",() => {deleteSelectedFood(foodIndex)}, <RiCloseLine/>)}
             </div>
         );
+    }
+    function foodBubbleClickedHandler(recipeFood, index){
+        setSelectedFood(recipeFood.food)
+        setSelectedPortion(recipeFood.amountUsed.portion);
+        setSelectedQuantity(recipeFood.amountUsed.quantity);
+        setEditFoodIndex(index);
     }
     function displaySelectedFoodList(){
         return (
             <div className="selectedFoodList">
                 <h3>Ingredients</h3>
                 {selectedFoodsList.map((recipeFood,index) =>{
-                    console.log("12321321321")
                     return <SelectedFoodBubble key={index} recipeFood={recipeFood} foodIndex={index}/>
                 })}
             </div>
@@ -37,14 +42,21 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSel
         </>
     );
 }
-function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoodsList}){
-    const defaultPortion = {
-        portionId: 0,
-        portionName: '100g',
-        gramAmount: 100
-    }
-    const [selectedPortion, setSelectedPortion] = useState(defaultPortion);
-    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoodsList, editFoodIndex, setEditFoodIndex,selectedPortion, setSelectedPortion, selectedQuantity, setSelectedQuantity}){
+     console.log(editFoodIndex)
+    // let defaultPortion;
+    // let defaultQuantity;
+    // if (selectedRecipeFood.amountUsed){
+    //     defaultPortion = selectedRecipeFood.amountUsed.portion;
+    //     defaultQuantity = selectedRecipeFood.amountUsed.quantity
+    // } else {
+    //     defaultPortion = {
+    //         portionId: 0,
+    //         portionName: '100g',
+    //         gramAmount: 100
+    //     }
+    //     defaultQuantity = 1;
+    // }
     const [inputError, setInputError] = useState("");
     
     function addFoodToFoodList(){
@@ -56,13 +68,20 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
             food: selectedFood,
             amountUsed: {
                 portion: selectedPortion,
-                quantity: Number(selectedFoodQuantity)
+                quantity: Number(selectedQuantity)
             }
         }; // build a recipe object as declare in global-types.ts in backend
         const newFoodList = [...selectedFoodsList]; // copy to newList
-        newFoodList.push(newRecipeFood);
+        if (editFoodIndex >= 0){
+            newFoodList.splice(editFoodIndex,1);
+            newFoodList.splice(editFoodIndex,0,newRecipeFood);
+        }
+        else {
+            newFoodList.push(newRecipeFood);
+        }
         console.log(newFoodList)
         setSelectedFoodsList(newFoodList);
+        setEditFoodIndex(-1);
         setInputError("");
     }
     function displaySelectedFood(){
@@ -80,8 +99,9 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
 
                 <select id="portionsToSelect" onChange={(d)=> setSelectedPortion(selectedFood.portions[d.target.value])}>
                 {Object.keys(selectedFood).length !=0 && selectedFood.portions.map((portion, index) =>{
-                    if (!index) {console.log(portion)}
-                    console.log(portion);
+                    if (selectedPortion.portionId == portion.portionId){
+                        return <option key={index} value={index} selected>{portion.portionName ?? `${portion.gramAmount}g`}</option>
+                    }
                     return <option key={index} value={index}>{portion.portionName ?? `${portion.gramAmount}g`}</option>
                 })}
                 </select>
@@ -92,15 +112,13 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
         return (
             <div>
                     {makeLabel("quantityFoodInput", "Enter quantity","")}
-                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedFoodQuantity, "quanityFoodInput","quantity", setSelectedFoodQuantity)}
+                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedQuantity, "quanityFoodInput","quantity", setSelectedQuantity)}
                     
             </div>
         );
     }
     function isValidRecipeFoodInputs(){
-        console.log(selectedFoodQuantity);
-        console.log(Object.keys(selectedPortion).length)
-        if (selectedFoodQuantity <= 0 || Object.keys(selectedPortion).length == 0){
+        if (selectedQuantity <= 0 || Object.keys(selectedPortion).length == 0 || Object.keys(selectedFood).length == 0){
             setInputError("Invalid input");
             setTimeout(()=>setInputError(""),3000);
             return false;
@@ -108,12 +126,19 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
         setInputError("")
         return true;
     }
+    function makeButtons(){
+        return(
+            <>
+                {makeActionButton("button", `btn ${(editFoodIndex < 0) ? 'btn-primary' : 'btn-info'}`, ()=>{addFoodToFoodList()},(editFoodIndex < 0) ? "Add to Recipe" : "Edit Recipe", "addFoodToRecipeBtn")}
+            </>
+        )
+    }
     return (
         <>
                     {displaySelectedFood()}
                     {makePortionSelections()}
                     {makeQuantityInput()}
-                    {makeActionButton("button", "btn btn-primary", ()=>{addFoodToFoodList()},"Add To Recipe", "addFoodToRecipeBtn")}
+                    {makeButtons()}
                     {makeErrorMessage(inputError)}
         </>
     );
