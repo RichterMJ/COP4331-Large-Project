@@ -105,8 +105,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
+  transition: opacity 0.3s ease;
 }
-
 .centered {
   position: fixed;
   top: 50%;
@@ -138,6 +138,7 @@
   font-size: 20px;
   color: black;
   text-align: center;
+  max-height:100%;
 }
 
 .modalActions {
@@ -232,11 +233,37 @@
   width: 700px;
   height: 550px;
 }
+#editInputsDiv{
+  min-width: 780px;
+  min-height: 350px;
+}
+.recipeListDiv{
+  height:400px;
+  overflow:auto;
+}
+.errorFontSize{
+  font-size: 0.75em ;
+}
+#editProfileButton:disabled,
+#editProfileButton[disabled]{
+  background-color: #cccccc;
+  color: #666666;
+  border: 1px solid #999999;
+}
 .myAccountModal{
-  min-width: 700px;
-  min-height: 550px;
-  width: auto;
+  background-color: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  width:800px;
   height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
 }
 .addRecipeModal{
   min-width:1000px;

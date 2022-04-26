@@ -1,11 +1,12 @@
 import React from "react";
 
-function makeActionButton(type,className,event,text,id){
+function makeActionButton(type,className,event,text,id, disabled=""){
   return(<button
           type = {type}
           className={className}
           onClick = {event}
-          id = {id}>
+          id = {id}
+          disabled={disabled}>
             {text}
           </button>)
 }

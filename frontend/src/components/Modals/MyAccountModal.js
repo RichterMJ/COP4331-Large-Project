@@ -75,7 +75,7 @@ function MyAccountModal({user, open, close}) {
                 {makeLabel("lastNameEdit", "Last Name")}
 
                 {makeInputDiv("text", "lastNameEdit", `lastNameEditInput d-block ${addInvalidStyle(editFormError.lastNameError)} ${toggleEdittingStyle()}` , lastName,"Last name", "Last Name" ,setLastName, `${toggleDisable()}`)}
-                {displayRepsonseMessage({type:'error', message:editFormError.lastNameInput})}
+                {displayRepsonseMessage({type:'error', message:editFormError.lastNameError})}
              </div>
         );
     }
@@ -120,9 +120,10 @@ function MyAccountModal({user, open, close}) {
     }
     function passwordUpdate(){
         return (
-            <div className="updatePasswordInputs d-block">
+            <div className="updatePasswordInputs d-block pb-5 mb-4 pt-3">
                 {makeLabel('oldPasswordInput', !isEdittingPassword ? 'Password' : 'Old Password', '')}
                 {makeInputDiv("password", "oldPasswordInput", `form-control ${addInvalidStyle(editFormError.oldPasswordError)}`, oldUserPassword, "oldPasswordInput", "old password", setOldUserPassword, (isEdittingPassword) ? '' : 'disabled')}
+                {displayRepsonseMessage({type:'error', message:editFormError.oldPasswordError})}
                 {isEdittingPassword && makeNewPasswordInputs()}
                 {!isEdittingPassword && makeButton('editPasswordBtn', 'btn btn-primary mt-2', ()=>{setIsEditingtPassword(true); setOldUserPassword("")}, 'Update Password')}
                 {isEdittingPassword && makeButton('updatePasswordBtn', 'btn btn-success mt-2', ()=>{updatePassword()}, 'Save')}
@@ -138,7 +139,7 @@ function MyAccountModal({user, open, close}) {
     function makeEditInputs(){
         return (
             <div className="container "> 
-                <div className="row justify-content-around">
+                <div className="row justify-content-around " id="editInputsDiv">
                     <div className= "row col-5 text-left leftEditInputs">
                         {firstNameInput()} 
                         {emailInput()} 
@@ -249,20 +250,22 @@ function MyAccountModal({user, open, close}) {
         setIsEditting(true);
     }
     function cancelEdit(){
+        cancelUpdatePassword();
         //set back to the initial value
         setFirstName(user.firstName);
         setLastName(user.lastName);
         setUserWeight(user.weight);
-
+        
         // reset the error and mode edit
         setEditFormError({});
         setIsEditting(false);
+        
     }
     function makeProfileButtons(){
         return (
-        <div className="buttonDivs fixed-bottom d-flex justify-content-around">
+        <div className="buttonDivs d-flex justify-content-around pt-4">
         {makeActionButton("button", "btn btn-danger mt-3 mb-5", () => doLogout(), "Log out", "logoutButton")}
-        {!isEditing && makeActionButton("button", "btn btn-primary mt-3 mb-5", () => editProfile(), "Edit Profile", "editProfileButton")}
+        {!isEditing && makeActionButton("button", "btn btn-primary mt-3 mb-5 ", () => editProfile(), "Edit Profile", "editProfileButton", isEdittingPassword ? "disabled" : "")}
         {isEditing && makeActionButton("button","btn btn-success mt-3 mb-5", () => saveChanges(), "Save Changes",  "saveChangesButton")}
         {isEditing && makeActionButton("button","btn btn-warning mt-3 mb-5", () => cancelEdit(), "Cancel",  "cancelEditButton")}
         </div>
@@ -271,8 +274,8 @@ function MyAccountModal({user, open, close}) {
     return (
         open ?
         <div className="darkBG">
-            <div className="centered myAccountModal theModal ">
-              <div className="modalContent">
+            <div className=" myAccountModal ">
+              <div className="modalContent ">
                 <h1>My Account</h1>
                 {makeButton("", "closeBtn",() => {cancelEdit(); close()}, <RiCloseLine/>)}
                 {makeEditInputs()}
