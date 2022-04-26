@@ -47,7 +47,12 @@ function NutrientBars(props)
 {
   return (
     <div className = "nutrientBars">
-      {props.nutrients.map((nutrient) => <NutrientDiv key={nutrient.nutrientId}  nutrient={nutrient}/>)}
+      {props.nutrients.map((nutrient) => {
+        if(nutrient.RDIValue == 0){
+          return null;
+        }
+        else return <NutrientDiv key={nutrient.nutrientId}  nutrient={nutrient}/>
+      })}
     </div>
   )
 }
