@@ -30,8 +30,6 @@ function TopSubPanel(props){
       setFoods(foods.slice(0));
     }
     
-    function editFood(){}
-
     function makeFoodButtons(id, index){
     
         return(
@@ -91,7 +89,7 @@ function TopSubPanel(props){
 
     function handleFDGetRes(res){
       if(res.error!=0){
-        console.log("error Happen"+res.error);
+        console.log("error Happened"+res.error);
         return [];
       }
       console.log(res.foodRecords);
