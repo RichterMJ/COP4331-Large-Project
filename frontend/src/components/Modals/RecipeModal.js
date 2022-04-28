@@ -12,7 +12,7 @@ import {getDateString} from "../divHelpers/monthGenerator";
 
 let storage = require('../tokenStorage');
 
-function RecipeModal({ user, open, date, close, tc, setTC}){
+function RecipeModal({ user, open, date, close, tc, setTC, updateFoods}){
     const [searchQuery, setSearchQuery] = useState("");
     const [recipeList, setRecipeList] = useState([]);
     const [viewDetailOpen, setViewDetailOpen] = useState([]);
@@ -133,6 +133,7 @@ function RecipeModal({ user, open, date, close, tc, setTC}){
     function addToFoodList(recipe){
         for(let ingredient of recipe.ingredients)
             addFood(ingredient);
+        updateFoods(date)
     }
 
     function makeFoodRecordJSON(ingredient){

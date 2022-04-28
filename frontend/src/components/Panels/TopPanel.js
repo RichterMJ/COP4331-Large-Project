@@ -6,12 +6,15 @@ function leftDayEvent(curDate,setDayFunc,updateFoods){
     newDate.setDate(curDate.getDate()-1);
     setDayFunc(newDate);
     updateFoods(newDate);
+    console.log("heloasjo")
+  
 }
 function rightDayEvent(curDate,setDayFunc,updateFoods){
     let newDate = new Date(curDate);
     newDate.setDate(curDate.getDate()+1);
     setDayFunc(newDate);
     updateFoods(newDate);
+
 }
 function LeftButton (props){
     return makeActionButton
@@ -50,7 +53,7 @@ function TopPanel(props){
         <div id = "topPanel">
           <LeftButton curDate={props.date} setDayFunc={props.setDateFunc} updateFoods={props.updateFoods} />
           <MainInfoBox date={props.date}/>
-          <RightButton curDate={props.date} setDayFunc={props.setDateFunc} updateFoods={props.updateFoods}  />
+          <RightButton curDate={props.date} setDayFunc={props.setDateFunc} updateFoods={props.updateFoods} />
         </div>
     )
 }
