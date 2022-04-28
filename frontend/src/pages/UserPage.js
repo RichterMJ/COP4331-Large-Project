@@ -6,8 +6,8 @@ import "./mainPageStyle.css"
 import {getLatestFoods} from "./FoodList";
 
 function UserPage() {
-    function updateFoods(thisDate){
-        setFoods(getLatestFoods(thisDate));
+    async function updateFoods(thisDate){
+         setFoods(await getLatestFoods(thisDate));
     }
 
     let curDate = new Date();
@@ -16,6 +16,8 @@ function UserPage() {
     // gets initial food day data
     useEffect(() =>{
       const getRecords = async () =>{
+        console.log("THIS IS DATE");
+        console.log(date);
         let res = await getLatestFoods(date);
         setFoods(res);
       }
@@ -30,7 +32,8 @@ function UserPage() {
     return(
         <div id="content">
             <div id="panels">
-              <LeftPanel user={user} date={date} foods = {foods} updateFoods = {updateFoods}/>
+              <LeftPanel user={user} date={date}
+                         foods = {foods} updateFoods = {updateFoods}/>
               <RightPanel user={user} date={date} setDateFunc={setDate}
                           foods = {foods} updateFoods = {updateFoods} />
             </div>

@@ -18,7 +18,6 @@
 
     // this will get the latest version of the person's food day
     async function getLatestFoods(startDate){
-      console.log(makeFoodDayURL(makeFoodDayJSON(startDate)));
       let res = await JSONGETRequest(makeFoodDayURL(makeFoodDayJSON(startDate)));
       console.log(res);
       return handleFDGetRes(res);

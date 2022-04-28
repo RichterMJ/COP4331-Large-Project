@@ -7,7 +7,7 @@ import {getDateString} from "../divHelpers/monthGenerator";
 
 const storage = require("../tokenStorage.js");
 
-function AddFoodModal({user, open, close, tc, setTC, date}){
+function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
    
     const [selectedFood, setSelectedFood] = useState({});
     const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
@@ -38,6 +38,7 @@ function AddFoodModal({user, open, close, tc, setTC, date}){
       console.log(res);
       console.log(res.error);
       resetPortionSelection();
+      updateFoods(date);
     }
 
     function resetPortionSelection(){

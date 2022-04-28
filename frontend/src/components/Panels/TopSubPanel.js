@@ -33,14 +33,14 @@ function TopSubPanel(props){
       console.log(deleteJSON);
 
       let res = await JSONRequest("DELETE", deleteJSON, "api/users/data/foodRecords");
-      props.updateFoods();
+      props.updateFoods(props.date);
 
     }
 
 
     function FoodList(props){
       return(
-        props.foods.map((f, index) => <FoodElement key={f.id} food={f} index={index}/>)
+        props.foods.map((f, index) => <FoodElement key={index} food={f} index={index}/>)
       )
     }
   function FoodElement(props){

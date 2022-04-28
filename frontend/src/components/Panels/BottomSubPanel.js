@@ -163,10 +163,14 @@ function BottomSubPanel(props) {
     console.log(catergorizedNutrients);
     console.log(categorizedRDINutrients);
     let finalCategorizedNutrient;
-    if (nutrientList.length != 0) 
+    if (nutrientList.length != 0){
       finalCategorizedNutrient= addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    }
     else
+    {
       finalCategorizedNutrient = makeDefaultNutrientDisplay();
+      console.log("EMPTY BABY");
+    }
     console.log(finalCategorizedNutrient);
     
     return (
