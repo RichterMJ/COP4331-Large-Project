@@ -5,6 +5,8 @@ import {isBlank, validWeight, validEmail, validPassword, matchingPasswords} from
 import {makeErrorMessage} from "./Validators/InputValidator";
 import {JSONRequest} from "./RESTHelpers/JSONRequest";
 
+const MD5 = require('md5');
+
 function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -39,7 +41,7 @@ function Signup() {
       lastname: lastName,
       weight: Number(weight),
       email: email,
-      password: password
+      password: MD5(password)
     }
 
     return JSON.stringify(signupData);

@@ -5,7 +5,7 @@ import { emailValidator, passwordValidator, addInvalidStyle, makeErrorMessage} f
 import {JSONRequest} from "./RESTHelpers/JSONRequest"
 
 let storage = require('./tokenStorage.js');
-
+const MD5 = require('md5');
 
 
 function Login() {
@@ -33,7 +33,7 @@ function Login() {
   function makeLoginJSON(email,password){
     const loginData = {
       email: email,
-      password: password,
+      password: MD5(password),
     };
     return JSON.stringify(loginData);
   }
