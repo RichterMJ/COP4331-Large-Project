@@ -61,16 +61,16 @@ function blankValidator(...fields){
 // if error exist make a P tag with error message
 function makeErrorMessage(error){
   if (error){
-    return <p className="text-danger mb-0">{error}</p>;
+    return <p className="text-danger mb-0" >{error}</p>;
   } 
   return;
 }
 function displayRepsonseMessage(response){
   if (response.message) {
     if (response.type === 'success'){
-      return <p className="text-success mb-0">{response.message}</p>
+      return <p className="text-success mb-0 ">{response.message}</p>
     }
-    return <p className="text-danger mb-0">{response.message}</p>
+    return <p className="text-danger mb-0 errorFontSize">{response.message}</p>
   }
   return;
 }

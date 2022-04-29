@@ -30,20 +30,31 @@ function RecipeModal({ user, open, date, close, tc, setTC, updateFoods}){
     useEffect(()=>{
         const getRecipes = async () =>{
             let res = await getAllRecipes();
-            console.log('recipes',res.recipes);
-            setRecipeList(res.recipes);
+            console.log(res.recipes);
+            let searchResults = getRecipeSearchResults(res.recipes, searchQuery);
+            handleSearchResult(searchResults, res.recipes);
         }
         getRecipes();
-        console.log("hello")
-    },[open, triggerRender])
-
+    },[open, triggerRender, searchQuery])
+    
     useEffect(() =>{
         setViewDetailOpen(Array(recipeList.length).fill(false));
     }, [recipeList])
 
-    console.log(editRecipeOpen);
-    console.log(addRecipeOpen)
-
+    function handleSearchResult(searchResults, recipesResponse){
+        if (searchResults === null){
+            setRecipeList(recipesResponse);
+            setResponseMessage({type: "", message:""})
+        } else {
+            if (searchResults.length == 0){
+                setRecipeList([]);
+                setResponseMessage({type: "error", message:"No results found"})
+            } else {
+                setRecipeList(searchResults);
+                setResponseMessage({type: "", message:""})
+            }
+        }
+    }
     function makeSearchRecipeBar(){
         return (
             <div className="recipeSearchBar row w-100 justify-content-start">
@@ -104,7 +115,7 @@ function RecipeModal({ user, open, date, close, tc, setTC, updateFoods}){
         console.log(recipeList);
         return (
             <div className="recipeListDiv container pt-4">
-                <table className="table table-striped table-hover">
+                <table className="table table-striped table-hover" id="recipeTable">
                     <tbody>
                         {recipeList.map((recipe, index) =>{
                             return (
@@ -210,8 +221,15 @@ function RecipeModal({ user, open, date, close, tc, setTC, updateFoods}){
         }
         return null;
     }
+    function getRecipeSearchResults(recipesList, query){
+        if(query){
+            let results = recipesList.filter((recipe) => recipe.description.toLowerCase().includes(query.toLowerCase()));
+            return results
+        }
+        else return null;
+    }
     function searchRecipe(){
-        return null
+        setSearchQuery(searchQuery);
     }
     function addNewRecipe(){
         // switch to different modal 
