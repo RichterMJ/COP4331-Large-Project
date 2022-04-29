@@ -7,6 +7,8 @@ import { makePTag, makeInputDiv, makeActionButton, makeDiv, makeButton, makeLink
 import ResponseModal from "./Modals/ResponseModal";
 import {JSONRequest} from "./RESTHelpers/JSONRequest"
 
+const MD5 = require('md5');
+
 function ResetPassword() {
   const search = useLocation().search;
   const userId = new URLSearchParams(search).get("userId");
@@ -34,13 +36,15 @@ function ResetPassword() {
     const resetPasswordData = {
       userId: userId,
       email: email,
-      confirmPasswordReset: confirmPasswordReset
+      newPassword: MD5(confirmPasswordReset)
     };
+    console.log(resetPasswordData)
 
     return JSON.stringify(resetPasswordData);
   }
   function handleResetPasswordRes(res){
     if (res.error != 0) {
+      console.log(res.error);
       setMessage("Error occurred");
     } else {
       setIsOpen(true);

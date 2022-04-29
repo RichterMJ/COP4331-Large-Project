@@ -4,6 +4,8 @@ import {displayRepsonseMessage, addInvalidStyle, makeErrorMessage, passwordValid
 import { RiCloseLine } from "react-icons/ri";
 import {JSONRequest} from "../RESTHelpers/JSONRequest";
 
+const MD5 = require('md5');
+
 function MyAccountModal({user, open, close}) {
     
     const [firstName, setFirstName] = useState(user.firstName);
@@ -155,8 +157,8 @@ function MyAccountModal({user, open, close}) {
     function prepareUpdatePasswordJSON(){
         const updatePasswordJSON = {
             userId: user.userId,
-            oldPassword: oldUserPassword,
-            newPassword: newPassword,
+            oldPassword: MD5(oldUserPassword),
+            newPassword: MD5(newPassword),
             jwtToken: storage.retrieveToken()
         }
         return JSON.stringify(updatePasswordJSON)
