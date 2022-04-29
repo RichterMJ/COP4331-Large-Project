@@ -73,13 +73,10 @@ function NutrientStatusBars(props){
 function NutrientDiv(props)
 {
     function getNutrientAmountString(n){
-      console.log(n)
         return n.value.toFixed(2) + "/"+n.RDIValue+" " +n.unitName+" "+ n.nutrientName;
     }
     let curNutrient = props.nutrient;
-
-  const [width, setWidth] = useState(getBarWidth(curNutrient));
-
+    let width = getBarWidth(curNutrient);
   return (
     <div key ={curNutrient.nutrientId} className = "nutrientElement">
       {console.log(width)}
@@ -106,14 +103,14 @@ function BottomSubPanel(props) {
   const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
   const [nutrientList, setNutrientList] = useState([]);
   const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
-  console.log(nutrientList)
-
+  console.log(props.triggerRender)
+  
   useEffect(()=>{
     const getFoodAverageList = async () =>{
       let res = await getFoodAverage();
     }
     getFoodAverageList();
-  },[])
+  },[props.foods])
   useEffect(()=>{
     console.log(nutrientList);
     console.log(props.RDINutrients);
@@ -163,10 +160,14 @@ function BottomSubPanel(props) {
     console.log(catergorizedNutrients);
     console.log(categorizedRDINutrients);
     let finalCategorizedNutrient;
-    if (nutrientList.length != 0) 
+    if (nutrientList.length != 0){
       finalCategorizedNutrient= addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    }
     else
+    {
       finalCategorizedNutrient = makeDefaultNutrientDisplay();
+      console.log("EMPTY BABY");
+    }
     console.log(finalCategorizedNutrient);
     
     return (

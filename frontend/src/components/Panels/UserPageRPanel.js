@@ -3,9 +3,10 @@ import TopPanel from "./TopPanel";
 import BottomSubPanel from "./BottomSubPanel"
 import {TopSubPanel}from "./TopSubPanel"
 import { JSONGETRequest } from "../RESTHelpers/JSONRequest";
-function RightPanel({user,date, setDateFunc}){
+function RightPanel({user,date, setDateFunc,foods,updateFoods}){
   const [RDIChart, setRDIChart] = useState([]);
 
+ 
   useEffect(()=>{
     const getRDINutrients = async () =>{
       let res = await JSONGETRequest("api/food/rdi");
@@ -16,9 +17,9 @@ function RightPanel({user,date, setDateFunc}){
   },[])
     return(
         <div id="rightPanel">
-          <TopPanel userId={user.userID} date={date} setDateFunc={setDateFunc} />
-          <TopSubPanel date= {date} userId={user.userId}/>
-          <BottomSubPanel date={date} userId={user.userId} RDINutrients={RDIChart}/>
+          <TopPanel userId={user.userID} date={date} setDateFunc={setDateFunc} updateFoods={updateFoods} />
+          <TopSubPanel date= {date} userId={user.userId} foods={foods} updateFoods ={updateFoods}/>
+          <BottomSubPanel date={date} foods={foods} userId={user.userId} RDINutrients={RDIChart}/>
         </div>
     )
 }
