@@ -7,7 +7,7 @@ import UserPage from "./pages/UserPage";
 import EmailVerifyPage from "./pages/EmailVerifyPage";
 import InvalidPage from "./pages/InvalidPage";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Redirect,
   Switch,
