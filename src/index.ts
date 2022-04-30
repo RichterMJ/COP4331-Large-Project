@@ -37,7 +37,7 @@ app.use((_, res, next) => {
     next()
 })
 
-//setApp(app, dbClient)
+setApp(app, dbClient)
 
 if (process.env.NODE_ENV === 'production') {
     // Set static folder.
