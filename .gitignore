@@ -1,6 +1,9 @@
 # TypeScript
 dist/**/*
 
+# Vim
+*.swp
+
 # Logs
 logs
 *.log
