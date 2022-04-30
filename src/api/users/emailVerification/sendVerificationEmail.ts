@@ -60,7 +60,7 @@ export function sendVerificationEmail(app: Express, client: MongoClient): Reques
                 }
             }));
 
-            const emailUrl = `http://${process.env.URL}/emailVerify?userId=${userId}`
+            const emailUrl = `http://${process.env.URL}/#/emailVerify?userId=${userId}`
             const logoRef = 'design_assets/Logo/thirdLogo.png'
             const html = `<p>Click <a href=${emailUrl}>here</a> to verify your account. </p> <p>From GitFit</p> <img src="cid:img"/>`
             

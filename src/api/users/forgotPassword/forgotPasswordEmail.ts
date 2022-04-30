@@ -84,7 +84,7 @@ export function forgotPasswordEmail(app: Express, client: MongoClient): RequestH
                 }
             }));
 
-            const emailUrl = `http://${process.env.URL}/resetPassword?userId=${userId}`
+            const emailUrl = `http://${process.env.URL}/#/resetPassword?userId=${userId}`
             const logoRef = 'design_assets/Logo/thirdLogo.png'
             const html = `<p>Click <a href=${emailUrl}>here</a> to change your password. </p> <p>From GitFit</p> <img src="cid:img"/>`
             
