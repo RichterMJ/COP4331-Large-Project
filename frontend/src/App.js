@@ -21,19 +21,19 @@ function App() {
         <Route path="/" exact>
           <LoginPage />
         </Route>
-        <Route path="/#/signup" exact>
+        <Route path="/signup" exact>
           <SignupPage />
         </Route>
-        <Route path="/#/forgotPassword" exact>
+        <Route path="/forgotPassword" exact>
           <ForgotPasswordPage />
         </Route>
-        <Route path="/#/resetPassword" exact>
+        <Route path="/resetPassword" exact>
           <ResetPasswordPage />
         </Route>
-        <Route path="/#/userPage" exact>
+        <Route path="/userPage" exact>
           <UserPage />
         </Route>
-        <Route path="/#/emailVerify" exact>
+        <Route path="/emailVerify" exact>
           <EmailVerifyPage />
         </Route>
         <Route path="*">

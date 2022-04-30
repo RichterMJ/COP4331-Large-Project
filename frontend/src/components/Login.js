@@ -102,12 +102,12 @@ function Login() {
     return(
     <div id="formFooter">
       {makeLink(
-          "forgotPassword",
+          "#/forgotPassword",
           "underLineHover d-block",
           "Forgot Password?"
       )}
 
-      {makeLink("signup", "underLineHover d-block", "Create an Account")}
+      {makeLink("#/signup", "underLineHover d-block", "Create an Account")}
 
     </div>
     )

@@ -78,7 +78,7 @@ function ResetPassword() {
     )
   }
   function makeFooter(){
-    return (<div id="formFooter" className="pt-2">{makeLink("/", "pt-2 pl-1 text-danger","Cancel")}</div>);
+    return (<div id="formFooter" className="pt-2">{makeLink("/#/", "pt-2 pl-1 text-danger","Cancel")}</div>);
 
   }
   return (

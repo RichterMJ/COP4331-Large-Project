@@ -248,7 +248,7 @@ function Signup() {
     return (
               <p className="text-center text-muted mt-5 mb-0">
                 Have an account already?{" "}
-                {makeLink("/", "fw-bold text-body", "Login here")}
+                {makeLink("/#/", "fw-bold text-body", "Login here")}
               </p>
         )
   }

@@ -53,7 +53,7 @@ function ForgotPassword() {
     );
   }
   function makeFooter(){
-    return (<div id="formFooter" className="pt-2">{makeLink("/","text-danger", "Cancel")}</div>);
+    return (<div id="formFooter" className="pt-2">{makeLink("/#/","text-danger", "Cancel")}</div>);
   }
 
   return (
