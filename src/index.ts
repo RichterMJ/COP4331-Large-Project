@@ -37,10 +37,10 @@ app.use((_, res, next) => {
     next()
 })
 
-setApp(app, dbClient)
+//setApp(app, dbClient)
 
-if(process.env.NODE_ENV === 'production'){
-    // set static folder
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder.
     app.use(express.static('frontend/build'))
 
     app.get('*', (req, res) => {
