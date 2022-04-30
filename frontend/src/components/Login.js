@@ -62,7 +62,7 @@ function Login() {
       };
       localStorage.setItem("user_data", JSON.stringify(user));
       setMessage("");
-      window.location.href = "/userPage";
+      window.location.href = "/#/userPage";
     }
   }
   const doLogin = async (event) => {
