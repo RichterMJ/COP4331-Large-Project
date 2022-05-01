@@ -6,10 +6,17 @@ function prepMonth(month){
       return month;
     }
 }
+function prepDay(day){
+     if(day.toString().length==1){
+      return "0"+day;
+    }
+    else{
+      return day;
+    }
 
+}
 function getDateString(date){
-    console.log(date);
-    return date.getFullYear() + "-" + prepMonth(date.getMonth())+ "-" + date.getDate();
+  return date.getFullYear() + "-" + prepMonth(date.getMonth())+ "-" + prepDay(date.getDate());
 }
 
 export {prepMonth, getDateString};
