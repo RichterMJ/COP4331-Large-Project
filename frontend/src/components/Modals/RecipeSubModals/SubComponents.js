@@ -82,6 +82,9 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
         console.log(newFoodList)
         setSelectedFoodsList(newFoodList);
         setEditFoodIndex(-1);
+        setSelectedQuantity(1);
+        setSelectedPortion({});
+        setSelectedFood({});
         setInputError("");
     }
     function displaySelectedFood(){
@@ -112,8 +115,7 @@ function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoo
         return (
             <div>
                     {makeLabel("quantityFoodInput", "Enter quantity","")}
-                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control",selectedQuantity, "quanityFoodInput","quantity", setSelectedQuantity)}
-                    
+                    {makeInputDiv("number", "quantityFoodInput", "w-25 form-control", ("fdcId" in selectedFood) ? selectedQuantity : 0, "quanityFoodInput","", setSelectedQuantity, "", 1, ("fdcId" in selectedFood) ? 100000 : 1)}                    
             </div>
         );
     }

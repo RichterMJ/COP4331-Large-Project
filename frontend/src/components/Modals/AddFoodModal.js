@@ -46,7 +46,6 @@ function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
       setSelectedFood({});
       setSelectedFoodQuantity(0);
       setSelectedPortion({});
-      console.log(Object.keys(selectedFood).length)
     }
 
 
@@ -82,7 +81,7 @@ function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
             <div>
                     {makeLabel("quantityFoodInput", "Enter quantity:","")}
                     <div className="shortWidth">
-                      {makeInputDiv("number", "quantityFoodInput", "quantitySelect w-25 form-control", ("fdcId" in selectedFood) ? selectedFoodQuantity : 0, "quanityFoodInput","", setSelectedFoodQuantity, "", 1, ("fdcId" in selectedFood) ? 100000 : 5)}
+                      {makeInputDiv("number", "quantityFoodInput", "quantitySelect w-25 form-control", ("fdcId" in selectedFood) ? selectedFoodQuantity : 0, "quanityFoodInput","", setSelectedFoodQuantity, "", 1, ("fdcId" in selectedFood) ? 100000 : 1)}
                     </div>                    
             </div>
         );

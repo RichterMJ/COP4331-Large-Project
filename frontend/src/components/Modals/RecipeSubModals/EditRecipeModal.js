@@ -57,7 +57,15 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function resetTable(){
         setTC("");
+        resetPortionSelection();
     }
+
+    function resetPortionSelection(){
+        setSelectedFood({});
+        setSelectedQuantity(1);
+        setSelectedPortion({});
+    }
+
     function makeEditRecipeNameInput(){
         return(
             <>
