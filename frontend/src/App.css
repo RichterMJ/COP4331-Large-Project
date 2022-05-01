@@ -98,8 +98,8 @@
 }
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
-  width: 200vw;
-  height: 200vh;
+  width: 500vw;
+  height: 500vh;
   z-index: 0;
   top: 50%;
   left: 50%;
@@ -271,6 +271,7 @@
   width:auto;
   height:auto;
   max-width: 1000px;
+  margin-top:250px;
 }
 #foodSearch{
   width: 80%;

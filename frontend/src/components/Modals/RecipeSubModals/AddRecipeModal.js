@@ -93,7 +93,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     return (
         open ?
         <div className="darkBG">
-            <div className="centered addRecipeModal theModal ">
+            <div className="centered largeModal addRecipeModal theModal ">
               <div className="modalContent">
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Add Recipe</h1>
