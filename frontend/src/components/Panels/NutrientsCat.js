@@ -7,7 +7,7 @@ const nutrientCatIDs = {
     mineralIDs:[
         1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1141, 1142, 1149
     ],
-    amonioIDs: [
+    aminosIDs: [
         1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1232, 1233, 1234
     ],
     macroIDs:[
@@ -26,8 +26,8 @@ function categorizeNutrients(nutrients) {
             name: "Minerals",
             nutrients: []
         },
-        amonios: {
-            name: "Amonios",
+        aminos: {
+            name: "Aminos",
             nutrients: []
         },
         macros: {
@@ -40,8 +40,8 @@ function categorizeNutrients(nutrients) {
             categorizedNutrients.vitamins.nutrients.push(nutrient);
         } else if (nutrientCatIDs.mineralIDs.includes(nutrient.nutrientId)){
             categorizedNutrients.minerals.nutrients.push(nutrient);
-        } else if (nutrientCatIDs.amonioIDs.includes(nutrient.nutrientId)){
-            categorizedNutrients.amonios.nutrients.push(nutrient);
+        } else if (nutrientCatIDs.aminosIDs.includes(nutrient.nutrientId)){
+            categorizedNutrients.aminos.nutrients.push(nutrient);
         } else if (nutrientCatIDs.macroIDs.includes(nutrient.nutrientId)){
             categorizedNutrients.macros.nutrients.push(nutrient);
         } 
