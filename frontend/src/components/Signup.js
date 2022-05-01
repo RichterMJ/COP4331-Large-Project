@@ -14,6 +14,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
+  const [errorMessage, setMessage] = useState(""); 
 
   const [formClassError, setFormClassError] = useState({
     fnErrorClass: "",
@@ -79,8 +80,7 @@ function Signup() {
   }
 
   async function handleSignupRes(res){
-      if (res.id <= 0) {
-      } else {
+      if (res.error == 0) {
         const emailJSON = makeEmailJSON(res);
 
         try{
@@ -90,6 +90,11 @@ function Signup() {
         }catch(e){
           console.log(e);
         }
+      } else if (res.error ==3){
+        // existing user detected
+        setMessage(`${email} is already associated with a different account`);
+      } else {
+        setMessage("Error occured")
       }
   }
 
@@ -252,18 +257,24 @@ function Signup() {
               </p>
         )
   }
-
+  function errorDiv(){
+    return (
+      <div className ="text-center pt-3">
+        {makeErrorMessage(errorMessage)}
+      </div>
+    );
+  }
 
   return (
     <div className="container">
-      <div className="card">
+      <div className="card ">
         <h2 className="text-center"> Sign Up </h2>
 
         {FirstRow()}
         {Email()}
         {Password()}
         {PasswordRepeat()}
-
+        {errorDiv()}
         <SignupButton/>
       </div>
 
