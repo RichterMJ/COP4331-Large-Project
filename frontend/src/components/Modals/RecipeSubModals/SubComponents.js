@@ -42,7 +42,7 @@ function SelectedRecipeFoodList({selectedFoodsList, setSelectedFoodsList, setSel
         </>
     );
 }
-function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood,selectedFoodsList, editFoodIndex, setEditFoodIndex,selectedPortion, setSelectedPortion, selectedQuantity, setSelectedQuantity}){
+function AddSelectedFoodToRecipe({setSelectedFoodsList, selectedFood, setSelectedFood, selectedFoodsList, editFoodIndex, setEditFoodIndex,selectedPortion, setSelectedPortion, selectedQuantity, setSelectedQuantity}){
      console.log(editFoodIndex)
     // let defaultPortion;
     // let defaultQuantity;

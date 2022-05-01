@@ -82,7 +82,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
                 </div>
                 <div className="editRecipeDescriptionInput col-4">
                     {makeEditRecipeNameInput()}
-                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} setEditFoodIndex={setEditFoodIndex} selectedFoodsList={selectedFoodsList} editFoodIndex={editFoodIndex}  selectedPortion={selectedPortion} selectedQuantity={selectedQuantity} setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity} />
+                    <AddSelectedFoodToRecipe setSelectedFoodsList={setSelectedFoodsList} selectedFood={selectedFood} setSelectedFood={setSelectedFood} setEditFoodIndex={setEditFoodIndex} selectedFoodsList={selectedFoodsList} editFoodIndex={editFoodIndex}  selectedPortion={selectedPortion} selectedQuantity={selectedQuantity} setSelectedPortion={setSelectedPortion} setSelectedQuantity={setSelectedQuantity} />
                     {makeActionButton("button", "btn-success mt-2", ()=>{addMoreFood()},"Add New Ingredient", "addNewIngredientBtn")}
                 </div>
                 
