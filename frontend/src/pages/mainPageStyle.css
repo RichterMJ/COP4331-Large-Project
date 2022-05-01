@@ -79,7 +79,7 @@
   width:480px;
 }
 #leftPanel {
-    width: 20vw;
+    width: 25vw;
     display: flex;
     flex-direction: column;
 }
