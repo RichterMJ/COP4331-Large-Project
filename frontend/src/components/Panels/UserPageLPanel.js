@@ -45,10 +45,11 @@ function LeftPanel({user, date,updateFoods, foods}){
           {leftPanelLogoHeader()}
           {makeActionButton("button", "leftPanelButton",() => addFoodEvent(toggleAFM),
                             "Add Food","addFoodButton")}
+          {makeActionButton("button", "leftPanelButton",() => displayRecipe(toggleDR),
+                            "Recipe","recipeButton")}
           {makeActionButton("button", "leftPanelButton",() => myAccountEvent(toggleMA),
                             "My Account","myAccountButton")}
-            {makeActionButton("button", "leftPanelButton",() => displayRecipe(toggleDR),
-                            "Recipe","recipeButton")}
+
           <main>
             {<AddFoodModal user={user} open={addFoodOpen} date={date} close={toggleAFM} tc={tableContent} setTC={toggleTC} updateFoods ={updateFoods}/>}
             {<RecipeModal user={user} open={recipeOpen} updateFoods={updateFoods} date={date} close={toggleDR} tc={tableContent} setTC={toggleTC}/>}
