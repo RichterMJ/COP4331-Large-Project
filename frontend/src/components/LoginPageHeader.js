@@ -1,5 +1,5 @@
 import React from "react";
-
+import Logo from "./Logo";
 function LoginPageHeader() {
   return (
     <div className="container">
@@ -13,8 +13,4 @@ function LoginPageHeader() {
   );
 }
 
-function Logo(){
-  const fileLocation = "./assets/thirdLogo.png"
-  return(<img id ="mainLogo" src ={fileLocation} alt="logo for gitfit"></img>)
-}
 export default LoginPageHeader;

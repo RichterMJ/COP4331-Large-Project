@@ -4,7 +4,6 @@ import RightPanel from "../components/Panels/UserPageRPanel";
 import InvalidPage from "./InvalidPage";
 import "./mainPageStyle.css"
 import {getLatestFoods} from "./FoodList";
-
 function UserPage() {
     async function updateFoods(thisDate){
          setFoods(await getLatestFoods(thisDate));
@@ -14,7 +13,10 @@ function UserPage() {
     const [date,setDate] = useState(curDate);
     const [foods,setFoods] = useState([]);
     // gets initial food day data
-    useEffect(() =>{
+
+    const _ud = localStorage.getItem('user_data');
+    const user = JSON.parse(_ud);
+useEffect(() =>{
       const getRecords = async () =>{
         console.log("THIS IS DATE");
         console.log(date);
@@ -24,8 +26,6 @@ function UserPage() {
       getRecords();
     },[]);
 
-    const _ud = localStorage.getItem('user_data');
-    const user = JSON.parse(_ud);
     if (user === null){
         return (<InvalidPage/>); // user access page without login
     }

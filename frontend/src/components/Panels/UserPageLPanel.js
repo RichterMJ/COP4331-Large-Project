@@ -5,6 +5,7 @@ import AddFoodModal from "../Modals/AddFoodModal";
 import MyAccountModal from "../Modals/MyAccountModal.js";
 import RecipeModal from "../Modals/RecipeModal.js";
 
+import Logo from "../Logo"
 function addFoodEvent(toggleAFM){
     toggleAFM();
 }
@@ -19,7 +20,7 @@ function myAccountEvent(toggleEUP){
 function leftPanelLogoHeader(){
     return(
         <div id = "logoHeader">
-            <img id ="mainLogo" src ="./public/assets/thirdlogo.png" alt="logo for gitfit"></img>
+          <Logo/>
             <h1 className ="left-text headerText" id = "title"> gitFit</h1>
          </div>
     )

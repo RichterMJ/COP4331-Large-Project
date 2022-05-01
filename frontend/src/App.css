@@ -305,12 +305,7 @@
 }
 
 #addFoodButton{
-  display:inline;
-  width: 100px;
-  height: 40px;
-  margin-top: 10px;
-  line-height: 0px;
-  background-color: #4de611;
+  background-color: #A6E582;
   border-color: black;
 }
 
