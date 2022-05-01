@@ -50,17 +50,19 @@ function makeH2(id, className, text){
 function makePTag(className, text) {
   return <p className={className}>{text}</p>;
 }
-function makeInputDiv(type, id, className, value, name, placeholder,onChangeFunc, disabled="") {
+function makeInputDiv(type, id, className, value, name, placeholder,onChangeFunc, disabled="", min="", max="") {
   return (
       <input
         className={className}
         type={type}
         id={id}
         name={name}
-        value={value}
         placeholder={placeholder}
         onChange={(d)=>onChangeFunc(d.target.value)}
         disabled={disabled}
+        min={min}
+        max={max}
+        value={value}
       />
   );
 }

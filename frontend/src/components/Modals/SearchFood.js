@@ -96,6 +96,7 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
       //Reset table when new search
       if(!scroll){
         resetTable();
+        startFlag = true;
         flag = "";
       }
 
@@ -113,14 +114,9 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
       }
     }
 
-    function resetTable(){
-       setTC("");
-       startFlag = true;
-    }
-
     function Food(props){
       return (
-          <button className="foodItem" onClick={function(){setSelectedFood(props.food); setSelectedPortion(props.food.portions[0])}}>
+          <button className="foodItem" onClick={function(){setSelectedFood(props.food); setSelectedPortion(props.food.portions[0]);}}>
             {props.food.description}
           </button>
       )
