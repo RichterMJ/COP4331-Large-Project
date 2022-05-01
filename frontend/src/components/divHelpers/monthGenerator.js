@@ -1,6 +1,6 @@
 function prepMonth(month){
     if(month.toString().length==1){
-      return "0"+month;
+      return "0"+(month+1);
     }
     else{
       return month;
