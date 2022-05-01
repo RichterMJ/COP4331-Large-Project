@@ -4,7 +4,6 @@ import RightPanel from "../components/Panels/UserPageRPanel";
 import InvalidPage from "./InvalidPage";
 import "./mainPageStyle.css"
 import {getLatestFoods} from "./FoodList";
-
 function UserPage() {
     async function updateFoods(thisDate){
          setFoods(await getLatestFoods(thisDate));
