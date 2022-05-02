@@ -99,9 +99,9 @@ function NutrientCategory (props){
 
 function BottomSubPanel(props) {
   const [fitPercentage,setFitPercentage] = useState("50%");
-  const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
+  //const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
   const [nutrientList, setNutrientList] = useState([]);
-  const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
+  //const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
 
   
   useEffect(()=>{
@@ -110,15 +110,15 @@ function BottomSubPanel(props) {
     }
     getFoodAverageList();
   },[props.foods])
-  useEffect(()=>{
+  // useEffect(()=>{
 
-    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
-      console.log(nutrientList);
-      setCategorizedNutrients(categorizeNutrients(nutrientList));
-      setCategorizedRDINutrients(categorizeNutrients(props.RDINutrients));
-    }
+  //   if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+  //     console.log(nutrientList);
+  //     setCategorizedNutrients(categorizeNutrients(nutrientList));
+  //     setCategorizedRDINutrients(categorizeNutrients(props.RDINutrients));
+  //   }
     
-  },[nutrientList])
+  // },[nutrientList])
   function makeDefaultNutrientDisplay(){
     let defaultCategorizedNutrient = {...categorizeNutrients(props.RDINutrients)}
     for( let key in defaultCategorizedNutrient){
@@ -156,8 +156,12 @@ function BottomSubPanel(props) {
   function displayNutrientCategories(){
     
     let finalCategorizedNutrient;
-    if (nutrientList.length != 0){
-      finalCategorizedNutrient= addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    console.log(props.RDINutrients)
+
+    //finalCategorizedNutrient = makeDefaultNutrientDisplay();
+    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+
+      finalCategorizedNutrient= addRDIAmount(categorizeNutrients(nutrientList),categorizeNutrients(props.RDINutrients));
     }
     else
     {
