@@ -141,9 +141,9 @@ function RecipeModal({ user, open, date, close, tc, setTC, updateFoods}){
         setAddRecipeOpen(!addRecipeOpen);
     }
 
-    function addToFoodList(recipe){
-        for(let ingredient of recipe.ingredients)
-            addFood(ingredient);
+    async function addToFoodList(recipe){
+        for await (let ingredient of recipe.ingredients)
+            await addFood(ingredient);
         updateFoods(date)
     }
 

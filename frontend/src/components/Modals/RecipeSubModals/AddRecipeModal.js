@@ -9,7 +9,7 @@ import { AddSelectedFoodToRecipe, SelectedRecipeFoodList } from "./SubComponents
 const storage = require("../../tokenStorage.js");
 
 function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
-    console.log(open)
+    
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
     const [recipeDescription, setRecipeDescription] = useState("");
@@ -60,12 +60,10 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     }
     function handleAddRecipeRes(res){
         if (res.error!=0){
-            console.log(res);
             setResponseMessage({...responseMessage, type: 'error', message: 'Error occured'});
             setTimeout(()=>{setResponseMessage({...responseMessage, message:''})},2000); // set message back to normal after 3s
             return;
         }
-        console.log(res);
         storage.storeToken(res);
         setResponseMessage({...responseMessage, type: 'success', message: 'Recipe Added'});
         setSelectedFoodsList([]);
@@ -81,6 +79,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
         const recipeJSON = prepareAddRecipeJSON();
         console.log(recipeJSON);
         let res = await JSONRequest("POST", recipeJSON, "api/users/data/recipes");
+        console.log(res)
         handleAddRecipeRes(res);
     }
     function makeAddRecipeButtons(){

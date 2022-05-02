@@ -46,20 +46,41 @@ function categorizeNutrients(nutrients) {
             categorizedNutrients.macros.nutrients.push(nutrient);
         } 
     })
+    console.log(categorizedNutrients)
     return categorizedNutrients;
 }
+// function addRDIAmount(userNutrients, RDINutrients){
+//     const nutrientsWithRDI = {...userNutrients};
+    
+//     for (const key in nutrientsWithRDI){
+//         nutrientsWithRDI[key].nutrients.map((userNutrient,index) =>{
+//             RDINutrients[key].nutrients.map(RDINutrient =>{
+//                 if (userNutrient.nutrientId == RDINutrient.nutrientId){
+//                     nutrientsWithRDI[key].nutrients[index] = {...userNutrient, RDIValue: RDINutrient.value};
+//                 }
+//             })
+//         })
+//     }
+
+//     return nutrientsWithRDI;
+// }
 function addRDIAmount(userNutrients, RDINutrients){
-    const nutrientsWithRDI = {...userNutrients};
+    const nutrientsWithRDI = {...RDINutrients};
+    console.log(nutrientsWithRDI)
     for (const key in nutrientsWithRDI){
-        nutrientsWithRDI[key].nutrients.map((userNutrient,index) =>{
-            RDINutrients[key].nutrients.map(RDINutrient =>{
+        nutrientsWithRDI[key].nutrients.map((RDINutrient,index) =>{
+            nutrientsWithRDI[key].nutrients[index].RDIValue = RDINutrient.value;
+            nutrientsWithRDI[key].nutrients[index] ={...nutrientsWithRDI[key].nutrients[index], value:0}
+            userNutrients[key].nutrients.map(userNutrient =>{
                 if (userNutrient.nutrientId == RDINutrient.nutrientId){
-                    nutrientsWithRDI[key].nutrients[index] = {...userNutrient, RDIValue: RDINutrient.value};
+                    console.log("matching nutrient")
+                    console.log(userNutrient)
+                    nutrientsWithRDI[key].nutrients[index].value = userNutrient.value;
                 }
             })
         })
     }
-    console.log(nutrientsWithRDI);
+    console.log(nutrientsWithRDI)
     return nutrientsWithRDI;
 }
 export {categorizeNutrients, addRDIAmount};

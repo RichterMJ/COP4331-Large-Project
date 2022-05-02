@@ -6,7 +6,7 @@ import "./mainPageStyle.css"
 import {getLatestFoods} from "./FoodList";
 function UserPage() {
     async function updateFoods(thisDate){
-         setFoods(await getLatestFoods(thisDate));
+         setFoods(await getLatestFoods(thisDate, user.userId));
     }
 
     let curDate = new Date();
@@ -20,7 +20,7 @@ useEffect(() =>{
       const getRecords = async () =>{
         console.log("THIS IS DATE");
         console.log(date);
-        let res = await getLatestFoods(date);
+        let res = await getLatestFoods(date, user.userId);
         setFoods(res);
       }
       getRecords();

@@ -79,7 +79,6 @@ function NutrientDiv(props)
     let width = getBarWidth(curNutrient);
   return (
     <div key ={curNutrient.nutrientId} className = "nutrientElement">
-      {console.log(width)}
       <NutrientStatusBars width={width}/>
       <div className = "nutrientText"> {getNutrientAmountString(curNutrient)}</div>
     </div>
@@ -87,7 +86,7 @@ function NutrientDiv(props)
 }
 function NutrientCategory (props){
     let nutrientCat = props.nutrientCat;
-    console.log(nutrientCat)
+
   return(
     <div className = "nutrientCategory">
       <div className = "nutrientCatHeading">
@@ -100,10 +99,10 @@ function NutrientCategory (props){
 
 function BottomSubPanel(props) {
   const [fitPercentage,setFitPercentage] = useState("50%");
-  const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
+  //const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
   const [nutrientList, setNutrientList] = useState([]);
-  const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
-  console.log(props.triggerRender)
+  //const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
+
   
   useEffect(()=>{
     const getFoodAverageList = async () =>{
@@ -111,16 +110,15 @@ function BottomSubPanel(props) {
     }
     getFoodAverageList();
   },[props.foods])
-  useEffect(()=>{
-    console.log(nutrientList);
-    console.log(props.RDINutrients);
-    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
-      console.log(nutrientList);
-      setCategorizedNutrients(categorizeNutrients(nutrientList));
-      setCategorizedRDINutrients(categorizeNutrients(props.RDINutrients));
-    }
+  // useEffect(()=>{
+
+  //   if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+  //     console.log(nutrientList);
+  //     setCategorizedNutrients(categorizeNutrients(nutrientList));
+  //     setCategorizedRDINutrients(categorizeNutrients(props.RDINutrients));
+  //   }
     
-  },[nutrientList])
+  // },[nutrientList])
   function makeDefaultNutrientDisplay(){
     let defaultCategorizedNutrient = {...categorizeNutrients(props.RDINutrients)}
     for( let key in defaultCategorizedNutrient){
@@ -156,17 +154,19 @@ function BottomSubPanel(props) {
     setNutrientList(res.averageNutrients);
   }
   function displayNutrientCategories(){
-    console.log("displayCat reached")
-    console.log(catergorizedNutrients);
-    console.log(categorizedRDINutrients);
+    
     let finalCategorizedNutrient;
-    if (nutrientList.length != 0){
-      finalCategorizedNutrient= addRDIAmount(catergorizedNutrients,categorizedRDINutrients);
+    console.log(props.RDINutrients)
+
+    //finalCategorizedNutrient = makeDefaultNutrientDisplay();
+    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+
+      finalCategorizedNutrient= addRDIAmount(categorizeNutrients(nutrientList),categorizeNutrients(props.RDINutrients));
     }
     else
     {
       finalCategorizedNutrient = makeDefaultNutrientDisplay();
-      console.log("EMPTY BABY");
+      
     }
     console.log(finalCategorizedNutrient);
     
