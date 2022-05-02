@@ -7,15 +7,14 @@ import {getDateString} from "../divHelpers/monthGenerator";
 
 const storage = require("../tokenStorage.js");
 
-function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
+function AddFoodModal({user, open, close, date, updateFoods}){
    
     const [selectedFood, setSelectedFood] = useState({});
-    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(0);
+    const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
     const [selectedPortion, setSelectedPortion] = useState({});
 
     console.log(date)
     function resetTable(){
-      setTC("");
       resetPortionSelection();
     }
    
@@ -44,7 +43,7 @@ function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
 
     function resetPortionSelection(){
       setSelectedFood({});
-      setSelectedFoodQuantity(0);
+      setSelectedFoodQuantity(1);
       setSelectedPortion({});
     }
 
@@ -110,7 +109,7 @@ function AddFoodModal({user, open, close, tc, setTC, date, updateFoods}){
             <div className="centered largeModal theModal">
               <div className="modalContent">
                 <ModalHeader/>
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable}/>
+                <SearchFood setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable}/>
                 {makeRecipeFoodsToAdd()}
                 <AddFoodButton/>
               </div>

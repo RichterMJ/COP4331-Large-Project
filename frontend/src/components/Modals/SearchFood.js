@@ -6,12 +6,14 @@ import {CircleSpinner} from "react-spinners-kit";
 
 const storage = require("../tokenStorage.js");
 
-function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}){
+function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
     const [foodQuery, setFoodQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [queryStart, setQueryStart] = useState(0);
+    const [tableFoods, setTableFoods] = useState([]);
 
     let startFlag = false;
+    
     const pageSize = 10;
 
     function makeTextInput (id,name,placeholder, onChange){
@@ -48,17 +50,18 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
       return JSON.stringify(searchInfo);
     }
 
-    function displayTable(foods, currentFoods){
-        if (foods.length == 0) {
-          setTC("This search provided no results");
-        } else {
-          //Appends the new items to the table
-          setTC(<div>{currentFoods} <FoodList foods={foods}/></div>);
+    function displayTable(foods){
+        if (foods.length != 0) {
+          const displayedFoods = (!startFlag) ? [...tableFoods] : [];
+          for(let f of FoodList(foods))
+            displayedFoods.push(f);
+
+          setTableFoods(displayedFoods);
           setQueryStart((startFlag) ? 1 : queryStart + 1)
         }
     }
 
-    async function convertWithID(res, currentFoods){
+    async function convertWithID(res){
       const foodsToConvert = [];
       for(let food of res.foods){
         const searchIDJSON = makeIDSearchJSON(food.fdcId);
@@ -77,27 +80,25 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
           return;
         }
       }
-        console.log(foodsToConvert);
-        displayTable(foodsToConvert, currentFoods);
-      
+      console.log(foodsToConvert);
+      displayTable(foodsToConvert);
     }
 
-    function FoodList(props){
+    function FoodList(foods){
       return(
-        props.foods.map(f=> <Food key={f.food.fdcId} food={f.food}/>)
+        foods.map(f=> <Food key={f.food.fdcId} food={f.food}/>)
       )
     }
 
     //These will be added to separate files
     async function search(scroll){
 
-      let flag = tc;
       startFlag = false;
       //Reset table when new search
       if(!scroll){
         resetTable();
         startFlag = true;
-        flag = "";
+        setTableFoods([]);
       }
 
       const searchJSON = makeNameSearchJSON();
@@ -106,7 +107,7 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
         setIsLoading(true);
         let res = await JSONRequest("POST", searchJSON, "api/food/searchByName");
         console.log(res);
-        await convertWithID(res, flag);
+        await convertWithID(res);
         setIsLoading(false);
       } catch (e) {
         console.log(e);
@@ -134,7 +135,9 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
     function FoodSearchTable(){
       return (
                 <div className="foodSearchTable" onScroll={onScroll} ref={scrollReference}>
-                  {tc}
+                  <div>                  
+                    {tableFoods}
+                  </div>
                 </div>    
             )
     }
@@ -157,7 +160,7 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
     }
     function LoadTable(){
         return (
-            (isLoading && tc.length == 0)
+            (isLoading && tableFoods.length == 0)
             ? 
             loadingAnimation()
             :
@@ -169,7 +172,7 @@ function SearchFood({ tc, setTC,setSelectedFood, setSelectedPortion, resetTable}
         <>
             {FoodSearchComponents()}
             {LoadTable()}
-            {(isLoading && tc.length != 0) && loadingAnimation()}
+            {(isLoading && tableFoods.length != 0) && loadingAnimation()}
         </>
     )
 }
