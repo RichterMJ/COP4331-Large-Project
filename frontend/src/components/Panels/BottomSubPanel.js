@@ -2,7 +2,9 @@ import React, {useState, useEffect} from "react";
 import { getDateString } from "../divHelpers/monthGenerator";
 import { JSONRequest } from "../RESTHelpers/JSONRequest";
 import {categorizeNutrients, addRDIAmount} from "./NutrientsCat";
+import {getNutrientSubCategoryPercentage} from ".//AveragePercentage"
 const storage = require("../tokenStorage.js");
+
 // let nutrientTestArray = [
 //     {
 //         name:"Carbohydrates",
@@ -152,6 +154,11 @@ function BottomSubPanel(props) {
     console.log(res);
     handleGetFoodAverage(res);
     setNutrientList(res.averageNutrients);
+  }
+  function addTotalAveragePercentSubNutrient(catergorizedNutrients){
+    for (const subCategory in catergorizedNutrients){
+      catergorizedNutrients[subCategory].totalAvgPercentage = {...catergorizedNutrients[subCategory], totalAvgPercentage: getNutrientSubCategoryPercentage(catergorizedNutrients[subCategory])}
+    }
   }
   function displayNutrientCategories(){
     
