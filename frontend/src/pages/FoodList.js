@@ -1,13 +1,13 @@
     import {getDateString} from "../components/divHelpers/monthGenerator";
     import {JSONRequest, JSONGETRequest} from "../components/RESTHelpers/JSONRequest";
-    const _ud = localStorage.getItem('user_data');
-    const user = JSON.parse(_ud);
+    
 
    const storage = require("../components/tokenStorage.js");
-   function makeFoodDayJSON(curDate){
+   function makeFoodDayJSON(curDate, userId){
+      
       const dateString = getDateString(curDate);
       const foodReq = {
-        userId:user.userId,
+        userId: userId,
         startDate:dateString,
         endDate:dateString,
         jwtToken:storage.retrieveToken()
@@ -17,8 +17,8 @@
 
 
     // this will get the latest version of the person's food day
-    async function getLatestFoods(startDate){
-      let res = await JSONGETRequest(makeFoodDayURL(makeFoodDayJSON(startDate)));
+    async function getLatestFoods(startDate, userId){
+      let res = await JSONGETRequest(makeFoodDayURL(makeFoodDayJSON(startDate, userId)));
       console.log(res);
       return handleFDGetRes(res);
     }
