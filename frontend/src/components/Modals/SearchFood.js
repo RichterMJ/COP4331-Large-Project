@@ -50,8 +50,14 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
       return JSON.stringify(searchInfo);
     }
 
-    function displayTable(foods){
-        if (foods.length != 0) {
+    function DisplayTable(props){
+      //foods is the foodlist
+      console.log("THE FOOD LIST IS BELOWW");
+      console.log(props.foods);
+      return(
+        props.foods.map(f=> <Food key={f.food.fdcId} food={f.food}/>)
+      )
+        /*if (foods.length != 0) {
           const displayedFoods = (!startFlag) ? [...tableFoods] : [];
           for(let f of FoodList(foods))
             displayedFoods.push(f);
@@ -59,29 +65,24 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
           setTableFoods(displayedFoods);
           setQueryStart((startFlag) ? 1 : queryStart + 1)
         }
+        */
     }
 
     async function convertWithID(res){
-      const foodsToConvert = [];
-      for(let food of res.foods){
-        const searchIDJSON = makeIDSearchJSON(food.fdcId);
+      let newFoods = [];
 
-        try {
-          let res = await JSONRequest("POST", searchIDJSON, "api/food/searchById");
+      try {
+        const promises = res.foods
+                            .map(food => makeIDSearchJSON(food.fdcId))
+                            .map(searchIDJSON => JSONRequest('POST', searchIDJSON, 'api/food/searchById'));
 
-          //If there is a problem with one of the items skip it
-          if(res.error != 0)
-            continue;
-
-          storage.storeToken(res);
-          foodsToConvert.push(res);
-        } catch (e) {
-          console.log(e);
-          return;
-        }
+        newFoods = await Promise.all(promises);
+      } catch (e) {
+        console.log(e);
+        return;
       }
-      console.log(foodsToConvert);
-      displayTable(foodsToConvert);
+
+      setTableFoods(newFoods.filter(res => res.error === 0));
     }
 
     function FoodList(foods){
@@ -106,6 +107,7 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
       try {
         setIsLoading(true);
         let res = await JSONRequest("POST", searchJSON, "api/food/searchByName");
+
         console.log(res);
         await convertWithID(res);
         setIsLoading(false);
@@ -132,11 +134,11 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
             )
     }
 
-    function FoodSearchTable(){
+    function FoodSearchTable(foodList){
       return (
                 <div className="foodSearchTable" onScroll={onScroll} ref={scrollReference}>
                   <div>                  
-                    {tableFoods}
+                    <DisplayTable foods={foodList}/>
                   </div>
                 </div>    
             )
@@ -164,15 +166,14 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
             ? 
             loadingAnimation()
             :
-            FoodSearchTable()
+            FoodSearchTable(tableFoods)
         );
     }
 
     return (
         <>
             {FoodSearchComponents()}
-            {LoadTable()}
-            {(isLoading && tableFoods.length != 0) && loadingAnimation()}
+            {FoodSearchTable(tableFoods)}
         </>
     )
 }
