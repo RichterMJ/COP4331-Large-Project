@@ -16,7 +16,7 @@ const nutrientCatIDs = {
 }
 // function categorize list of nutrients into four main categorise
 function categorizeNutrients(nutrients) {
-    console.log(nutrients)
+ 
     let categorizedNutrients = {
         vitamins: {
             name: "Vitamins",
@@ -59,7 +59,7 @@ function addRDIAmount(userNutrients, RDINutrients){
             })
         })
     }
-    console.log(nutrientsWithRDI);
+
     return nutrientsWithRDI;
 }
 export {categorizeNutrients, addRDIAmount};
