@@ -62,26 +62,20 @@ function SearchFood({setSelectedFood, setSelectedPortion, resetTable}){
     }
 
     async function convertWithID(res){
-      const foodsToConvert = [];
-      for(let food of res.foods){
-        const searchIDJSON = makeIDSearchJSON(food.fdcId);
+      let newFoods = [];
 
-        try {
-          let res = await JSONRequest("POST", searchIDJSON, "api/food/searchById");
+      try {
+        const promises = res.foods
+                            .map(food => makeIDSearchJSON(food.fdcId))
+                            .map(searchIDJSON => JSONRequest('POST', searchIDJSON, 'api/food/searchById'));
 
-          //If there is a problem with one of the items skip it
-          if(res.error != 0)
-            continue;
-
-          storage.storeToken(res);
-          foodsToConvert.push(res);
-        } catch (e) {
-          console.log(e);
-          return;
-        }
+        newFoods = await Promise.all(promises);
+      } catch (e) {
+        console.log(e);
+        return;
       }
-      console.log(foodsToConvert);
-      displayTable(foodsToConvert);
+
+      displayTable(newFoods.filter(res => res.error === 0));
     }
 
     function FoodList(foods){
