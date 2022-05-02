@@ -8,7 +8,7 @@ import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 import { SelectedRecipeFoodList, AddSelectedFoodToRecipe} from "./SubComponents";
 const storage = require("../../tokenStorage.js");
  
-function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
+function EditRecipeModal({ recipe, open, close, backToRecipe}){
    
     const [responseMessage, setResponseMessage] = useState({
         type: '',
@@ -56,7 +56,6 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
         }
     }
     function resetTable(){
-        setTC("");
         resetPortionSelection();
     }
 
@@ -92,7 +91,7 @@ function EditRecipeModal({ recipe, open, close, backToRecipe, tc ,setTC}){
     }
     function displaySearchFood(){
         return (
-            addMoreFoodOpen && <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
+            addMoreFoodOpen && <SearchFood setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
         );
     }
     function addMoreFood(){

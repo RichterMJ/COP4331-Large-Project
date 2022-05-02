@@ -8,7 +8,7 @@ import {JSONRequest} from "../../RESTHelpers/JSONRequest";
 import { AddSelectedFoodToRecipe, SelectedRecipeFoodList } from "./SubComponents";
 const storage = require("../../tokenStorage.js");
 
-function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
+function AddRecipeModal({user, open, close, backToRecipe}){
     
     const [selectedFoodsList, setSelectedFoodsList] = useState([]);
     const [selectedFood, setSelectedFood] = useState({});
@@ -46,7 +46,6 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
     }
     
     function resetTable(){
-        setTC("");
     }
     function prepareAddRecipeJSON(){
         const recipeJSON ={
@@ -97,7 +96,7 @@ function AddRecipeModal({user, open, close, tc, setTC, backToRecipe}){
                 {makeButton("", "backBtn bg-white position-fixed bottom-y", ()=> {close(); resetTable(); backToRecipe()}, <BiArrowBack />)}
                 <h1>Add Recipe</h1>
                 {makeButton("", "closeBtn",() => {close(); resetTable()}, <RiCloseLine/>)}
-                <SearchFood tc={tc} setTC={setTC} setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
+                <SearchFood setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable} />
                 {makeRecipeFoodsToAdd()}
                 {makeActionButton("button", "btn btn-success", () => addRecipe(), "Add Recipe", "addRecipeBtn" )}
                 {displayRepsonseMessage(responseMessage)}
