@@ -6,7 +6,7 @@ const ResoponseModal = ({ setIsOpen, responseMessage }) => {
     <>
       <div className="darkBG" />
       <div className="centered">
-        <div className="theModal">
+        <div className="verifyModal">
           <div className="modalContent">
             {responseMessage}!
           </div>
