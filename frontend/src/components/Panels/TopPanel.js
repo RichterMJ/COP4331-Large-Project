@@ -49,6 +49,7 @@ function getDateString(date){
     }
 
 function TopPanel(props){
+    
     return(
         <div id = "topPanel">
           <LeftButton curDate={props.date} setDayFunc={props.setDateFunc} updateFoods={props.updateFoods} />

@@ -2,7 +2,9 @@ import React, {useState, useEffect} from "react";
 import { getDateString } from "../divHelpers/monthGenerator";
 import { JSONRequest } from "../RESTHelpers/JSONRequest";
 import {categorizeNutrients, addRDIAmount} from "./NutrientsCat";
+import {getNutrientSubCategoryPercentage,getAverageNutrientForDay} from ".//AveragePercentage"
 const storage = require("../tokenStorage.js");
+
 // let nutrientTestArray = [
 //     {
 //         name:"Carbohydrates",
@@ -90,7 +92,7 @@ function NutrientCategory (props){
   return(
     <div className = "nutrientCategory">
       <div className = "nutrientCatHeading">
-        {nutrientCat.name}
+        {`${nutrientCat.name} ${nutrientCat.totalAvgPercentage.toFixed(2)}%`}
       </div>
       <NutrientBars nutrients={nutrientCat.nutrients}/>
     </div>
@@ -98,27 +100,38 @@ function NutrientCategory (props){
 }
 
 function BottomSubPanel(props) {
-  const [fitPercentage,setFitPercentage] = useState("50%");
+  const [fitPercentage,setFitPercentage] = useState(0);
   //const [categorizedRDINutrients, setCategorizedRDINutrients] = useState([]);
   const [nutrientList, setNutrientList] = useState([]);
+  const [finalCategorizedNutrient, setFinalCategorizedNutrient] = useState(makeDefaultNutrientDisplay())
   //const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
 
+  
   
   useEffect(()=>{
     const getFoodAverageList = async () =>{
       let res = await getFoodAverage();
     }
     getFoodAverageList();
-  },[props.foods])
-  // useEffect(()=>{
 
-  //   if (nutrientList.length != 0 && props.RDINutrients.length != 0){
-  //     console.log(nutrientList);
-  //     setCategorizedNutrients(categorizeNutrients(nutrientList));
-  //     setCategorizedRDINutrients(categorizeNutrients(props.RDINutrients));
-  //   }
+  },[props.foods])
+  useEffect(()=>{
+
+    //finalCategorizedNutrient = makeDefaultNutrientDisplay();
+    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+      let finalNutrient  = addRDIAmount(categorizeNutrients(nutrientList),categorizeNutrients(props.RDINutrients));
+      addTotalAveragePercentSubNutrient(finalNutrient);
+      setFinalCategorizedNutrient(finalNutrient);
+    }
+    else
+    {
+      setFinalCategorizedNutrient(makeDefaultNutrientDisplay());
+    }
     
-  // },[nutrientList])
+  },[nutrientList])
+  useEffect(()=>{
+    setFitPercentage(getAverageNutrientForDay(finalCategorizedNutrient))
+  },[finalCategorizedNutrient])
   function makeDefaultNutrientDisplay(){
     let defaultCategorizedNutrient = {...categorizeNutrients(props.RDINutrients)}
     for( let key in defaultCategorizedNutrient){
@@ -153,23 +166,32 @@ function BottomSubPanel(props) {
     handleGetFoodAverage(res);
     setNutrientList(res.averageNutrients);
   }
+  function addTotalAveragePercentSubNutrient(catergorizedNutrients){
+    for (const subCategory in catergorizedNutrients){
+      catergorizedNutrients[subCategory] = {...catergorizedNutrients[subCategory], totalAvgPercentage: getNutrientSubCategoryPercentage(catergorizedNutrients[subCategory])}
+    }
+  }
   function displayNutrientCategories(){
     
-    let finalCategorizedNutrient;
-    console.log(props.RDINutrients)
+    //let finalCategorizedNutrient;
+    //console.log(props.RDINutrients)
 
     //finalCategorizedNutrient = makeDefaultNutrientDisplay();
-    if (nutrientList.length != 0 && props.RDINutrients.length != 0){
+    // if (nutrientList.length != 0 && props.RDINutrients.length != 0){
 
-      finalCategorizedNutrient= addRDIAmount(categorizeNutrients(nutrientList),categorizeNutrients(props.RDINutrients));
-    }
-    else
-    {
-      finalCategorizedNutrient = makeDefaultNutrientDisplay();
+    //   finalCategorizedNutrient= addRDIAmount(categorizeNutrients(nutrientList),categorizeNutrients(props.RDINutrients));
+    // }
+    // else
+    // {
+    //   finalCategorizedNutrient = makeDefaultNutrientDisplay();
       
-    }
-    console.log(finalCategorizedNutrient);
-    
+    // }
+    //
+    addTotalAveragePercentSubNutrient(finalCategorizedNutrient);
+    //let dayAverage = getAverageNutrientForDay(finalCategorizedNutrient);
+    //console.log(finalCategorizedNutrient);
+    //setFitPercentage(15)
+    //setFitPercentage(dayAverage);
     return (
       Object.keys(finalCategorizedNutrient).map((key, index) =>{
         return <NutrientCategory key={index} nutrientCat={finalCategorizedNutrient[key]}/>
@@ -178,7 +200,7 @@ function BottomSubPanel(props) {
   }
   return(
     <div id= "BSP">
-      <div id  = "bottomSubPanelHeading"> Summary: {fitPercentage}</div>
+      <div id  = "bottomSubPanelHeading"> Summary: {`${fitPercentage.toFixed(2)}%`}</div>
       <div id = "bottomSubPanel">
           {displayNutrientCategories()}
       </div>

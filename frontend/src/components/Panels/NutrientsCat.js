@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 const nutrientCatIDs = {
     vitaminIDs: [
         1106, 1109, 1114, 1124, 1162, 1165, 1166, 1167, 1174, 1175, 1176, 1177, 1178, 1180, 1183, 1184, 1185, 1187
@@ -16,7 +17,6 @@ const nutrientCatIDs = {
 }
 // function categorize list of nutrients into four main categorise
 function categorizeNutrients(nutrients) {
-    console.log(nutrients)
     let categorizedNutrients = {
         vitamins: {
             name: "Vitamins",
@@ -46,7 +46,7 @@ function categorizeNutrients(nutrients) {
             categorizedNutrients.macros.nutrients.push(nutrient);
         } 
     })
-    console.log(categorizedNutrients)
+    
     return categorizedNutrients;
 }
 // function addRDIAmount(userNutrients, RDINutrients){
@@ -66,21 +66,19 @@ function categorizeNutrients(nutrients) {
 // }
 function addRDIAmount(userNutrients, RDINutrients){
     const nutrientsWithRDI = {...RDINutrients};
-    console.log(nutrientsWithRDI)
+   
     for (const key in nutrientsWithRDI){
         nutrientsWithRDI[key].nutrients.map((RDINutrient,index) =>{
             nutrientsWithRDI[key].nutrients[index].RDIValue = RDINutrient.value;
             nutrientsWithRDI[key].nutrients[index] ={...nutrientsWithRDI[key].nutrients[index], value:0}
             userNutrients[key].nutrients.map(userNutrient =>{
                 if (userNutrient.nutrientId == RDINutrient.nutrientId){
-                    console.log("matching nutrient")
-                    console.log(userNutrient)
                     nutrientsWithRDI[key].nutrients[index].value = userNutrient.value;
                 }
             })
         })
     }
-    console.log(nutrientsWithRDI)
+    
     return nutrientsWithRDI;
 }
 export {categorizeNutrients, addRDIAmount};
