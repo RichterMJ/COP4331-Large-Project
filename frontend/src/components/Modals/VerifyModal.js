@@ -5,7 +5,7 @@ const VerifyModal = () => {
     <>
       <div className="darkBG"/>
       <div className="centered">
-        <div className="theModal">
+        <div className="verifyModal">
           <div className="modalContent">
             Check your Email Address for Account Verification!
           </div>

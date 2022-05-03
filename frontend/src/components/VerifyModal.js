@@ -3,9 +3,9 @@ import React from "react";
 const VerifyModal = () => {
   return (
     <>
-      <div className="darkBG"/>
+      <div className="darkBGVerify"/>
       <div className="centered">
-        <div className="theModal">
+        <div className="verifyModal">
           <div className="modalContent">
             Check your Email Address for Account Verification!
           </div>

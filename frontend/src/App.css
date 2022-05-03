@@ -96,6 +96,19 @@
 .recipeDetail:hover{
   cursor: pointer;
 }
+
+.darkBGVerify{
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 500vw;
+  height: 500vh;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  transition: opacity 0.3s ease;
+}
+
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
   width: 100vw;
@@ -107,14 +120,22 @@
   position: absolute;
   transition: opacity 0.3s ease;
   overflow-y:hidden;
-
-
 }
 .centered {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -75%);
+}
+
+.verifyModal{
+  width: 300px;
+  height: 175px;
+  background: white;
+  color: white;
+  z-index: 10;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
 .theModal {
