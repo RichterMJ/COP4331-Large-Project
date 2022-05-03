@@ -17,7 +17,6 @@ const nutrientCatIDs = {
 }
 // function categorize list of nutrients into four main categorise
 function categorizeNutrients(nutrients) {
-    console.log(nutrients)
     let categorizedNutrients = {
         vitamins: {
             name: "Vitamins",
@@ -47,7 +46,7 @@ function categorizeNutrients(nutrients) {
             categorizedNutrients.macros.nutrients.push(nutrient);
         } 
     })
-    console.log(categorizedNutrients)
+    
     return categorizedNutrients;
 }
 // function addRDIAmount(userNutrients, RDINutrients){
@@ -67,21 +66,19 @@ function categorizeNutrients(nutrients) {
 // }
 function addRDIAmount(userNutrients, RDINutrients){
     const nutrientsWithRDI = {...RDINutrients};
-    console.log(nutrientsWithRDI)
+   
     for (const key in nutrientsWithRDI){
         nutrientsWithRDI[key].nutrients.map((RDINutrient,index) =>{
             nutrientsWithRDI[key].nutrients[index].RDIValue = RDINutrient.value;
             nutrientsWithRDI[key].nutrients[index] ={...nutrientsWithRDI[key].nutrients[index], value:0}
             userNutrients[key].nutrients.map(userNutrient =>{
                 if (userNutrient.nutrientId == RDINutrient.nutrientId){
-                    console.log("matching nutrient")
-                    console.log(userNutrient)
                     nutrientsWithRDI[key].nutrients[index].value = userNutrient.value;
                 }
             })
         })
     }
-    console.log(nutrientsWithRDI)
+    
     return nutrientsWithRDI;
 }
 export {categorizeNutrients, addRDIAmount};

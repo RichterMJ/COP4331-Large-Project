@@ -105,7 +105,8 @@ function BottomSubPanel(props) {
   const [nutrientList, setNutrientList] = useState([]);
   const [finalCategorizedNutrient, setFinalCategorizedNutrient] = useState(makeDefaultNutrientDisplay())
   //const [catergorizedNutrients, setCategorizedNutrients] = useState([]);
-  console.log(nutrientList )
+
+  
   
   useEffect(()=>{
     const getFoodAverageList = async () =>{

@@ -1,7 +1,6 @@
 
 
 function getNutrientSubCategoryPercentage(subCategoryNutrient){
-    console.log(subCategoryNutrient)
     let totalPercentage = 0.0
     let count = 0
     
@@ -20,9 +19,8 @@ function getNutrientSubCategoryPercentage(subCategoryNutrient){
     //         console.log(count)
     //     }
     // }
-    console.log(totalPercentage)
-    console.log(count)
-    console.log(totalPercentage/count)
+    
+
     return totalPercentage/count;
 }
 function getAverageNutrientForDay(categorizedNutrients){
@@ -46,7 +44,7 @@ function getAverageNutrientForDay(categorizedNutrients){
         })
         totalPercentage += (essentialNutrientNum/totalNutrients) * categorizedNutrients[subCategory].totalAvgPercentage;
     }
-    console.log(totalNutrients);
+    
     return totalPercentage
 }
 export {getNutrientSubCategoryPercentage,getAverageNutrientForDay}
