@@ -6,7 +6,12 @@ function getNutrientSubCategoryPercentage(subCategoryNutrient){
     
     subCategoryNutrient.nutrients.forEach((nutrient, index)=>{
         if (nutrient.RDIValue != 0){
-            totalPercentage += (nutrient.value / nutrient.RDIValue) * 100;
+            let fullNutrient = 100;
+            let nutrientPercent = (nutrient.value / nutrient.RDIValue) * 100;
+            if (nutrientPercent < fullNutrient)
+                totalPercentage += (nutrient.value / nutrient.RDIValue) * 100;
+            else 
+                totalPercentage += fullNutrient;
             count += 1;
         }
     })
