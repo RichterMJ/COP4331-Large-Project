@@ -98,30 +98,33 @@
 }
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
-  width: 500vw;
-  height: 500vh;
+  width: 100vw;
+  height: 100vh;
   z-index: 0;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
   transition: opacity 0.3s ease;
+  overflow-y:hidden;
+
+
 }
 .centered {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -75%);
 }
 
 .theModal {
-  width: 300px;
-  height: 175px;
+  max-height: 600px;
   background: white;
   color: white;
   z-index: 10;
   border-radius: 16px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  padding-bottom:400px;
 }
 
 .heading {
@@ -271,7 +274,7 @@
   width:auto;
   height:auto;
   max-width: 1000px;
-  margin-top:250px;
+  margin-top:140px;
 }
 #foodSearch{
   width: 80%;
@@ -375,4 +378,8 @@
 #timeSubHeader{
   width: 300px;
   margin-left: -25px;
+}
+.break {
+  flex-basis: 100%;
+  height: 0;
 }

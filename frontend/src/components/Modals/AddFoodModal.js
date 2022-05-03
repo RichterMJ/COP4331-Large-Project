@@ -106,7 +106,7 @@ function AddFoodModal({user, open, close, date, updateFoods}){
     return (
         open ?
         <div className="darkBG">
-            <div className="centered largeModal theModal">
+          <div className="centered largeModal theModal">
               <div className="modalContent">
                 <ModalHeader/>
                 <SearchFood setSelectedFood={setSelectedFood} setSelectedPortion={setSelectedPortion} resetTable={resetTable}/>

@@ -58,19 +58,17 @@ function TopSubPanel(props){
             {portion.portionName}
           </div>
           <div className ="foodUnit">
-            {quantity}
-          </div>
-          <div className ="foodGrams">
-            {portion.gramAmount}
+            {quantity} Serving
           </div>
           {makeFoodButtons(props.food.foodRecordId, props.index)}
         </div>
       )
     }
-
     return(
       <div id = "topSubPanel">
+        <div className = "foodList">
         <FoodList foods ={props.foods}/>
+        </div>
       </div>
     )
 }
