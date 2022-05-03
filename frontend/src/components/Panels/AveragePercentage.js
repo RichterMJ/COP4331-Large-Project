@@ -1,16 +1,28 @@
 
 
 function getNutrientSubCategoryPercentage(subCategoryNutrient){
+    console.log(subCategoryNutrient)
     let totalPercentage = 0.0
-    count = 0
-    for (const nutrient in subCategoryNutrient){
-        // skip the unessential nutrients
-        if (nutrient.RDIValue == 0)
-            continue;
-
-        totalPercentage += (nutrient.value / nutrient.RDIValue) * 100
-        count += 1;
-    }
+    let count = 0
+    
+    subCategoryNutrient.nutrients.forEach((nutrient, index)=>{
+        if (nutrient.RDIValue != 0){
+            totalPercentage += (nutrient.value / nutrient.RDIValue) * 100;
+            count += 1;
+        }
+    })
+    // for (const nutrient in subCategoryNutrient.nutrients){
+    //     // skip the unessential nutrients
+    //     if (subCategoryNutrient[nutrient].RDIValue != 0){
+    //         console.log(subCategoryNutrient[nutrient])
+    //         totalPercentage += (subCategoryNutrient[nutrient].value / subCategoryNutrient[nutrient].RDIValue) * 100
+    //         count += 1;
+    //         console.log(count)
+    //     }
+    // }
+    console.log(totalPercentage)
+    console.log(count)
+    console.log(totalPercentage/count)
     return totalPercentage/count;
 }
 function getAverageNutrientForDay(categorizedNutrients){
@@ -26,7 +38,7 @@ function getAverageNutrientForDay(categorizedNutrients){
     }
     for (const subCategory in categorizedNutrients){
         // get number of essential nutrients in subcategory
-        essentialNutrientNum = 0
+        let essentialNutrientNum = 0
         categorizedNutrients[subCategory].nutrients.map((nutrient, index)=>{
             if (nutrient.RDIValue != 0){
                 essentialNutrientNum += 1;
@@ -34,6 +46,7 @@ function getAverageNutrientForDay(categorizedNutrients){
         })
         totalPercentage += (essentialNutrientNum/totalNutrients) * categorizedNutrients[subCategory].totalAvgPercentage;
     }
+    console.log(totalNutrients);
     return totalPercentage
 }
 export {getNutrientSubCategoryPercentage,getAverageNutrientForDay}
